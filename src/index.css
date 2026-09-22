@@ -2,6 +2,7 @@
     --light-gray: #d1d5db;
     --light-gray-text: #6B7280;
     --primary: #4f2078;
+    --input-text-color: #333333;
     --background: #f5f3fc;
     font-size: 62.5%;
 }
@@ -68,4 +69,8 @@ a {
 }
 .huninn {
   font-family: "Huninn", sans-serif;
+}
+
+.metade {
+  width: 50%;
 }

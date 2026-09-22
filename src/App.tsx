@@ -1,10 +1,16 @@
+import { Route, Routes } from "react-router-dom";
+import "./index.css";
+import LoginPage from "./pages/LoginPage";
 function App() {
-  return (
-    <>
-      <h1>
-        Hello, World! Ceris é o melhor
-      </h1>
-    </>
-  )
+    return (
+        <>
+            <Routes>
+                <Route
+                    path="/login"
+                    element={<LoginPage />}
+                />
+            </Routes>
+        </>
+    );
 }
-export default App
+export default App;

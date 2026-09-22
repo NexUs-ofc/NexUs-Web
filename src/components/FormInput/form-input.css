@@ -1,0 +1,61 @@
+.formInputContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.formInput {
+    height: 46px;
+    border-radius: 46px;
+    border: 1px solid var(--light-gray);
+    font-size: 1.5rem;
+    box-shadow: 0 0.1rem 0.2rem 0 rgba(0, 0, 0, 0.04);
+}
+
+.formNormalInput {
+    padding: 20px;
+}
+
+.formLabel {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #1f2937;
+}
+
+.formPasswordInputContainer {
+    position: relative;
+    width: 100%;
+}
+
+.formPasswordInput {
+    width: 100%;
+    padding-right: 4.8rem;
+}
+.formPasswordInput::placeholder {
+    color: var(--light-gray-text);
+}
+
+.passwordToggle {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--light-gray);
+    cursor: pointer;
+    padding: 0;
+}
+
+.passwordToggle:focus {
+    outline: none;
+}
+
+.passwordIcon {
+    color: var(--light-gray-text);
+}
+

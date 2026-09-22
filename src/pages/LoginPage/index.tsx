@@ -6,11 +6,13 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
+        console.log(email)
     };
 
     const [senha, setSenha] = useState("");
     const handleSenhaChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSenha(e.target.value);
+        console.log(senha)
     };
     return (
         <div id="login-page">

@@ -51,8 +51,20 @@
     padding: 0;
 }
 
-.passwordToggle:focus {
-    outline: none;
+.passwordToggle:focus-visible {
+    outline: 3px solid #4f2078;
+    outline-offset: 2px;
+    border-radius: 0.6rem;
+}
+
+.formInput:focus-visible {
+    outline: 3px solid #4f2078;
+    outline-offset: 1px;
+}
+
+.formFieldError {
+    font-size: 1.3rem;
+    color: #7f1d1d;
 }
 
 .passwordIcon {

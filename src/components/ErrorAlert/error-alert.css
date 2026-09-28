@@ -1,0 +1,15 @@
+.errorAlert {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.2rem 1.6rem;
+    border-radius: 1.2rem;
+    border: 1px solid #b91c1c;
+    background-color: #fef2f2;
+    color: #7f1d1d;
+    font-size: 1.4rem;
+}
+
+.errorAlertTitle {
+    font-size: 1.5rem;
+}

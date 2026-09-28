@@ -64,6 +64,17 @@ a {
   font-size: 1.6rem;
 }
 
+.primary-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #4f2078;
+  outline-offset: 2px;
+}
+
 .montserrat {
   font-family: "Montserrat", sans-serif;
 }

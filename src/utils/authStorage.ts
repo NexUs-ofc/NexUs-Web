@@ -1,6 +1,6 @@
 import type { Profile } from "../types/profile";
 
-export const AUTH_STORAGE_VERSION = 1;
+export const AUTH_STORAGE_VERSION = 2;
 
 export const AUTH_STORAGE_KEY = "nexus-auth-session";
 
@@ -8,6 +8,8 @@ export interface PersistedAuthSession {
     _versao: number;
     profile: Profile | null;
     expiresAt: string | null;
+    refreshToken: string | null;
+    refreshExpiresAt: string | null;
 }
 
 function isPersistedAuthSession(value: unknown): value is PersistedAuthSession {
@@ -18,21 +20,40 @@ function isPersistedAuthSession(value: unknown): value is PersistedAuthSession {
     return (
         record["_versao"] === AUTH_STORAGE_VERSION &&
         ("profile" in record) &&
-        ("expiresAt" in record)
+        ("expiresAt" in record) &&
+        ("refreshToken" in record) &&
+        ("refreshExpiresAt" in record)
     );
 }
 
-export function saveAuthSession(profile: Profile | null, expiresAt: string | null): void {
+export interface SaveAuthSessionInput {
+    profile: Profile | null;
+    expiresAt: string | null;
+    refreshToken: string | null;
+    refreshExpiresAt: string | null;
+}
+
+export function saveAuthSession(input: SaveAuthSessionInput): void {
     const payload: PersistedAuthSession = {
         _versao: AUTH_STORAGE_VERSION,
-        profile,
-        expiresAt,
+        profile: input.profile,
+        expiresAt: input.expiresAt,
+        refreshToken: input.refreshToken,
+        refreshExpiresAt: input.refreshExpiresAt,
     };
     try {
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
     } catch {
         return;
     }
+}
+
+export function isExpiredAt(value: string | null): boolean {
+    if (value === null) {
+        return true;
+    }
+    const time = Date.parse(value);
+    return Number.isNaN(time) || time <= Date.now();
 }
 
 export function loadAuthSession(): PersistedAuthSession | null {
@@ -51,12 +72,12 @@ export function loadAuthSession(): PersistedAuthSession | null {
             clearAuthSession();
             return null;
         }
-        if (parsed.expiresAt !== null) {
-            const expiresTime = Date.parse(parsed.expiresAt);
-            if (Number.isNaN(expiresTime) || expiresTime <= Date.now()) {
+        if (parsed.refreshToken === null || isExpiredAt(parsed.refreshExpiresAt)) {
+            if (isExpiredAt(parsed.expiresAt)) {
                 clearAuthSession();
                 return null;
             }
+            return { ...parsed, refreshToken: null, refreshExpiresAt: null };
         }
         return parsed;
     } catch {

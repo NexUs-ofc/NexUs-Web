@@ -68,7 +68,12 @@ export function useLogin(): UseLoginResult {
                 if (!mountedRef.current) {
                     return false;
                 }
-                setAuthenticated(profile, tokens.accessTokenExpiresAt);
+                setAuthenticated(
+                    profile,
+                    tokens.accessTokenExpiresAt,
+                    tokens.refreshToken,
+                    tokens.refreshTokenExpiresAt,
+                );
                 setLoading(false);
                 setSuccess(true);
                 return true;

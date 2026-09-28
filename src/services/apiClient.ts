@@ -7,6 +7,7 @@ export interface ApiRequestOptions {
     apiKey?: string;
     body?: unknown;
     signal?: AbortSignal;
+    credentials?: RequestCredentials;
 }
 
 function resolveErrorMessage(data: unknown, fallback: string): string {
@@ -29,7 +30,7 @@ export async function apiRequest<T>(
     try {
         const response = await fetch(url, {
             method: options.method ?? "GET",
-            credentials: "include",
+            credentials: options.credentials ?? "include",
             headers: {
                 "Content-Type": "application/json",
                 ...(options.apiKey ? { "X-API-KEY": options.apiKey } : {}),

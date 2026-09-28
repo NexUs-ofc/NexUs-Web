@@ -13,4 +13,8 @@ export interface AuthTokens {
     refreshTokenExpiresAt: string;
 }
 
+export interface RefreshPayload {
+    refreshToken: string;
+}
+
 export type AuthStatus = "idle" | "loading" | "authenticated" | "error";

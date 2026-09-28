@@ -1,4 +1,4 @@
-import type { AuthTokens, LoginPayload } from "../types/auth";
+import type { AuthTokens, LoginPayload, RefreshPayload } from "../types/auth";
 import { apiRequest } from "./apiClient";
 
 const AUTH_API_BASE_URL =
@@ -19,6 +19,7 @@ export async function login(
             method: "POST",
             apiKey: AUTH_API_KEY,
             body: payload,
+            credentials: "omit",
             ...(options.signal ? { signal: options.signal } : {}),
         });
     } catch (error) {
@@ -26,5 +27,29 @@ export async function login(
             throw error;
         }
         throw new Error("Erro inesperado ao realizar login.", { cause: error });
+    }
+}
+
+export interface RefreshRequestOptions {
+    signal?: AbortSignal;
+}
+
+export async function refreshSession(
+    payload: RefreshPayload,
+    options: RefreshRequestOptions = {},
+): Promise<AuthTokens> {
+    try {
+        return await apiRequest<AuthTokens>(AUTH_API_BASE_URL, "/api/auth/token/refresh", {
+            method: "POST",
+            apiKey: AUTH_API_KEY,
+            body: payload,
+            credentials: "omit",
+            ...(options.signal ? { signal: options.signal } : {}),
+        });
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        }
+        throw new Error("Erro inesperado ao renovar a sessão.", { cause: error });
     }
 }

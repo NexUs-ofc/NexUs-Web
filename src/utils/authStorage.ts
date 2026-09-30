@@ -1,12 +1,13 @@
 import type { Profile } from "../types/profile";
 
-export const AUTH_STORAGE_VERSION = 2;
+export const AUTH_STORAGE_VERSION = 3;
 
 export const AUTH_STORAGE_KEY = "nexus-auth-session";
 
 export interface PersistedAuthSession {
     _versao: number;
     profile: Profile | null;
+    accessToken: string | null;
     expiresAt: string | null;
     refreshToken: string | null;
     refreshExpiresAt: string | null;
@@ -20,6 +21,7 @@ function isPersistedAuthSession(value: unknown): value is PersistedAuthSession {
     return (
         record["_versao"] === AUTH_STORAGE_VERSION &&
         ("profile" in record) &&
+        ("accessToken" in record) &&
         ("expiresAt" in record) &&
         ("refreshToken" in record) &&
         ("refreshExpiresAt" in record)
@@ -28,6 +30,7 @@ function isPersistedAuthSession(value: unknown): value is PersistedAuthSession {
 
 export interface SaveAuthSessionInput {
     profile: Profile | null;
+    accessToken: string | null;
     expiresAt: string | null;
     refreshToken: string | null;
     refreshExpiresAt: string | null;
@@ -37,6 +40,7 @@ export function saveAuthSession(input: SaveAuthSessionInput): void {
     const payload: PersistedAuthSession = {
         _versao: AUTH_STORAGE_VERSION,
         profile: input.profile,
+        accessToken: input.accessToken,
         expiresAt: input.expiresAt,
         refreshToken: input.refreshToken,
         refreshExpiresAt: input.refreshExpiresAt,

@@ -6,10 +6,12 @@ import type { Profile } from "../../types/profile";
 import { clearAuthSession, isExpiredAt, loadAuthSession, saveAuthSession } from "../../utils/authStorage";
 import { refreshSession } from "../../services/auth.service";
 import { getProfile } from "../../services/profile.service";
+import { setCoreAuthToken } from "../../services/coreClient";
 
 export interface AuthState {
     status: AuthStatus;
     profile: Profile | null;
+    accessToken: string | null;
     expiresAt: string | null;
     refreshToken: string | null;
     refreshExpiresAt: string | null;
@@ -21,6 +23,7 @@ export type AuthAction =
     | {
         type: "RESTORE_SUCCESS";
         profile: Profile | null;
+        accessToken: string | null;
         expiresAt: string | null;
         refreshToken: string | null;
         refreshExpiresAt: string | null;
@@ -28,6 +31,7 @@ export type AuthAction =
     | {
         type: "LOGIN_SUCCESS";
         profile: Profile;
+        accessToken: string;
         expiresAt: string | null;
         refreshToken: string | null;
         refreshExpiresAt: string | null;
@@ -37,8 +41,9 @@ export type AuthAction =
     | { type: "CLEAR_ERROR" };
 
 export const initialAuthState: AuthState = {
-    status: "idle",
+    status: "loading",
     profile: null,
+    accessToken: null,
     expiresAt: null,
     refreshToken: null,
     refreshExpiresAt: null,
@@ -54,6 +59,7 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
                 ...state,
                 status: action.profile ? "authenticated" : "idle",
                 profile: action.profile,
+                accessToken: action.accessToken,
                 expiresAt: action.expiresAt,
                 refreshToken: action.refreshToken,
                 refreshExpiresAt: action.refreshExpiresAt,
@@ -64,6 +70,7 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
                 ...state,
                 status: "authenticated",
                 profile: action.profile,
+                accessToken: action.accessToken,
                 expiresAt: action.expiresAt,
                 refreshToken: action.refreshToken,
                 refreshExpiresAt: action.refreshExpiresAt,
@@ -76,6 +83,7 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
                 ...state,
                 status: "idle",
                 profile: null,
+                accessToken: null,
                 expiresAt: null,
                 refreshToken: null,
                 refreshExpiresAt: null,
@@ -94,6 +102,7 @@ export interface AuthContextValue {
     isLoading: boolean;
     setAuthenticated: (
         profile: Profile,
+        accessToken: string,
         expiresAt: string | null,
         refreshToken: string | null,
         refreshExpiresAt: string | null,
@@ -124,6 +133,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                     dispatch({
                         type: "RESTORE_SUCCESS",
                         profile: null,
+                        accessToken: null,
                         expiresAt: null,
                         refreshToken: null,
                         refreshExpiresAt: null,
@@ -131,11 +141,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                 }
                 return;
             }
-            if (!isExpiredAt(stored.expiresAt)) {
+            if (!isExpiredAt(stored.expiresAt) && stored.accessToken !== null) {
                 if (mounted) {
                     dispatch({
                         type: "RESTORE_SUCCESS",
                         profile: stored.profile,
+                        accessToken: stored.accessToken,
                         expiresAt: stored.expiresAt,
                         refreshToken: stored.refreshToken,
                         refreshExpiresAt: stored.refreshExpiresAt,
@@ -149,6 +160,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                     dispatch({
                         type: "RESTORE_SUCCESS",
                         profile: null,
+                        accessToken: null,
                         expiresAt: null,
                         refreshToken: null,
                         refreshExpiresAt: null,
@@ -161,11 +173,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                     { refreshToken: stored.refreshToken },
                     { signal: controller.signal },
                 );
+                setCoreAuthToken(tokens.accessToken);
                 const profile = await getProfile({ signal: controller.signal });
                 if (mounted) {
                     dispatch({
                         type: "LOGIN_SUCCESS",
                         profile,
+                        accessToken: tokens.accessToken,
                         expiresAt: tokens.accessTokenExpiresAt,
                         refreshToken: tokens.refreshToken,
                         refreshExpiresAt: tokens.refreshTokenExpiresAt,
@@ -177,6 +191,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                     dispatch({
                         type: "RESTORE_SUCCESS",
                         profile: null,
+                        accessToken: null,
                         expiresAt: null,
                         refreshToken: null,
                         refreshExpiresAt: null,
@@ -193,15 +208,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }, []);
 
     useEffect(() => {
+        setCoreAuthToken(state.accessToken);
+    }, [state.accessToken]);
+
+    useEffect(() => {
         if (state.status === "authenticated") {
             saveAuthSession({
                 profile: state.profile,
+                accessToken: state.accessToken,
                 expiresAt: state.expiresAt,
                 refreshToken: state.refreshToken,
                 refreshExpiresAt: state.refreshExpiresAt,
             });
         }
-    }, [state.status, state.profile, state.expiresAt, state.refreshToken, state.refreshExpiresAt]);
+    }, [state.status, state.profile, state.accessToken, state.expiresAt, state.refreshToken, state.refreshExpiresAt]);
 
     const value = useMemo<AuthContextValue>(
         () => ({
@@ -210,11 +230,19 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             isLoading: state.status === "loading",
             setAuthenticated: (
                 profile: Profile,
+                accessToken: string,
                 expiresAt: string | null,
                 refreshToken: string | null,
                 refreshExpiresAt: string | null,
             ) => {
-                dispatch({ type: "LOGIN_SUCCESS", profile, expiresAt, refreshToken, refreshExpiresAt });
+                dispatch({
+                    type: "LOGIN_SUCCESS",
+                    profile,
+                    accessToken,
+                    expiresAt,
+                    refreshToken,
+                    refreshExpiresAt,
+                });
             },
             setLoginError: (error: string) => {
                 dispatch({ type: "LOGIN_ERROR", error });

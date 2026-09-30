@@ -5,6 +5,7 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export interface ApiRequestOptions {
     method?: HttpMethod;
     apiKey?: string;
+    authToken?: string;
     body?: unknown;
     signal?: AbortSignal;
     credentials?: RequestCredentials;
@@ -34,6 +35,7 @@ export async function apiRequest<T>(
             headers: {
                 "Content-Type": "application/json",
                 ...(options.apiKey ? { "X-API-KEY": options.apiKey } : {}),
+                ...(options.authToken ? { Authorization: `Bearer ${options.authToken}` } : {}),
             },
             ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
             ...(options.signal ? { signal: options.signal } : {}),

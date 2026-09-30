@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FormInput from "../../components/FormInput";
 import PrimaryButton from "../../components/PrimaryButton";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorAlert from "../../components/ErrorAlert";
-import { useAuth } from "../../hooks/useAuth";
 import { useLogin } from "../../hooks/useLogin";
 import { LOGIN_MAX_LENGTH, validateLoginForm } from "../../utils/validateLogin";
 import type { LoginFormData, LoginFormErrors } from "../../utils/validateLogin";
@@ -17,19 +16,11 @@ const initialErrors: LoginFormErrors = { email: "", password: "" };
 export default function LoginPage() {
     const [form, setForm] = useState<LoginFormData>(initialForm);
     const [fieldErrors, setFieldErrors] = useState<LoginFormErrors>(initialErrors);
-    const { isAuthenticated, isLoading: authLoading } = useAuth();
     const { loading, error, success, execute, reset } = useLogin();
-    const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Entrar — NexUs";
     }, []);
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate("/", { replace: true });
-        }
-    }, [isAuthenticated, navigate]);
 
     const handleChange = useCallback(
         (field: keyof LoginFormData) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +38,7 @@ export default function LoginPage() {
         event.preventDefault();
         const validation = validateLoginForm(form);
         setFieldErrors(validation);
-        const ok = await execute(form);
-        if (ok) {
-            navigate("/", { replace: true });
-        }
+        await execute(form);
     }
 
     return (
@@ -111,11 +99,11 @@ export default function LoginPage() {
                             Esqueci minha senha
                         </Link>
                     </div>
-                    {authLoading || loading ? <LoadingSpinner message="Entrando na sua conta..." /> : null}
+                    {loading ? <LoadingSpinner message="Entrando na sua conta..." /> : null}
                     {error !== "" ? <ErrorAlert title="Não foi possível entrar" message={error} /> : null}
                     {success ? (
                         <p className="loginSuccess" role="status">
-                            Login realizado com sucesso. Redirecionando...
+                            Login realizado com sucesso.
                         </p>
                     ) : null}
                     <PrimaryButton type="submit" loading={loading} id="submit-login-form-button">

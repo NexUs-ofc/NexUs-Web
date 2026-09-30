@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "./useAuth";
 import { login as loginRequest } from "../services/auth.service";
+import { setCoreAuthToken } from "../services/coreClient";
 import { getProfile } from "../services/profile.service";
 import { ApiError } from "../services/apiError";
 import {
@@ -64,12 +65,14 @@ export function useLogin(): UseLoginResult {
             try {
                 const payload = toLoginPayload(data);
                 const tokens = await loginRequest(payload, { signal: controller.signal });
+                setCoreAuthToken(tokens.accessToken);
                 const profile = await getProfile({ signal: controller.signal });
                 if (!mountedRef.current) {
                     return false;
                 }
                 setAuthenticated(
                     profile,
+                    tokens.accessToken,
                     tokens.accessTokenExpiresAt,
                     tokens.refreshToken,
                     tokens.refreshTokenExpiresAt,

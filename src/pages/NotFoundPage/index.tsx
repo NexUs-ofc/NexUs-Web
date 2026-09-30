@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./not-found-page.css";
 
 export default function NotFoundPage() {
@@ -10,7 +10,7 @@ export default function NotFoundPage() {
     }, []);
 
     function handleGoBack(): void {
-        navigate("/", { replace: true });
+        navigate("/login", { replace: true });
     }
 
     return (
@@ -20,9 +20,8 @@ export default function NotFoundPage() {
                 <p>O endereço acessado não existe ou foi movido.</p>
                 <div className="notFoundActions">
                     <button type="button" className="primary-button huninn" onClick={handleGoBack}>
-                        Voltar ao início
+                        Voltar ao login
                     </button>
-                    <Link to="/login">Ir para o login</Link>
                 </div>
             </main>
         </div>

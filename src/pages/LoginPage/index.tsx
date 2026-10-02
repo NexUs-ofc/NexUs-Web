@@ -1,38 +1,65 @@
-import { type ChangeEvent, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
+import { Link } from "react-router-dom";
 import FormInput from "../../components/FormInput";
+import PrimaryButton from "../../components/PrimaryButton";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import ErrorAlert from "../../components/ErrorAlert";
+import { useLogin } from "../../hooks/useLogin";
+import { LOGIN_MAX_LENGTH, validateLoginForm } from "../../utils/validateLogin";
+import type { LoginFormData, LoginFormErrors } from "../../utils/validateLogin";
 import "./login-page.css";
 
-export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
-        console.log(email)
-    };
+const initialForm: LoginFormData = { email: "", password: "" };
+const initialErrors: LoginFormErrors = { email: "", password: "" };
 
-    const [senha, setSenha] = useState("");
-    const handleSenhaChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSenha(e.target.value);
-        console.log(senha)
-    };
+export default function LoginPage() {
+    const [form, setForm] = useState<LoginFormData>(initialForm);
+    const [fieldErrors, setFieldErrors] = useState<LoginFormErrors>(initialErrors);
+    const { loading, error, success, execute, reset } = useLogin();
+
+    useEffect(() => {
+        document.title = "Entrar — NexUs";
+    }, []);
+
+    const handleChange = useCallback(
+        (field: keyof LoginFormData) => (event: ChangeEvent<HTMLInputElement>) => {
+            const nextForm = { ...form, [field]: event.target.value };
+            setForm(nextForm);
+            reset();
+            setFieldErrors(validateLoginForm(nextForm));
+        },
+        [form, reset],
+    );
+
+    const fieldErrorsMemo = useMemo(() => fieldErrors, [fieldErrors]);
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
+        event.preventDefault();
+        const validation = validateLoginForm(form);
+        setFieldErrors(validation);
+        await execute(form);
+    }
+
     return (
         <div id="login-page">
-            <section id="brand-panel">
+            <section id="brand-panel" aria-label="Apresentação NexUs">
                 <header>
-                    <img src="/src/assets/logo-full.svg" alt="Ceris" />
+                    <img src="/src/assets/logo-full.svg" alt="NexUs" />
                 </header>
                 <section id="slogan-section">
                     <div id="slogan-text" className="huninn">
                         <div>
                             <p>Simplifique o controle das suas filiais e transforme dados operacionais em crescimento estratégico.</p>
-                            <img src="/src/assets/logo-symbol.svg" alt="Logo do Ceris" />
+                            <img src="/src/assets/logo-symbol.svg" alt="" />
                         </div>
                         <hr />
                     </div>
                 </section>
-                <div id="gradient-sheet"></div>
+                <div id="gradient-sheet" aria-hidden="true" />
             </section>
             <section id="form-section">
-                <form id="login-form">
+                <form id="login-form" onSubmit={handleSubmit} noValidate>
                     <div id="login-description-container">
                         <h1 className="title huninn" id="loginTitle">
                             Bem-vindo(a) de volta!
@@ -43,34 +70,50 @@ export default function LoginPage() {
                     </div>
                     <div id="login-inputs-container">
                         <FormInput
-                            width="100%"
                             label="E-mail corporativo"
+                            name="email"
+                            type="email"
                             placeholder="exemplo@empresa.com"
-                            onChange={handleEmailChange}
+                            value={form.email}
+                            onChange={handleChange("email")}
+                            maxLength={LOGIN_MAX_LENGTH.email}
+                            autoComplete="email"
+                            required
+                            error={fieldErrorsMemo.email}
+                            width="100%"
                         />
                         <FormInput
-                            type="password"
-                            width="100%"
                             label="Senha"
+                            name="password"
+                            type="password"
                             placeholder="Digite sua senha de acesso"
-                            onChange={handleSenhaChange}
+                            value={form.password}
+                            onChange={handleChange("password")}
+                            maxLength={LOGIN_MAX_LENGTH.password}
+                            autoComplete="current-password"
+                            required
+                            error={fieldErrorsMemo.password}
+                            width="100%"
                         />
-                        <a href="#" id="forgot-password-text">
+                        <Link to="/esqueci-senha" id="forgot-password-text">
                             Esqueci minha senha
-                        </a>
+                        </Link>
                     </div>
-                    <button
-                        type="submit"
-                        className="primary-button huninn"
-                        id="submit-login-form-button"
-                    >
+                    {loading ? <LoadingSpinner message="Entrando na sua conta..." /> : null}
+                    {error !== "" ? <ErrorAlert title="Não foi possível entrar" message={error} /> : null}
+                    {success ? (
+                        <p className="loginSuccess" role="status">
+                            Login realizado com sucesso.
+                        </p>
+                    ) : null}
+                    <PrimaryButton type="submit" loading={loading} id="submit-login-form-button">
                         Entrar na conta
-                    </button>
+                    </PrimaryButton>
                     <p className="huninn" id="signup-text">
                         Ainda não tem conta corporativa?{" "}
-                        <a href="#" id="signup-link">
+                        <Link to="/cadastro" id="signup-link">
                             Cadastre-se
-                        </a>
+                        </Link>
                     </p>
                 </form>
             </section>

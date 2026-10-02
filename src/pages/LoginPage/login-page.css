@@ -52,6 +52,14 @@
 #submit-login-form-button {
     height: 5.6rem;
 }
+.loginSuccess {
+    font-size: 1.4rem;
+    color: #14532d;
+    background-color: #f0fdf4;
+    border: 1px solid #14532d;
+    border-radius: 1.2rem;
+    padding: 1.2rem 1.6rem;
+}
 #signup-text {
     color: var(--light-gray-text);
     font-size: 1.5rem;

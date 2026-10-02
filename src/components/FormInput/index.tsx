@@ -1,87 +1,112 @@
-import { useState, type HTMLInputTypeAttribute } from "react";
-import type GenericComponentProps from "../../utils/GenericComponentProps";
-import type { ChangeEvent } from "react";
+import { useId, useState } from "react";
+import type { ChangeEvent, HTMLInputTypeAttribute } from "react";
+import type GenericComponentProps from "../../types/common";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import "./form-input.css";
 
-interface FormInputProps extends GenericComponentProps {
-  type?: HTMLInputTypeAttribute;
-  width?: string;
-  label: string;
-  placeholder: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+export interface FormInputProps extends GenericComponentProps {
+    label: string;
+    name: string;
+    placeholder: string;
+    value: string;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    type?: HTMLInputTypeAttribute;
+    width?: string;
+    maxLength?: number;
+    autoComplete?: string;
+    required?: boolean;
+    error?: string;
 }
 
 export default function FormInput({
-  className = "",
-  id = crypto.randomUUID(),
-  type = "text",
-  width = "100%",
-  label,
-  placeholder,
-  onChange,
+    className = "",
+    id,
+    label,
+    name,
+    placeholder,
+    value,
+    onChange,
+    type = "text",
+    width = "100%",
+    maxLength,
+    autoComplete,
+    required = false,
+    error = "",
 }: FormInputProps) {
-  const [showPassword, setShowPassword] = useState(false);
+    const generatedId = useId();
+    const inputId = id ?? `${name}-${generatedId}`;
+    const errorId = error !== "" ? `${inputId}-error` : undefined;
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const handleIconClick = () => {
-    setShowPassword((previousValue) => !previousValue);
-  };
+    function handleTogglePassword(): void {
+        setShowPassword((previousValue) => !previousValue);
+    }
 
-  if (type === "password") {
+    function renderInput(isPassword: boolean) {
+        return (
+            <>
+                <input
+                    className={isPassword ? "formInput formNormalInput formPasswordInput" : "formNormalInput formInput"}
+                    id={inputId}
+                    name={name}
+                    type={isPassword ? (showPassword ? "text" : "password") : type}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    maxLength={maxLength}
+                    autoComplete={autoComplete}
+                    required={required}
+                    aria-invalid={error !== ""}
+                    aria-describedby={errorId}
+                />
+                {isPassword ? (
+                    <button
+                        type="button"
+                        className="passwordToggle"
+                        onClick={handleTogglePassword}
+                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                        aria-pressed={showPassword}
+                    >
+                        {showPassword ? (
+                            <MdOutlineVisibility className="icon passwordIcon" aria-hidden="true" />
+                        ) : (
+                            <MdOutlineVisibilityOff className="icon passwordIcon" aria-hidden="true" />
+                        )}
+                    </button>
+                ) : null}
+            </>
+        );
+    }
+
+    if (type === "password") {
+        return (
+            <div className={`formInputContainer ${className}`} style={{ width }}>
+                <label className="formLabel" htmlFor={inputId}>
+                    {label}
+                </label>
+                <div className="formPasswordInputContainer">
+                    {renderInput(true)}
+                </div>
+                {error !== "" ? (
+                    <span className="formFieldError" id={errorId} role="alert">
+                        {error}
+                    </span>
+                ) : null}
+            </div>
+        );
+    }
+
     return (
-      <div
-        className={`formInputContainer ${className}`}
-        style={{ width }}
-      >
-        <label
-          className="formLabel"
-          htmlFor={id}
-        >
-          {label}
-        </label>
-        <div className="formPasswordInputContainer">
-          <input
-            className="formInput formNormalInput formPasswordInput"
-            id={id}
-            type={showPassword ? "text" : "password"}
-            placeholder={placeholder}
-            onChange={onChange}
-          />
-          <button
-            type="button"
-            className="passwordToggle"
-            onClick={handleIconClick}
-            aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-          >
-            {showPassword ? (
-              <MdOutlineVisibility className="icon passwordIcon" />
-            ) : (
-              <MdOutlineVisibilityOff className="icon passwordIcon" />
-            )}
-          </button>
+        <div className={`formInputContainer ${className}`} style={{ width }}>
+            <label className="formLabel" htmlFor={inputId}>
+                {label}
+            </label>
+            {renderInput(false)}
+            {error !== "" ? (
+                <span className="formFieldError" id={errorId} role="alert">
+                    {error}
+                </span>
+            ) : null}
         </div>
-      </div>
     );
-  }
-
-  return (
-    <div
-      className={`formInputContainer ${className}`}
-      style={{ width }}
-    >
-      <label
-        className="formLabel"
-        htmlFor={id}
-      >
-        {label}
-      </label>
-      <input
-        className="formNormalInput formInput"
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-    </div>
-  );
 }

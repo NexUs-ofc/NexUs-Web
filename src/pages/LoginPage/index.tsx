@@ -8,6 +8,8 @@ import ErrorAlert from "../../components/ErrorAlert";
 import { useLogin } from "../../hooks/useLogin";
 import { LOGIN_MAX_LENGTH, validateLoginForm } from "../../utils/validateLogin";
 import type { LoginFormData, LoginFormErrors } from "../../utils/validateLogin";
+import logoFullUrl from "../../assets/logo-full.svg";
+import logoSymbolUrl from "../../assets/logo-symbol.svg";
 import "./login-page.css";
 
 const initialForm: LoginFormData = { email: "", password: "" };
@@ -45,13 +47,13 @@ export default function LoginPage() {
         <div id="login-page">
             <section id="brand-panel" aria-label="Apresentação NexUs">
                 <header>
-                    <img src="/src/assets/logo-full.svg" alt="NexUs" />
+                    <img src={logoFullUrl} alt="Logotipo Ceris" />
                 </header>
                 <section id="slogan-section">
                     <div id="slogan-text" className="huninn">
                         <div>
                             <p>Simplifique o controle das suas filiais e transforme dados operacionais em crescimento estratégico.</p>
-                            <img src="/src/assets/logo-symbol.svg" alt="" />
+                            <img src={logoSymbolUrl} alt="" aria-hidden="true" />
                         </div>
                         <hr />
                     </div>

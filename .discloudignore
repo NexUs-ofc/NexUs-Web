@@ -1,0 +1,29 @@
+# Dependências e build local (a Discloud roda BUILD=npm run build e gera dist/)
+node_modules/
+dist/
+dist-ssr/
+
+# Git / CI
+.git/
+.github/
+.gitignore
+
+# Logs e OS
+logs
+*.log
+npm-debug.log*
+
+# Editor / IDE
+.vscode/*
+.idea/
+.DS_Store
+
+# Env local (use o painel da Discloud ou secrets no deploy-action)
+.env
+.env.local
+.env.*.local
+
+# Docker / k8s (não sobe pra Discloud)
+Dockerfile
+.dockerignore
+k8s/

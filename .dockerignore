@@ -1,0 +1,15 @@
+.git
+.github
+.gitignore
+.idea
+.vscode
+node_modules
+dist
+dist-ssr
+npm-debug.log*
+.env
+.env.local
+.env.*.local
+Dockerfile
+.dockerignore
+k8s/

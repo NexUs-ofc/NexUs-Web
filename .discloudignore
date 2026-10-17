@@ -1,6 +1,8 @@
-# Dependências e build local (a Discloud roda BUILD=npm run build e gera dist/)
+# Dependências e build local (a Discloud roda BUILD e regenera dist/)
+# dist/index.html (placeholder) precisa entrar no zip: é validado como MAIN
 node_modules/
-dist/
+dist/*
+!dist/index.html
 dist-ssr/
 
 # Git / CI

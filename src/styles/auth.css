@@ -1,0 +1,273 @@
+.auth-page {
+    display: flex;
+    align-items: center;
+}
+.auth-page > * {
+    width: 50%;
+    height: 100vh;
+    max-height: 100vh;
+}
+.form-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    gap: 2.4rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    max-width: 54rem;
+    width: 80%;
+    padding: 4rem;
+    box-shadow: 0.4rem 0.4rem 0.4rem 0 rgba(40, 13, 82, 0.25);
+}
+.auth-description-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.auth-description-container * {
+    margin: 0;
+}
+.auth-title {
+    font-size: 3.6rem;
+    letter-spacing: -0.05rem;
+}
+.auth-subtitle {
+    font-size: 1.6rem;
+}
+.auth-inputs-container {
+    display: flex;
+    gap: 2rem;
+}
+.auth-submit-button {
+    height: 5.6rem;
+}
+.auth-switch-text {
+    color: var(--light-gray-text);
+    font-size: 1.5rem;
+    width: 100%;
+    text-align: center;
+
+    .auth-switch-link {
+        color: var(--primary);
+    }
+}
+
+.brand-panel {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    max-height: 100vh;
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    background-color: var(--primary);
+
+    .gradient-sheet {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+            170deg,
+            rgba(17, 5, 27, 0) 41%,
+            rgba(27, 9, 44, 1) 100%
+        );
+    }
+
+    header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10rem;
+
+        img {
+            height: 6rem;
+        }
+    }
+
+    .slogan-section {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border-top-right-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+        background-image: url("/src/assets/supermarket-bg.png");
+        background-position: center;
+        background-size: cover;
+    }
+
+    .slogan-text {
+        position: absolute;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        z-index: 2;
+        bottom: 2rem;
+        gap: .5rem;
+        font-size: 2.5rem;
+
+        div {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+        }
+
+        p {
+            width: 95%;
+        }
+
+        hr {
+            height: .3rem;
+            background-color: white;
+            border-radius: 42px;
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    .brand-panel .slogan-text {
+        font-size: 2rem;
+        line-height: 1.16;
+    }
+}
+
+@media (max-width: 1024px) {
+    .brand-panel .slogan-text {
+        font-size: 1.75rem;
+        line-height: 1.15;
+    }
+}
+
+@media (max-width: 900px) {
+    .brand-panel header {
+        height: 8rem;
+    }
+
+    .brand-panel header img {
+        height: 5rem;
+    }
+
+    .slogan-text {
+        font-size: 2rem;
+        line-height: 1.2;
+        bottom: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-page {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .auth-page > *,
+    .brand-panel {
+        width: 100%;
+        height: auto;
+        max-height: none;
+    }
+
+    .brand-panel {
+        min-height: 8rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 2rem;
+        border-bottom-left-radius: 2rem;
+    }
+
+    .brand-panel header {
+        height: 8rem;
+    }
+
+    .brand-panel header img {
+        height: 5rem;
+    }
+
+    .brand-panel .gradient-sheet,
+    .brand-panel .slogan-section,
+    .brand-panel .slogan-text {
+        display: none;
+    }
+
+    .auth-title {
+        font-size: 3.2rem;
+    }
+
+    .auth-subtitle {
+        font-size: 1.5rem;
+    }
+
+    .form-section {
+        padding: 3.2rem 2rem;
+    }
+
+    .auth-form {
+        width: min(100%, 54rem);
+    }
+}
+
+@media (max-width: 520px) {
+    .auth-title {
+        font-size: 2.8rem;
+    }
+
+    .auth-subtitle {
+        font-size: 1.4rem;
+    }
+
+    .brand-panel {
+        min-height: 7rem;
+        border-bottom-right-radius: 1.6rem;
+        border-bottom-left-radius: 1.6rem;
+    }
+
+    .brand-panel header {
+        height: 7rem;
+    }
+
+    .brand-panel header img {
+        height: 4.2rem;
+    }
+
+    .form-section {
+        padding: 2.4rem 1.6rem;
+    }
+
+    .auth-form {
+        gap: 1.8rem;
+        padding: 2.4rem 1.8rem;
+        border-radius: 1.8rem;
+        box-shadow: 0.2rem 0.3rem 0.4rem 0 rgba(40, 13, 82, 0.18);
+    }
+
+    .auth-description-container {
+        gap: .8rem;
+    }
+
+    .auth-switch-text {
+        font-size: 1.35rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .auth-title {
+        font-size: 2.5rem;
+    }
+
+    .auth-subtitle {
+        font-size: 1.3rem;
+    }
+
+    .brand-panel {
+        min-height: 7rem;
+    }
+
+    .auth-form {
+        padding: 2rem 1.4rem;
+    }
+}

@@ -4,6 +4,7 @@ import AuthProvider from "./contexts/AuthContext";
 import LoadingSpinner from "./components/LoadingSpinner";
 import RootRedirect from "./components/RootRedirect";
 import "./index.css";
+import RegisterPage from "./pages/RegisterPage";
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<RootRedirect />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/cadastro" element={<RegisterPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>

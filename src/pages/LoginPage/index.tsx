@@ -10,6 +10,7 @@ import { LOGIN_MAX_LENGTH, validateLoginForm } from "../../utils/validateLogin";
 import type { LoginFormData, LoginFormErrors } from "../../utils/validateLogin";
 import logoFullUrl from "../../assets/logo-full.svg";
 import logoSymbolUrl from "../../assets/logo-symbol.svg";
+import "../../styles/auth.css";
 import "./login-page.css";
 
 const initialForm: LoginFormData = { email: "", password: "" };
@@ -44,13 +45,13 @@ export default function LoginPage() {
     }
 
     return (
-        <div id="login-page">
-            <section id="brand-panel" aria-label="Apresentação NexUs">
+        <div className="auth-page">
+            <section className="brand-panel" aria-label="Apresentação NexUs">
                 <header>
                     <img src={logoFullUrl} alt="Logotipo Ceris" />
                 </header>
-                <section id="slogan-section">
-                    <div id="slogan-text" className="huninn">
+                <section className="slogan-section">
+                    <div className="slogan-text huninn">
                         <div>
                             <p>Simplifique o controle das suas filiais e transforme dados operacionais em crescimento estratégico.</p>
                             <img src={logoSymbolUrl} alt="" aria-hidden="true" />
@@ -58,19 +59,19 @@ export default function LoginPage() {
                         <hr />
                     </div>
                 </section>
-                <div id="gradient-sheet" aria-hidden="true" />
+                <div className="gradient-sheet" aria-hidden="true" />
             </section>
-            <section id="form-section">
-                <form id="login-form" onSubmit={handleSubmit} noValidate>
-                    <div id="login-description-container">
-                        <h1 className="title huninn" id="loginTitle">
+            <section className="form-section">
+                <form className="auth-form" onSubmit={handleSubmit} noValidate>
+                    <div className="auth-description-container">
+                        <h1 className="title huninn auth-title">
                             Bem-vindo(a) de volta!
                         </h1>
-                        <p className="subtitle montserrat" id="loginSubtitle">
+                        <p className="subtitle montserrat auth-subtitle">
                             Acesse sua conta empresarial
                         </p>
                     </div>
-                    <div id="login-inputs-container">
+                    <div className="auth-inputs-container login-inputs-container">
                         <FormInput
                             label="E-mail corporativo"
                             name="email"
@@ -97,7 +98,7 @@ export default function LoginPage() {
                             error={fieldErrorsMemo.password}
                             width="100%"
                         />
-                        <Link to="/esqueci-senha" id="forgot-password-text">
+                        <Link to="/esqueci-senha" className="forgot-password-text">
                             Esqueci minha senha
                         </Link>
                     </div>
@@ -108,12 +109,12 @@ export default function LoginPage() {
                             Login realizado com sucesso.
                         </p>
                     ) : null}
-                    <PrimaryButton type="submit" loading={loading} id="submit-login-form-button">
+                    <PrimaryButton type="submit" loading={loading} className="auth-submit-button">
                         Entrar na conta
                     </PrimaryButton>
-                    <p className="huninn" id="signup-text">
+                    <p className="huninn auth-switch-text">
                         Ainda não tem conta corporativa?{" "}
-                        <Link to="/cadastro" id="signup-link">
+                        <Link to="/cadastro" className="auth-switch-link">
                             Cadastre-se
                         </Link>
                     </p>

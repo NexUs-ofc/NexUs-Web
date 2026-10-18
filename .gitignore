@@ -25,3 +25,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# Build artifacts (não versionar)
+nexus-web.zip

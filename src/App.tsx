@@ -7,6 +7,7 @@ import "./index.css";
 import RegisterPage from "./pages/RegisterPage";
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const PlansPage = lazy(() => import("./pages/PlansPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/" element={<RootRedirect />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/cadastro" element={<RegisterPage />} />
+                    <Route path="/planos" element={<PlansPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Suspense>

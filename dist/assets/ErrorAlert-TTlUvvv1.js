@@ -1,0 +1,1 @@
+import{s as e}from"./index-Cwtdxbl9.js";var t=e();function n({className:e=``,id:n,message:r,title:i=`Erro`}){return r===``?null:(0,t.jsxs)(`div`,{id:n,className:`errorAlert ${e}`,role:`alert`,children:[(0,t.jsx)(`strong`,{className:`errorAlertTitle`,children:i}),(0,t.jsx)(`span`,{className:`errorAlertMessage`,children:r})]})}export{n as t};

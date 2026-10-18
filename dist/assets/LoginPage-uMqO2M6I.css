@@ -1,0 +1,1 @@
+.login-inputs-container{flex-direction:column}.forgot-password-text{color:var(--primary);text-align:right;font-size:1.4rem}.loginSuccess{color:#14532d;background-color:#f0fdf4;border:1px solid #14532d;border-radius:1.2rem;padding:1.2rem 1.6rem;font-size:1.4rem}@media (width<=520px){.auth-inputs-container.login-inputs-container{gap:1.6rem}.forgot-password-text{font-size:1.3rem}}

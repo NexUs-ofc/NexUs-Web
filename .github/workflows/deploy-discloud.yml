@@ -1,0 +1,37 @@
+name: Deploy Discloud
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build da aplicação
+        run: npm run build
+
+      - name: Criar ZIP para Discloud
+        run: |
+          zip -r nexus-web.zip discloud.config package.json package-lock.json build/ index.html
+
+      - name: Enviar ZIP para Discloud
+        env:
+          DISCLOUD_TOKEN: ${{ secrets.DISCLOUD_TOKEN }}
+          DISCLOUD_APP_ID: ${{ secrets.DISCLOUD_APP_ID }}
+        run: |
+          curl -X PUT "https://api.discloud.app/v2/app/${DISCLOUD_APP_ID}/commit" \
+            -H "api-token: ${DISCLOUD_TOKEN}" \
+            -F "file=@nexus-web.zip"

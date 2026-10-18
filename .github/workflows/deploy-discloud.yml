@@ -30,8 +30,13 @@ jobs:
       - name: Enviar ZIP para Discloud
         env:
           DISCLOUD_TOKEN: ${{ secrets.DISCLOUD_TOKEN }}
-          DISCLOUD_APP_ID: ${{ secrets.DISCLOUD_APP_ID }}
         run: |
-          curl -X PUT "https://api.discloud.app/v2/app/${DISCLOUD_APP_ID}/commit" \
-            -H "api-token: ${DISCLOUD_TOKEN}" \
-            -F "file=@nexus-web.zip"
+          if [ -n "${{ secrets.DISCLOUD_APP_ID }}" ]; then
+            curl -X PUT "https://api.discloud.app/v2/app/${{ secrets.DISCLOUD_APP_ID }}/commit" \
+              -H "api-token: ${DISCLOUD_TOKEN}" \
+              -F "file=@nexus-web.zip"
+          else
+            curl -X POST "https://api.discloud.app/v2/upload" \
+              -H "api-token: ${DISCLOUD_TOKEN}" \
+              -F "file=@nexus-web.zip"
+          fi

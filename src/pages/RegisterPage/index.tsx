@@ -1,12 +1,18 @@
 import logoFullUrl from "../../assets/logo-full.svg";
 import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput";
 import PrimaryButton from "../../components/PrimaryButton";
 import "../../styles/auth.css";
 import "./register-page.css";
 
 export default function RegisterPage() {
+    const navigate = useNavigate();
+
+    function handleCreateAccount(): void {
+        navigate("/planos");
+    }
+
     return (
         <div className="auth-page">
             <section className="brand-panel" aria-label="Apresentação NexUs">
@@ -96,7 +102,7 @@ export default function RegisterPage() {
                             width="47%"
                         />
                     </div>
-                    <PrimaryButton type="submit" loading={false} className="auth-submit-button">
+                    <PrimaryButton type="button" loading={false} className="auth-submit-button" onClick={handleCreateAccount}>
                         Criar minha conta
                     </PrimaryButton>
                     <p className="huninn auth-switch-text">

@@ -5,6 +5,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import RootRedirect from "./components/RootRedirect";
 import "./index.css";
 import RegisterPage from "./pages/RegisterPage";
+import VerifyRegistrationPage from "./pages/VerifyRegistrationPage";
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const PlansPage = lazy(() => import("./pages/PlansPage"));
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/" element={<RootRedirect />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/cadastro" element={<RegisterPage />} />
+                    <Route path="/cadastro/verificacao" element={<VerifyRegistrationPage />} />
                     <Route path="/planos" element={<PlansPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>

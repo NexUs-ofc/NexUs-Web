@@ -16,6 +16,8 @@ export interface FormInputProps extends GenericComponentProps {
     autoComplete?: string;
     required?: boolean;
     error?: string;
+    mask?: (value: string) => string;
+    reserveErrorSpace?: boolean;
 }
 
 export default function FormInput({
@@ -32,6 +34,8 @@ export default function FormInput({
     autoComplete,
     required = false,
     error = "",
+    mask,
+    reserveErrorSpace = false,
 }: FormInputProps) {
     const generatedId = useId();
     const inputId = id ?? `${name}-${generatedId}`;
@@ -40,6 +44,16 @@ export default function FormInput({
 
     function handleTogglePassword(): void {
         setShowPassword((previousValue) => !previousValue);
+    }
+
+    function handleChange(event: ChangeEvent<HTMLInputElement>): void {
+        if (mask === undefined) {
+            onChange(event);
+            return;
+        }
+        const input = event.currentTarget;
+        input.value = mask(input.value);
+        onChange(event);
     }
 
     function renderInput(isPassword: boolean) {
@@ -52,7 +66,7 @@ export default function FormInput({
                     type={isPassword ? (showPassword ? "text" : "password") : type}
                     placeholder={placeholder}
                     value={value}
-                    onChange={onChange}
+                    onChange={handleChange}
                     maxLength={maxLength}
                     autoComplete={autoComplete}
                     required={required}
@@ -91,7 +105,7 @@ export default function FormInput({
                     <span className="formFieldError" id={errorId} role="alert">
                         {error}
                     </span>
-                ) : null}
+                ) : reserveErrorSpace ? <span className="formFieldError formFieldErrorPlaceholder" aria-hidden="true" /> : null}
             </div>
         );
     }
@@ -106,7 +120,7 @@ export default function FormInput({
                 <span className="formFieldError" id={errorId} role="alert">
                     {error}
                 </span>
-            ) : null}
+            ) : reserveErrorSpace ? <span className="formFieldError formFieldErrorPlaceholder" aria-hidden="true" /> : null}
         </div>
     );
 }

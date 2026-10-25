@@ -1,13 +1,53 @@
 .register-inputs-container {
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-height: 26.2rem;
-    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     container: register-inputs / inline-size;
+    column-gap: 2rem;
+    row-gap: 0.8rem;
+}
+
+.register-inputs-container .formInputContainer {
+    justify-content: flex-start;
+    min-height: 0;
+    width: 100% !important;
+    gap: 0.4rem;
+}
+
+.register-inputs-container .formFieldError {
+    display: block;
+    min-height: 2.6rem;
+    line-height: 1.3rem;
 }
 
 @container register-inputs (max-width: 33.33rem) {
     .register-inputs-container .formInputContainer {
-        flex-basis: 100%;
+        width: 100% !important;
     }
+}
+
+@media (max-width: 520px) {
+    .register-inputs-container {
+        grid-template-columns: minmax(0, 1fr);
+        max-height: 55vh;
+        overflow-y: auto;
+        padding-right: 0.4rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 979px) {
+    .register-inputs-container {
+        grid-template-columns: minmax(0, 1fr);
+        max-height: 55vh;
+        overflow-y: auto;
+        padding-right: 0.4rem;
+    }
+}
+
+.registerSuccess {
+    font-size: 1.4rem;
+    color: #14532d;
+    background-color: #f0fdf4;
+    border: 1px solid #14532d;
+    border-radius: 1.2rem;
+    padding: 1.2rem 1.6rem;
 }

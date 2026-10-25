@@ -62,3 +62,67 @@ export function clearRegistrationDraft(): void {
         return;
     }
 }
+
+export const REGISTRATION_ID_STORAGE_VERSION = 1;
+
+export const REGISTRATION_ID_STORAGE_KEY = "nexus-registration-id";
+
+export interface PersistedRegistrationId {
+    _versao: number;
+    registrationId: string;
+}
+
+function isPersistedRegistrationId(value: unknown): value is PersistedRegistrationId {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+    const record = value as Record<string, unknown>;
+    return (
+        record["_versao"] === REGISTRATION_ID_STORAGE_VERSION &&
+        typeof record["registrationId"] === "string" &&
+        record["registrationId"].length > 0
+    );
+}
+
+export function saveRegistrationId(registrationId: string): void {
+    const payload: PersistedRegistrationId = {
+        _versao: REGISTRATION_ID_STORAGE_VERSION,
+        registrationId,
+    };
+    try {
+        localStorage.setItem(REGISTRATION_ID_STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+        return;
+    }
+}
+
+export function loadRegistrationId(): string | null {
+    let raw: string | null;
+    try {
+        raw = localStorage.getItem(REGISTRATION_ID_STORAGE_KEY);
+    } catch {
+        return null;
+    }
+    if (raw === null) {
+        return null;
+    }
+    try {
+        const parsed: unknown = JSON.parse(raw);
+        if (!isPersistedRegistrationId(parsed)) {
+            clearRegistrationId();
+            return null;
+        }
+        return parsed.registrationId;
+    } catch {
+        clearRegistrationId();
+        return null;
+    }
+}
+
+export function clearRegistrationId(): void {
+    try {
+        localStorage.removeItem(REGISTRATION_ID_STORAGE_KEY);
+    } catch {
+        return;
+    }
+}

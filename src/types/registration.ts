@@ -35,6 +35,7 @@ export const REGISTRATION_MAX_LENGTH = {
     password: 128,
     name: 100,
     cnpj: 18,
+    phone: 15,
 } as const;
 
 export const REGISTRATION_INITIAL_DATA: RegistrationData = {
@@ -57,6 +58,10 @@ export const REGISTRATION_INITIAL_ERRORS: RegistrationErrors = {
     planId: "",
 };
 
+export interface RegistrationStartResponse {
+    registrationId: string;
+}
+
 export const AVAILABLE_PLANS: Plan[] = [
     {
         id: 0,
@@ -66,11 +71,10 @@ export const AVAILABLE_PLANS: Plan[] = [
         subtitle: "Funcionalidades limitadas",
         featured: false,
         benefits: [
-            "Máximo de 3 filiais cadastradas",
             "Visualização de filiais próximas ao cliente",
             "Insights sobre vendas em regiões próximas",
             "Produtos mais desejados por período e por região",
-            "Dashboard estratégico com os produtos cadastrados no estoque do cliente",
+            "Dashboard estratégico com os produtos cadastrados no estoque do cliente"
         ],
     },
     {
@@ -81,26 +85,26 @@ export const AVAILABLE_PLANS: Plan[] = [
         subtitle: "Funcionalidades limitadas",
         featured: true,
         benefits: [
-            "Máximo de 3 filiais cadastradas",
+            "IA",
             "Visualização de filiais próximas ao cliente",
             "Insights sobre vendas em regiões próximas",
             "Produtos mais desejados por período e por região",
-            "Dashboard estratégico com os produtos cadastrados no estoque do cliente",
+            "Dashboard estratégico com os produtos cadastrados no estoque do cliente"
         ],
     },
     {
         id: 2,
         title: "Exclusive",
-        price: "R$659,99",
+        price: "R$959,99",
         priceSuffix: "/licença por mês",
         subtitle: "Funcionalidades limitadas",
         featured: false,
         benefits: [
-            "Máximo de 3 filiais cadastradas",
+            "IA + Relatórios",
             "Visualização de filiais próximas ao cliente",
             "Insights sobre vendas em regiões próximas",
             "Produtos mais desejados por período e por região",
-            "Dashboard estratégico com os produtos cadastrados no estoque do cliente",
+            "Dashboard estratégico com os produtos cadastrados no estoque do cliente"
         ],
     },
 ];

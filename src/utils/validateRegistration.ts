@@ -1,6 +1,24 @@
 import { REGISTRATION_MAX_LENGTH } from "../types/registration";
 import type { RegistrationData, RegistrationErrors } from "../types/registration";
 
+export interface RegistrationFormData {
+    name: string;
+    cnpj: string;
+    email: string;
+    phone: string;
+    password: string;
+    passwordConfirmation: string;
+}
+
+export interface RegistrationFormErrors {
+    name: string;
+    cnpj: string;
+    email: string;
+    phone: string;
+    password: string;
+    passwordConfirmation: string;
+}
+
 export interface SanitizedRegistrationData {
     email: string;
     password: string;
@@ -9,8 +27,14 @@ export interface SanitizedRegistrationData {
     planId: number;
 }
 
+type RegistrationSanitizableFields = Pick<
+    RegistrationData,
+    "email" | "password" | "name" | "cnpj" | "planId"
+>;
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CNPJ_PATTERN = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+const PHONE_DIGITS_LENGTH = 11;
 
 function sanitizeField(value: string, maxLength: number): string {
     return value.trim().slice(0, maxLength);
@@ -20,7 +44,7 @@ function sanitizePhone(value: string): string {
     return value.replace(/\D/g, "");
 }
 
-export function sanitizeRegistrationData(data: RegistrationData): SanitizedRegistrationData {
+export function sanitizeRegistrationData(data: RegistrationSanitizableFields): SanitizedRegistrationData {
     return {
         email: sanitizeField(data.email, REGISTRATION_MAX_LENGTH.email).toLowerCase(),
         password: data.password.slice(0, REGISTRATION_MAX_LENGTH.password),
@@ -56,6 +80,16 @@ export function validatePassword(password: string): string {
     return "";
 }
 
+export function validatePasswordConfirmation(password: string, passwordConfirmation: string): string {
+    if (passwordConfirmation.length === 0) {
+        return "Confirme a senha de acesso.";
+    }
+    if (passwordConfirmation !== password) {
+        return "As senhas não coincidem.";
+    }
+    return "";
+}
+
 export function validateName(name: string): string {
     const trimmed = name.trim();
     if (trimmed.length === 0) {
@@ -77,11 +111,56 @@ export function validateCnpj(cnpj: string): string {
     return "";
 }
 
+export function validatePhone(phone: string): string {
+    if (phone.length === 0) {
+        return "Informe o telefone de contato.";
+    }
+    if (sanitizePhone(phone).length !== PHONE_DIGITS_LENGTH) {
+        return "Informe um telefone válido com DDD, como (11) 99999-9999.";
+    }
+    return "";
+}
+
+export function validatePhones(phones: string[]): string {
+    if (phones.length === 0) {
+        return "Informe o telefone de contato.";
+    }
+    for (const phone of phones) {
+        const phoneError = validatePhone(phone);
+        if (phoneError !== "") {
+            return phoneError;
+        }
+    }
+    return "";
+}
+
 export function validatePlanId(planId: number): string {
     if (planId < 0) {
         return "Selecione um plano antes de continuar.";
     }
     return "";
+}
+
+export function validateRegistrationFormData(data: RegistrationFormData): RegistrationFormErrors {
+    return {
+        name: validateName(data.name),
+        cnpj: validateCnpj(data.cnpj),
+        email: validateEmail(data.email),
+        phone: validatePhone(data.phone),
+        password: validatePassword(data.password),
+        passwordConfirmation: validatePasswordConfirmation(data.password, data.passwordConfirmation),
+    };
+}
+
+export function isRegistrationFormDataValid(errors: RegistrationFormErrors): boolean {
+    return (
+        errors.name === "" &&
+        errors.cnpj === "" &&
+        errors.email === "" &&
+        errors.phone === "" &&
+        errors.password === "" &&
+        errors.passwordConfirmation === ""
+    );
 }
 
 export function validateRegistrationForm(data: RegistrationData): RegistrationErrors {
@@ -91,7 +170,7 @@ export function validateRegistrationForm(data: RegistrationData): RegistrationEr
         email: validateEmail(sanitized.email),
         password: validatePassword(sanitized.password),
         name: validateName(sanitized.name),
-        phones: "",
+        phones: validatePhones(data.phones),
         cnpj: validateCnpj(sanitized.cnpj),
         planId: validatePlanId(data.planId),
     };
@@ -102,9 +181,29 @@ export function isRegistrationFormValid(errors: RegistrationErrors): boolean {
         errors.email === "" &&
         errors.password === "" &&
         errors.name === "" &&
+        errors.phones === "" &&
         errors.cnpj === "" &&
         errors.planId === ""
     );
+}
+
+export function toRegistrationDraft(data: RegistrationFormData): RegistrationData {
+    const sanitized = sanitizeRegistrationData({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+        cnpj: data.cnpj,
+        planId: -1,
+    });
+    return {
+        type: "COMPANY",
+        email: sanitized.email,
+        password: sanitized.password,
+        name: sanitized.name,
+        phones: [sanitizePhone(data.phone)],
+        cnpj: sanitized.cnpj,
+        planId: -1,
+    };
 }
 
 export function toRegistrationPayload(data: RegistrationData): RegistrationData {
@@ -114,8 +213,8 @@ export function toRegistrationPayload(data: RegistrationData): RegistrationData 
         email: sanitized.email,
         password: sanitized.password,
         name: sanitized.name,
-        phones: data.phones.map((phone) => sanitizePhone(phone)),
-        cnpj: sanitized.cnpj,
+        phones: data.phones.map((phone) => `+${sanitizePhone(phone)}`),
+        cnpj: sanitizePhone(sanitized.cnpj),
         planId: data.planId,
     };
 }

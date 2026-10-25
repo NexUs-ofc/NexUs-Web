@@ -1,0 +1,67 @@
+.verify-registration-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+}
+
+.otp-inputs {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.otp-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.otp-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.otp-input {
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 2px solid #c4c4c4;
+    border-radius: 1rem;
+    background: #ffffff;
+    caret-color: #4f2078;
+    color: #1a1a1a;
+}
+
+.otp-input:focus {
+    border-color: #4f2078;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 32, 120, 0.15);
+}
+
+.otp-input:not(:placeholder-shown):not([value=""]) {
+    border-color: #737380;
+}
+
+.otp-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f5f5f5;
+}
+
+@media (max-width: 520px) {
+    .otp-input {
+        width: 3.2rem;
+        height: 3.2rem;
+        font-size: 1.2rem;
+    }
+}

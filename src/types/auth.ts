@@ -18,3 +18,8 @@ export interface RefreshPayload {
 }
 
 export type AuthStatus = "idle" | "loading" | "authenticated" | "error";
+
+export interface VerifyRegistrationPayload {
+    registrationId: string;
+    otp: string;
+}

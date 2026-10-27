@@ -9,7 +9,9 @@ export interface PlanCardProps {
     featured: boolean;
     benefits: string[];
     selected: boolean;
-    onContract: (planId: number) => void;
+    actionLabel: string;
+    actionAriaLabel: string;
+    onAction: (planId: number) => void;
 }
 
 const CHECK_SVG = (
@@ -53,12 +55,13 @@ export default function PlanCard({
     featured,
     benefits,
     selected,
-    onContract,
+    actionLabel,
+    actionAriaLabel,
+    onAction,
 }: PlanCardProps) {
     return (
         <article
             className={`planCard ${featured ? "featured" : ""} ${selected ? "selected" : ""}`}
-            aria-pressed={selected}
         >
             <header className="planCardHeader">
                 <h2 className="planTitle">{title}</h2>
@@ -80,10 +83,11 @@ export default function PlanCard({
             <button
                 type="button"
                 className="planButton"
-                onClick={() => onContract(id)}
-                aria-label={`Contratar o plano ${title}`}
+                onClick={() => onAction(id)}
+                aria-label={`${actionAriaLabel} ${title}`}
+                aria-pressed={selected}
             >
-                Contratar Plano
+                {actionLabel}
             </button>
         </article>
     );

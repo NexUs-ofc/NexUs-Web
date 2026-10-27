@@ -15,6 +15,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const StoresPage = lazy(() => import("./pages/StoresPage"));
 const ReportsPage = lazy(() => import("./pages/ReportsPage"));
+const UpdatePlansPage = lazy(() => import("./pages/UpdatePlansPage"));
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/planos" element={<PlansPage />} />
                     <Route element={<PrivateRoute><PortalLayout /></PrivateRoute>}>
                         <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/dashboard/planos" element={<UpdatePlansPage />} />
                         <Route path="/lojas" element={<StoresPage />} />
                         <Route path="/relatorios" element={<ReportsPage />} />
                     </Route>

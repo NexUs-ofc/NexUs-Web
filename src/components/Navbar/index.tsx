@@ -17,7 +17,7 @@ const navigationItems: ReadonlyArray<{
 }> = [
     { destination: "dashboard", label: "Dashboard", path: "/dashboard" },
     { destination: "stores", label: "Lojas", path: "/lojas" },
-    { destination: "plans", label: "Planos", path: "/planos" },
+    { destination: "plans", label: "Planos", path: "/dashboard/planos" },
     { destination: "reports", label: "Relatórios", path: "/relatorios" },
 ];
 

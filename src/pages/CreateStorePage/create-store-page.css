@@ -1,0 +1,7 @@
+.create-store-page { gap: 2.4rem; font-family: "Montserrat", sans-serif; }
+.create-store-page__header { display: flex; flex-direction: column; gap: 0.4rem; }
+.create-store-page__header h1 { line-height: 3.2rem; }
+.create-store-page__header > p { color: #475569; font-size: 1.4rem; line-height: 2rem; }
+.create-store-page__breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; color: #475569; font-size: 1.2rem; line-height: 1.6rem; }
+.create-store-page__breadcrumbs a { color: var(--primary); font-weight: 600; }
+.create-store-page__breadcrumbs img { display: block; }

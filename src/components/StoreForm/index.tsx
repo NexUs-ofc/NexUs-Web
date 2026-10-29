@@ -27,7 +27,7 @@ export default function StoreForm({ mode, initialData, saving, error, onSave, on
     const isCreate = mode === "create";
 
     function field(name: keyof StoreFormData, label: string, placeholder: string, type: "text" | "email" | "tel" = "text", mask?: (value: string) => string) {
-        const required = name === "name" || isCreate && (name === "cnpj" || name === "address");
+        const required = name === "name" || isCreate && (name === "cnpj" || name === "address" || name === "email");
         return <FormInput name={name} label={`${label}${required ? " *" : ""}`} placeholder={placeholder} type={type} value={form[name]} error={errors[name]} onChange={(event) => changeField(name, event.currentTarget.value)} maxLength={STORE_MAX_LENGTH[name]} required={required} mask={mask} />;
     }
 

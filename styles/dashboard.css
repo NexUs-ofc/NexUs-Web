@@ -1,0 +1,123 @@
+.portal-layout__content:has(> .dashboard-page) {
+    block-size: 100vh;
+    block-size: 100dvh;
+    min-block-size: 0;
+    overflow: hidden;
+}
+
+.dashboard-page {
+    --dashboard-text: #596273;
+    position: relative;
+    min-block-size: 0;
+    gap: 2.8rem;
+    padding: 5.6rem 3.6rem 2.4rem 4.4rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-block: contain;
+    scrollbar-gutter: stable;
+    font-family: "Montserrat", sans-serif;
+}
+
+.dashboard-page__heading { flex: 0 0 auto; }
+.dashboard-page__heading h1 { line-height: 3.2rem; overflow-wrap: anywhere; }
+.dashboard-page__heading h1:focus { outline: none; }
+.dashboard-page__content {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    gap: 4rem;
+    min-block-size: 0;
+    padding: 0.2rem;
+}
+
+.dashboard-page:focus-visible,
+.dashboard-card__visual:focus-visible,
+.dashboard-page button:focus-visible,
+.dashboard-data-table:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: -3px;
+}
+
+.dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.6rem, 3.3vw, 4.8rem);
+}
+
+.dashboard-stat,
+.dashboard-card {
+    min-inline-size: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 1.2rem;
+    background: #ffffff;
+    box-shadow: 0 4px 6px rgb(15 23 42 / 4%);
+}
+
+.dashboard-stat { display: flex; flex-direction: column; gap: 1.6rem; min-block-size: 13.8rem; padding: 2.4rem; }
+.dashboard-stat dt { color: #475569; font-size: 1.3rem; font-weight: 600; line-height: 1.6rem; }
+.dashboard-stat dd { color: #0f172a; font-size: clamp(2.4rem, 2.3vw, 3.2rem); font-weight: 700; line-height: 4rem; overflow-wrap: anywhere; }
+.dashboard-charts { display: grid; grid-template-columns: minmax(0, 1.56fr) minmax(0, 1fr); align-items: start; gap: 4rem 2rem; }
+.dashboard-card { display: flex; flex-direction: column; gap: 1.6rem; padding: 2.4rem; }
+.dashboard-card--full { grid-column: 1 / -1; }
+.dashboard-card__heading h2 { color: #0f172a; font-size: 1.6rem; font-weight: 600; line-height: 2.4rem; overflow-wrap: anywhere; }
+.dashboard-card__heading p { margin-block-start: 0.4rem; color: #475569; font-size: 1.3rem; line-height: 1.8rem; }
+.dashboard-card__visual { min-inline-size: 0; overflow-x: auto; overscroll-behavior-inline: contain; }
+.dashboard-chart { inline-size: 100%; min-inline-size: 32rem; block-size: 28rem; }
+.dashboard-card--monthly-waste .dashboard-chart,
+.dashboard-card--below-minimum .dashboard-chart { min-inline-size: 40rem; }
+.dashboard-card--regional-waste .dashboard-chart { min-inline-size: 36rem; }
+.dashboard-card--below-minimum .dashboard-chart { max-inline-size: 60.4rem; }
+.dashboard-card--monthly-waste .dashboard-chart { block-size: 22.5rem; }
+.dashboard-card--state-waste .dashboard-chart { block-size: 30rem; }
+.dashboard-card--regional-consumption .dashboard-chart { block-size: 25rem; }
+.dashboard-card__footer { display: flex; flex-direction: column; gap: 0.6rem; color: var(--dashboard-text); font-size: 1.1rem; line-height: 1.5rem; }
+.dashboard-legend { display: flex; flex-direction: column; gap: 0.6rem; list-style: none; }
+.dashboard-legend li { display: flex; align-items: start; gap: 0.8rem; }
+.dashboard-legend__swatch { flex: 0 0 1rem; inline-size: 1rem; block-size: 1rem; margin-block-start: 0.2rem; border: 1px solid #7b5799; border-radius: 0.2rem; background: var(--swatch-color); }
+.dashboard-legend__swatch--dashed { border: 0; border-block-start: 2px dashed var(--swatch-color); border-radius: 0; block-size: 0; margin-block-start: 0.6rem; background: transparent; }
+.dashboard-card__axes { display: flex; flex-direction: column; gap: 0.2rem; }
+.dashboard-card__note { line-height: 1.6rem; }
+.dashboard-card__data-toggle,
+.dashboard-page__error button { align-self: flex-end; min-block-size: 3.2rem; padding: 0.6rem 1rem; border: 1px solid #c4b3d7; border-radius: 0.6rem; background: #ffffff; color: var(--primary); font: 600 1.1rem/1.8rem "Montserrat", sans-serif; cursor: pointer; }
+.dashboard-card__data-toggle:hover,
+.dashboard-page__error button:hover { background: #f3f0ff; }
+.dashboard-card__empty { display: grid; min-block-size: 22.5rem; place-items: center; color: #475569; font-size: 1.4rem; }
+.dashboard-data-table { max-block-size: 30rem; overflow: auto; border: 1px solid #e5e7eb; border-radius: 0.8rem; }
+.dashboard-data-table table { inline-size: 100%; border-collapse: collapse; color: #475569; font-size: 1.2rem; line-height: 1.8rem; text-align: start; }
+.dashboard-data-table caption { padding: 1.2rem; color: #0f172a; font-weight: 600; text-align: start; }
+.dashboard-data-table th,
+.dashboard-data-table td { padding: 1rem 1.2rem; border-block-end: 1px solid #e5e7eb; text-align: start; }
+.dashboard-data-table thead { background: #f3f0ff; color: var(--primary); }
+.dashboard-data-table tbody th { font-weight: 500; }
+.dashboard-page__error button { margin-block-start: 1.6rem; font-size: 1.3rem; }
+.dashboard-page__footer { color: #475569; font-size: 1.2rem; line-height: 1.8rem; }
+.dashboard-sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (max-width: 75rem) {
+    .dashboard-page { padding: 3.2rem 2rem 2.4rem 2.4rem; }
+    .dashboard-summary { gap: 1.6rem; }
+    .dashboard-stat { padding: 2rem 1.6rem; }
+    .dashboard-charts { grid-template-columns: minmax(0, 1fr); gap: 2.4rem; }
+}
+
+@media (max-width: 48rem) {
+    .dashboard-page { gap: 2rem; padding: 2.4rem 1.6rem; }
+    .dashboard-page__content { gap: 2.4rem; }
+    .dashboard-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+    .dashboard-stat { min-block-size: 12rem; gap: 1.2rem; padding: 1.6rem; }
+    .dashboard-stat dd { font-size: clamp(1.8rem, 4.8vw, 2.4rem); line-height: 3.2rem; white-space: nowrap; }
+    .dashboard-card { padding: 1.6rem; }
+    .dashboard-card__heading h2 { font-size: 1.5rem; line-height: 2.2rem; }
+    .dashboard-card__heading p { font-size: 1.2rem; }
+    .dashboard-chart { block-size: 25rem; }
+}
+
+@media (max-width: 24rem) {
+    .dashboard-summary { grid-template-columns: minmax(0, 1fr); }
+    .dashboard-stat { min-block-size: 10rem; }
+}
+
+@media (forced-colors: active) {
+    .dashboard-stat, .dashboard-card, .dashboard-data-table, .dashboard-card__data-toggle { border-color: CanvasText; }
+    .dashboard-card__data-toggle { color: ButtonText; background: ButtonFace; }
+}

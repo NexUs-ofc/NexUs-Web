@@ -42,7 +42,7 @@ export default function Navbar({
                             <NavLink
                                 key={item.destination}
                                 to={item.path}
-                                end
+                                end={item.destination !== "stores"}
                                 className={({ isActive }) =>
                                     `navbar__item${isActive ? " navbar__item--active" : ""}${item.destination === "reports" ? " navbar__item--reports" : ""}`
                                 }

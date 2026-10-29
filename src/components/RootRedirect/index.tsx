@@ -13,6 +13,5 @@ export default function RootRedirect() {
         return <Navigate to="/login" replace />;
     }
 
-    // TODO(próxima PR): redirecionar autenticados para a página inicial real.
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/dashboard" replace />;
 }

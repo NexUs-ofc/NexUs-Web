@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput";
 import PrimaryButton from "../../components/PrimaryButton";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -17,6 +17,7 @@ const initialForm: LoginFormData = { email: "", password: "" };
 const initialErrors: LoginFormErrors = { email: "", password: "" };
 
 export default function LoginPage() {
+    const navigate = useNavigate();
     const [form, setForm] = useState<LoginFormData>(initialForm);
     const [fieldErrors, setFieldErrors] = useState<LoginFormErrors>(initialErrors);
     const { loading, error, success, execute, reset } = useLogin();
@@ -41,7 +42,10 @@ export default function LoginPage() {
         event.preventDefault();
         const validation = validateLoginForm(form);
         setFieldErrors(validation);
-        await execute(form);
+        const authenticated = await execute(form);
+        if (authenticated) {
+            navigate("/dashboard", { replace: true });
+        }
     }
 
     return (

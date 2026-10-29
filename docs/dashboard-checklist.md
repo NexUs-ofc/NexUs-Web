@@ -19,7 +19,7 @@ Revisão em 29/10/2026. “Atendido no dashboard” descreve esta entrega. Itens
 | Proibição de `fetch` em componentes/páginas | Atendida. Único `fetch` encontrado está em `src/services/apiClient.ts`. |
 | URLs privadas/chaves em ambiente, sem versionamento | Esta entrega não acrescenta URLs privadas nem chaves. `.env` permanece ignorado. A revisão dos serviços preexistentes não foi ampliada para uma auditoria de segredos. |
 | Estado local com `useState`, campos relacionados agrupados | `useDashboard` agrupa payload, mapa, loading, erro e revisão; cada card tem apenas o estado de exibição da tabela. |
-| Sem mutação de arrays/objetos | Adaptação cria novos objetos; ranking ordena uma cópia. Teste confirma preservação da origem. |
+| Sem mutação de arrays/objetos | Adaptação cria novos objetos; ranking ordena uma cópia. |
 | `useEffect` com dependências completas | Dependências explícitas em página e hooks. ESLint com regras de hooks passou. |
 | Listas com IDs únicos, sem `key={index}` em listas mutáveis | Novas listas usam IDs de domínio/coluna. O índice de coluna apenas seleciona a célula; não é usado como key. O OTP preexistente usa índices em seis posições fixas, sem adição/remoção/reordenação. |
 | `useParams` e tratamento de `undefined` | Não se aplica à rota estática `/dashboard`. Nenhuma rota atual usa parâmetros dinâmicos; permanece requisito global pendente, sem criar uma rota artificial nesta entrega. |
@@ -29,7 +29,7 @@ Revisão em 29/10/2026. “Atendido no dashboard” descreve esta entrega. Itens
 | Ações em buttons, sem `div onClick` | Atendido; controles de dados e tentativa são buttons. |
 | Labels com `htmlFor` | Dashboard não tem formulário. FormInput, filtros e formulários existentes usam associação explícita. |
 | Imagens com alt | Nenhuma imagem foi adicionada ao JSX do dashboard. Mapas e gráficos são SVGs dinâmicos com descrição acessível; assets do layout são reutilizados. |
-| Texto com contraste AA | Texto do dashboard usa tons escuros; rótulos do heatmap escolhem preto/branco pelo contraste real. Teste varre 1.001 pontos da escala, todos ≥ 4,5:1. |
+| Texto com contraste AA | Texto do dashboard usa tons escuros; rótulos do heatmap escolhem preto/branco pelo contraste real para garantir ao menos 4,5:1. |
 | Erros no DOM com `role="alert"` | `ErrorAlert` para carregamento e falha de desenho. Erro e recuperação do serviço verificados no navegador. |
 | Operação completa por teclado e foco visível | Tab/Enter nas tabelas e tentativa; regiões de rolagem focáveis e navegáveis com setas. Foco permanece no acionador ao fechar a tabela. Verificado no Chrome. |
 | Carregando, sucesso e erro no DOM | LoadingSpinner, status de sucesso e ErrorAlert. Estados e tentativa por teclado verificados no navegador. |
@@ -43,7 +43,7 @@ Revisão em 29/10/2026. “Atendido no dashboard” descreve esta entrega. Itens
 | useReducer com state e actions union tipados | Já existe em AuthContext e useStoreCollection. O carregamento simples do dashboard usa useState, sem criar complexidade artificial. |
 | Justificativa oral do useReducer | Pendente presencial: mostrar as transições de carregamento, gravação, falha e feedback de lojas, ou as transições da autenticação. |
 | Hook customizado tipado, loading e erros | `useDashboard` tem interface de retorno e os três estados. |
-| AbortController e prevenção de estado após unmount | Serviços recebem sinal; hook cancela e ignora resoluções abortadas. Teste de cancelamento e navegação durante carregamento passaram. |
+| AbortController e prevenção de estado após unmount | Serviços recebem sinal; hook cancela e ignora resoluções abortadas. Navegação durante carregamento verificada no navegador. |
 | React.lazy + Suspense por página | Dashboard continua lazy em App, com Suspense existente. O renderizador ECharts e a malha também são módulos separados sob demanda. Pendência global preexistente: RegisterPage e VerifyRegistrationPage ainda são imports diretos. |
 | Demonstração de chunks na aba Network | Build confirmou chunks distintos. A demonstração ao vivo continua pendente. |
 | localStorage com `_versao`, validação e descarte | Já existe para sessão, cadastro e lojas. Dashboard não persiste métricas mockadas nem preferências sem requisito funcional. |

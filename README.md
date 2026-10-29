@@ -7,7 +7,6 @@ npm ci
 npm run dev
 npm run build
 npm run lint
-npm test
 ```
 
 O Vite usa a porta 8080, ou a próxima livre. Configure as variáveis de ambiente conforme `.env.example`, sem versionar o `.env`. A autenticação mantém a integração existente; os indicadores do dashboard usam dados demonstrativos.
@@ -18,6 +17,6 @@ O fluxo dos dados é `services → hooks → páginas/componentes`. `src/service
 
 Os mocks ficam em `src/mocks/dashboard.ts`. As UFs usam as quatro classificações ilustrativas do design, sem taxas numéricas inventadas. A origem da malha está documentada em [assets/maps/README.md](assets/maps/README.md). O CSS novo fica em `styles/dashboard.css`, fora de `src`, para respeitar a exigência de adicionar somente `.ts` e `.tsx` nessa pasta. Componentes e páginas mantêm suas próprias pastas com `index.tsx`.
 
-`npm test` cobre validação, sanitização, cancelamento, integridade das 27 UFs, atualização das séries a partir dos dados, categorias adicionais, ausência de valores, ordenação imutável do top 10 e contraste do heatmap. O [checklist da avaliação](docs/dashboard-checklist.md) registra também os requisitos globais que ainda precisam de trabalho ou demonstração.
+O projeto não mantém uma suíte de testes automatizados neste momento. A validação usa build, lint e conferência dos fluxos no navegador. O [checklist da avaliação](docs/dashboard-checklist.md) registra também os requisitos globais que ainda precisam de trabalho ou demonstração.
 
 **Publicação:** o endereço de produção em Vercel ou GitHub Pages ainda não foi informado nem configurado neste repositório. Acrescente aqui o link real após a publicação e confirme o acesso às rotas diretamente pelo navegador. O servidor local não substitui essa entrega.

@@ -75,6 +75,7 @@ export function validateStoreForm(data: StoreFormData, mode: StoreFormMode): Sto
     if (mode === "create") {
         if (!clean.cnpj) errors.cnpj = "Informe o CNPJ da filial.";
         if (!clean.address) errors.address = "Informe o endereço da filial.";
+        if (!clean.email) errors.email = "Informe o e-mail da filial.";
     }
     if (clean.state && !BRAZILIAN_STATES.includes(clean.state)) errors.state = "Selecione uma UF válida.";
     if (clean.cnpj && (!/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/u.test(clean.cnpj) || !isValidCnpj(clean.cnpj))) {

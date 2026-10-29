@@ -1,0 +1,102 @@
+import type { Store, StoreFormData, StoreFormErrors, StoreFormMode } from "../types/store";
+import { applyPatternMask, maskCnpj } from "./masks";
+
+export const STORE_MAX_LENGTH = {
+    name: 100, cnpj: 18, cep: 9, phone: 15, address: 200,
+    city: 100, state: 2, email: 254, openingHours: 120, manager: 100, photoDataUrl: 1_400_000,
+} as const;
+
+export const BRAZILIAN_STATES: ReadonlyArray<string> = [
+    "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
+    "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+];
+
+export const EMPTY_STORE_FORM: StoreFormData = {
+    name: "", cnpj: "", cep: "", phone: "", address: "", city: "", state: "", email: "", openingHours: "", manager: "", photoDataUrl: "",
+};
+
+export function maskStoreCep(value: string): string {
+    return applyPatternMask(value, "#####-###");
+}
+
+export function maskStorePhone(value: string): string {
+    return applyPatternMask(value, value.replace(/\D/gu, "").length > 10 ? "(##) #####-####" : "(##) ####-####");
+}
+
+export function toStoreForm(store: Store): StoreFormData {
+    return {
+        name: store.name, city: store.city, state: store.state,
+        cnpj: maskCnpj(store.cnpj ?? ""), cep: maskStoreCep(store.cep ?? ""),
+        phone: maskStorePhone(store.phone ?? ""), address: store.address ?? "",
+        email: store.email ?? "", openingHours: store.openingHours ?? "",
+        manager: store.manager ?? "", photoDataUrl: store.photoDataUrl ?? "",
+    };
+}
+
+export function sanitizeStoreData(data: StoreFormData): StoreFormData {
+    const clean = (value: string): string => value.replace(/\p{Cc}/gu, "").trim().replace(/\s+/gu, " ");
+    return {
+        name: clean(data.name), cnpj: clean(data.cnpj), cep: clean(data.cep), phone: clean(data.phone),
+        address: clean(data.address), city: clean(data.city), state: clean(data.state).toUpperCase(),
+        email: clean(data.email).toLowerCase(), openingHours: clean(data.openingHours),
+        manager: clean(data.manager), photoDataUrl: data.photoDataUrl,
+    };
+}
+
+function isValidCnpj(value: string): boolean {
+    const digits = value.replace(/\D/gu, "");
+    if (digits.length !== 14 || /^(\d)\1+$/u.test(digits)) return false;
+    const check = (length: number): number => {
+        let weight = length - 7;
+        let sum = 0;
+        for (let position = 0; position < length; position += 1) {
+            sum += Number(digits[position]) * weight;
+            weight = weight === 2 ? 9 : weight - 1;
+        }
+        const remainder = sum % 11;
+        return remainder < 2 ? 0 : 11 - remainder;
+    };
+    return check(12) === Number(digits[12]) && check(13) === Number(digits[13]);
+}
+
+export function validateStoreForm(data: StoreFormData, mode: StoreFormMode): StoreFormErrors {
+    const clean = sanitizeStoreData(data);
+    const errors: StoreFormErrors = { ...EMPTY_STORE_FORM };
+    const labels: Record<keyof StoreFormData, string> = {
+        name: "nome da filial", cnpj: "CNPJ", cep: "CEP", phone: "telefone", address: "endereço",
+        city: "nome da cidade", state: "estado", email: "e-mail", openingHours: "horário de funcionamento", manager: "responsável", photoDataUrl: "foto da loja",
+    };
+    for (const field of Object.keys(STORE_MAX_LENGTH) as Array<keyof StoreFormData>) {
+        if (data[field].length > STORE_MAX_LENGTH[field]) {
+            errors[field] = `O campo ${labels[field]} deve ter no máximo ${STORE_MAX_LENGTH[field]} caracteres.`;
+        }
+    }
+    if (!clean.name) errors.name = "Informe o nome da filial.";
+    if (mode === "create") {
+        if (!clean.cnpj) errors.cnpj = "Informe o CNPJ da filial.";
+        if (!clean.address) errors.address = "Informe o endereço da filial.";
+    }
+    if (clean.state && !BRAZILIAN_STATES.includes(clean.state)) errors.state = "Selecione uma UF válida.";
+    if (clean.cnpj && (!/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/u.test(clean.cnpj) || !isValidCnpj(clean.cnpj))) {
+        errors.cnpj = "Informe um CNPJ válido, com 14 dígitos e dígitos verificadores corretos.";
+    }
+    if (clean.cep && !/^\d{5}-\d{3}$/u.test(clean.cep)) errors.cep = "Informe um CEP válido com 8 dígitos.";
+    if (clean.phone && !/^\([1-9]\d\) \d{4,5}-\d{4}$/u.test(clean.phone)) errors.phone = "Informe um telefone válido com DDD e 10 ou 11 dígitos.";
+    if (clean.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(clean.email)) errors.email = "Informe um e-mail válido, como filial@empresa.com.br.";
+    if (clean.photoDataUrl && !isStorePhotoDataUrl(clean.photoDataUrl)) errors.photoDataUrl = "Selecione uma foto PNG, JPEG ou WebP de até 1 MB.";
+    return errors;
+}
+
+export function isStorePhotoDataUrl(value: string): boolean {
+    return value.length <= STORE_MAX_LENGTH.photoDataUrl && /^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/u.test(value);
+}
+
+export function isStoreFormValid(errors: StoreFormErrors): boolean {
+    return Object.values(errors).every((error) => error === "");
+}
+
+export function toValidatedStoreData(data: StoreFormData, mode: StoreFormMode): StoreFormData {
+    const errors = validateStoreForm(data, mode);
+    if (!isStoreFormValid(errors)) throw new Error(Object.values(errors).find((error) => error !== ""));
+    return sanitizeStoreData(data);
+}

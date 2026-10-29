@@ -1,0 +1,132 @@
+.stores-table {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.2rem;
+    background: #ffffff;
+}
+
+.stores-table__scroll {
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+.stores-table__scroll:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: -3px;
+}
+
+.stores-table table {
+    inline-size: 100%;
+    min-inline-size: 65rem;
+    border-spacing: 0;
+    table-layout: fixed;
+    color: #475569;
+    font-size: 1.4rem;
+    line-height: 2rem;
+    text-align: start;
+}
+
+.stores-table__caption {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+.stores-table thead th {
+    position: sticky;
+    z-index: 1;
+    inset-block-start: 0;
+    padding-block: 1.4rem;
+    background: #f8fafc;
+    font-weight: 600;
+    text-align: start;
+}
+
+.stores-table th,
+.stores-table td {
+    padding-inline-end: 1.6rem;
+    overflow-wrap: anywhere;
+}
+
+.stores-table tr > :first-child {
+    padding-inline-start: 2.4rem;
+}
+
+.stores-table tr > :nth-child(2) {
+    inline-size: 18rem;
+}
+
+.stores-table tr > :nth-child(3) {
+    inline-size: 10rem;
+}
+
+.stores-table tr > :last-child {
+    inline-size: 17.4rem;
+    padding-inline-end: 2.4rem;
+    text-align: end;
+}
+
+.stores-table tbody th,
+.stores-table tbody td {
+    padding-block: 1.6rem;
+    border-block-start: 1px solid #e2e8f0;
+}
+
+.stores-table tbody th {
+    color: #0f172a;
+    font-weight: 600;
+    text-align: start;
+}
+
+.stores-table__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+}
+
+.stores-table__actions button {
+    display: grid;
+    flex: 0 0 2.8rem;
+    inline-size: 2.8rem;
+    block-size: 2.8rem;
+    place-items: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.6rem;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.stores-table__actions button:hover { background: #f3f0ff; }
+
+.stores-table__actions img {
+    display: block;
+}
+
+.stores-table td.stores-table__empty {
+    padding: 3.2rem 2.4rem;
+    text-align: center;
+}
+
+@media (max-width: 48rem) {
+    .stores-table table {
+        min-inline-size: 60rem;
+    }
+
+    .stores-table tr > :nth-child(2) {
+        inline-size: 15rem;
+    }
+
+    .stores-table tr > :nth-child(3) {
+        inline-size: 7rem;
+    }
+
+    .stores-table tr > :last-child {
+        inline-size: 11rem;
+    }
+}

@@ -1,0 +1,37 @@
+.store-form { display: flex; flex-direction: column; gap: 3.2rem; min-inline-size: 0; color: #0f172a; font-family: "Montserrat", sans-serif; }
+.store-form--create { padding: 3.2rem; border: 1px solid #e2e8f0; border-radius: 1.2rem; background: #ffffff; }
+.store-form__fields { display: flex; flex-direction: column; gap: 3.2rem; min-inline-size: 0; border: 0; }
+.store-form__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+.store-form__section { display: flex; flex-direction: column; gap: 2rem; }
+.store-form__section h2 { font-size: 1.6rem; font-weight: 500; line-height: 2.4rem; }
+.store-form__divider { block-size: 1px; background: url("/stores/form-line.svg") left center / 100% 1px no-repeat; }
+.store-form__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4rem; align-items: start; }
+.store-form__grid--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.store-form .formInputContainer { min-inline-size: 0; gap: 0.6rem; justify-content: flex-start; }
+.store-form .formLabel { color: #0f172a; font-size: 1.2rem; font-weight: 600; line-height: 1.6rem; }
+.store-form .formInput, .store-form select { inline-size: 100%; block-size: 4.4rem; padding: 1rem 1.4rem; border: 1px solid #e2e8f0; border-radius: 10rem; background: #ffffff; color: #0f172a; box-shadow: none; font: 400 1.4rem/2rem "Montserrat", sans-serif; }
+.store-form .formInput::placeholder { color: #64748b; opacity: 1; }
+.store-form__select { position: relative; }
+.store-form select { appearance: none; padding-inline-end: 4.4rem; cursor: pointer; }
+.store-form__select img { position: absolute; inset-inline-end: 1.4rem; inset-block-start: 50%; transform: translateY(-50%); pointer-events: none; }
+.store-form select:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.store-form [aria-invalid="true"] { border-color: #9f1239; }
+.store-form__actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 1.2rem; }
+.store-form__actions button { min-block-size: 4.4rem; padding: 1rem 1.8rem; border: 1px solid transparent; border-radius: 10rem; cursor: pointer; font: 600 1.4rem/2rem "Montserrat", sans-serif; }
+.store-form__actions .store-form__cancel { border-color: #e2e8f0; background: #ffffff; color: #0f172a; }
+.store-form__actions button:disabled { cursor: wait; }
+.store-form__status { font-size: 1.3rem; color: #475569; }
+.store-form--edit { gap: 2.4rem; color: #1e1b4b; }
+.store-form__edit-fields { display: flex; flex-direction: column; gap: 1.6rem; }
+.store-form--edit .formLabel { color: #1e1b4b; font-size: 1.3rem; font-weight: 700; line-height: 1.6rem; }
+.store-form--edit .formInputContainer { gap: 0.8rem; }
+.store-form--edit .formInput, .store-form--edit select { block-size: 4.2rem; padding: 1.2rem 2rem; border-color: #e2e2e9; color: #1e1b4b; }
+.store-form--edit select { padding-inline-end: 4.8rem; }
+.store-form--edit .store-form__grid { gap: 1.6rem; }
+.store-form__grid--city { grid-template-columns: minmax(0, 1fr) 14rem; }
+.store-form--edit .store-form__actions button { padding-inline: 2.4rem; font-weight: 700; }
+.store-form--edit .store-form__cancel { border-color: var(--primary); color: var(--primary); }
+
+@media (max-width: 64rem) { .store-form--create .store-form__grid { grid-template-columns: 1fr; } }
+@media (max-width: 48rem) { .store-form--create { padding: 2.4rem 1.6rem; } }
+@media (max-width: 30rem) { .store-form--edit .store-form__grid { grid-template-columns: 1fr; } .store-form__actions button { flex: 1; } }

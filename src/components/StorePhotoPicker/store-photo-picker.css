@@ -1,0 +1,11 @@
+.store-photo { display: flex; align-items: center; gap: 1.6rem; min-inline-size: 0; }
+.store-photo__preview, .store-photo__placeholder { flex: 0 0 7.2rem; inline-size: 7.2rem; block-size: 7.2rem; border-radius: 50%; object-fit: cover; }
+.store-photo__placeholder { display: grid; place-items: center; background: #f3f0ff; color: var(--primary); font-size: 1.4rem; }
+.store-photo__controls { display: flex; flex-direction: column; gap: 0.8rem; min-inline-size: 0; }
+.store-photo label { color: #1e1b4b; font-size: 1.3rem; font-weight: 600; }
+.store-photo__input { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); overflow: hidden; }
+.store-photo__buttons { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; }
+.store-photo button { min-block-size: 3.2rem; padding: 0.4rem 1.2rem; border: 1px solid var(--primary); border-radius: 10rem; background: #ffffff; color: var(--primary); cursor: pointer; font: 600 1.2rem/1.6rem "Montserrat", sans-serif; }
+.store-photo p { color: #475569; font-size: 1.2rem; line-height: 1.5; }
+.store-photo .store-photo__error { color: #9f1239; }
+@media (max-width: 30rem) { .store-photo { align-items: flex-start; flex-wrap: wrap; } }

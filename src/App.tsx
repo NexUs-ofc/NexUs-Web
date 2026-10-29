@@ -14,6 +14,7 @@ const PlansPage = lazy(() => import("./pages/PlansPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const StoresPage = lazy(() => import("./pages/StoresPage"));
+const CreateStorePage = lazy(() => import("./pages/CreateStorePage"));
 const ReportsPage = lazy(() => import("./pages/ReportsPage"));
 const UpdatePlansPage = lazy(() => import("./pages/UpdatePlansPage"));
 
@@ -31,6 +32,7 @@ function App() {
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/dashboard/planos" element={<UpdatePlansPage />} />
                         <Route path="/lojas" element={<StoresPage />} />
+                        <Route path="/lojas/nova" element={<CreateStorePage />} />
                         <Route path="/relatorios" element={<ReportsPage />} />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />

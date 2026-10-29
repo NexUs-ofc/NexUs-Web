@@ -61,7 +61,9 @@ export default function PlansPage() {
                             featured={plan.featured}
                             benefits={plan.benefits}
                             selected={selectedPlanId === plan.id}
-                            onContract={handleContract}
+                            actionLabel="Contratar Plano"
+                            actionAriaLabel="Contratar o plano"
+                            onAction={handleContract}
                         />
                     ))}
                 </div>

@@ -1,0 +1,26 @@
+.updatePlansPage {
+    flex: 1 1 0;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+}
+
+.updatePlansPage > main {
+    inline-size: 100%;
+    min-inline-size: 0;
+}
+
+@media (max-width: 1130px) {
+    .updatePlansPage .plansContainer {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        flex: 0 0 auto;
+        align-items: stretch;
+        height: auto;
+    }
+
+    .updatePlansPage .planCard {
+        inline-size: 100%;
+        min-inline-size: 100%;
+        max-inline-size: 100%;
+    }
+}

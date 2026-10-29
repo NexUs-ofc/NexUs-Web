@@ -1,0 +1,215 @@
+.navbar {
+    position: sticky;
+    inset-block-start: 0;
+    display: flex;
+    flex: 0 0 clamp(22rem, 18.3vw, 26.3rem);
+    flex-direction: column;
+    align-self: flex-start;
+    inline-size: clamp(22rem, 18.3vw, 26.3rem);
+    block-size: 100vh;
+    block-size: 100dvh;
+    min-block-size: 0;
+    overflow-y: auto;
+    padding: 2.4rem 2.3rem 1.8rem 2.4rem;
+    border-inline-end: 1px solid #e2e2e9;
+    background: #ffffff;
+}
+
+.navbar__top {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+}
+
+.navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-inline-size: 0;
+    color: #4f2078;
+}
+
+.navbar__brand-mark {
+    display: grid;
+    flex: 0 0 3.6rem;
+    inline-size: 3.6rem;
+    block-size: 3.6rem;
+    place-items: center;
+    border-radius: 1.2rem;
+    background: #4f2078;
+}
+
+.navbar__brand-mark img {
+    display: block;
+    max-inline-size: none;
+}
+
+.navbar__brand-name {
+    overflow: hidden;
+    font-family: "Huninn", sans-serif;
+    font-size: 2rem;
+    line-height: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.navbar__navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.navbar__item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    inline-size: 100%;
+    min-block-size: 4.4rem;
+    padding: 1.2rem 1.6rem;
+    border: 0;
+    border-radius: 100vw;
+    background: transparent;
+    color: #737380;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: normal;
+    text-align: start;
+    transition: background-color 120ms ease, color 120ms ease;
+}
+
+.navbar__item--active {
+    background: #f3f0ff;
+    color: #4f2078;
+    font-weight: 700;
+}
+
+.navbar__item--reports {
+    border-radius: 1.2rem;
+}
+
+.navbar__item-icon {
+    display: block;
+    flex: 0 0 auto;
+    inline-size: 2rem;
+    block-size: 2rem;
+    background-color: #737380;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+.navbar__item-icon--dashboard {
+    -webkit-mask-image: url("../../assets/dashboards/dashboard.svg");
+    mask-image: url("../../assets/dashboards/dashboard.svg");
+}
+
+.navbar__item-icon--stores {
+    -webkit-mask-image: url("../../assets/dashboards/stores.svg");
+    mask-image: url("../../assets/dashboards/stores.svg");
+}
+
+.navbar__item-icon--plans {
+    -webkit-mask-image: url("../../assets/dashboards/plans.svg");
+    mask-image: url("../../assets/dashboards/plans.svg");
+}
+
+.navbar__item-icon--reports {
+    -webkit-mask-image: url("../../assets/dashboards/reports.svg");
+    mask-image: url("../../assets/dashboards/reports.svg");
+}
+
+.navbar__item--active .navbar__item-icon {
+    background-color: #4f2078;
+}
+
+.navbar__item-label {
+    min-inline-size: 0;
+}
+
+.navbar__item:hover:not(.navbar__item--active) {
+    background: #f8f7fb;
+}
+
+.navbar__sign-out {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 1.2rem;
+    max-inline-size: 100%;
+    margin-block-start: auto;
+    margin-inline-start: 2.3rem;
+    padding: 1rem 1.2rem;
+    border: 0;
+    border-radius: 0.8rem;
+    background: transparent;
+    color: #dc2626;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2rem;
+    text-align: start;
+    white-space: nowrap;
+}
+
+.navbar__sign-out img {
+    display: block;
+    flex: 0 0 auto;
+}
+
+.navbar__sign-out-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.navbar__sign-out:hover {
+    background: #fff1f2;
+}
+
+.navbar__item:focus-visible,
+.navbar__sign-out:focus-visible {
+    outline: 3px solid #4f2078;
+    outline-offset: 2px;
+}
+
+@media (max-width: 48rem) {
+    .navbar {
+        flex-basis: 6.8rem;
+        inline-size: 6.8rem;
+        align-items: center;
+        padding-inline: 0.8rem;
+    }
+
+    .navbar__brand {
+        justify-content: center;
+    }
+
+    .navbar__brand-name,
+    .navbar__item-label,
+    .navbar__sign-out-label {
+        display: none;
+    }
+
+    .navbar__item {
+        justify-content: center;
+        padding-inline: 0;
+    }
+
+    .navbar__sign-out {
+        align-self: center;
+        justify-content: center;
+        margin-inline-start: 0;
+        padding-inline: 1.2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar__item {
+        transition: none;
+    }
+}

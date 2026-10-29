@@ -1,0 +1,39 @@
+.store-dialog {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    inline-size: min(56rem, calc(100% - 3.2rem));
+    max-inline-size: none;
+    max-block-size: calc(100dvh - 3.2rem);
+    margin: auto;
+    overflow-y: auto;
+    padding: 3.2rem;
+    border: 0;
+    border-radius: 2.4rem;
+    background: #ffffff;
+    color: #1e1b4b;
+    box-shadow: 0 1rem 1.6rem rgb(0 0 0 / 17%);
+    font-family: "Montserrat", sans-serif;
+}
+
+.store-dialog:not([open]) { display: none; }
+.store-dialog::backdrop { background: rgb(0 0 0 / 40%); }
+.store-dialog--edit::backdrop { background: url("/stores/modal-backdrop.svg") center / cover; }
+.store-dialog__header { display: flex; flex-direction: column; gap: 0.4rem; }
+.store-dialog__header h2 { font: 400 2.4rem/1.25 "Huninn", sans-serif; }
+.store-dialog__header p { color: #626270; font-size: 1.3rem; line-height: 1.5; }
+.store-dialog--delete { inline-size: min(42rem, calc(100% - 3.2rem)); padding: 2.8rem; gap: 2rem; }
+.store-dialog--delete .store-dialog__header { align-items: center; gap: 1.2rem; text-align: center; }
+.store-dialog--delete h2 { font-size: 1.8rem; }
+.store-dialog__warning { display: grid; place-items: center; inline-size: 4.8rem; block-size: 4.8rem; border-radius: 50%; background: rgb(190 18 60 / 10%); color: #be123c; font-size: 2rem; }
+.store-dialog__actions { display: flex; gap: 1.2rem; }
+.store-dialog__actions button { flex: 1; padding: 1.2rem 2rem; border: 1px solid #e2e2e9; border-radius: 10rem; background: #ffffff; color: #626270; cursor: pointer; font: 700 1.4rem/2rem "Montserrat", sans-serif; }
+.store-dialog__actions .store-dialog__delete { border-color: #be123c; background: #be123c; color: #ffffff; }
+.store-dialog button:disabled { cursor: wait; opacity: 0.7; }
+
+@media (max-width: 30rem) {
+    .store-dialog { padding: 2.4rem 2rem; }
+    .store-dialog__actions { flex-wrap: wrap; }
+}

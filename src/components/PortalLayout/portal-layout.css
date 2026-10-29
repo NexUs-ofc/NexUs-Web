@@ -14,6 +14,13 @@
     padding: 4rem;
 }
 
+.portal-layout__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+}
+
 .portal-page h1 {
     color: #0f172a;
     font-family: "Huninn", sans-serif;

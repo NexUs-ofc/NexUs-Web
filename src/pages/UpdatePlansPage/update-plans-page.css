@@ -1,15 +1,74 @@
+.portal-layout__content:has(> .updatePlansPage) {
+    block-size: 100vh;
+    block-size: 100dvh;
+    min-block-size: 0;
+    overflow: hidden;
+}
+
 .updatePlansPage {
     flex: 1 1 0;
     min-inline-size: 0;
     max-inline-size: 100%;
+    min-block-size: 0;
+    max-block-size: none;
+    padding: 2.4rem;
+    overflow: hidden;
 }
 
 .updatePlansPage > main {
     inline-size: 100%;
     min-inline-size: 0;
+    min-block-size: 0;
+    gap: 1.6rem;
 }
 
-@media (max-width: 1130px) {
+.updatePlansPage .plansHeader {
+    flex: 0 0 auto;
+    max-inline-size: 100%;
+    margin: 0;
+}
+
+.updatePlansPage .plansContainer {
+    min-block-size: 0;
+    height: auto;
+    flex-wrap: nowrap;
+}
+
+.updatePlansPage .planCard {
+    min-inline-size: 0;
+    min-block-size: 0;
+    block-size: calc(100% - 3.2rem);
+    max-block-size: 50rem;
+}
+
+.updatePlansPage .planCard.featured {
+    block-size: 100%;
+    max-block-size: 58rem;
+}
+
+.updatePlansPage .planPriceRow { flex-wrap: wrap; }
+.updatePlansPage .planButton { flex-shrink: 0; }
+.updatePlansPage .plansSuccess { flex: 0 0 auto; margin: 0 auto; padding: 1rem 1.6rem; }
+
+@media (min-width: 1131px) and (min-height: 701px) and (max-height: 850px) {
+    .updatePlansPage { padding: 1.6rem 2.4rem; }
+    .updatePlansPage .plansHeader { margin: 0; }
+    .updatePlansPage .planCard { gap: 1rem; padding: 1.6rem; }
+    .updatePlansPage .planPrice { font-size: 2.8rem; }
+    .updatePlansPage .planBenefitText { font-size: 1.4rem; }
+    .updatePlansPage .planBenefits { gap: 0.6rem; }
+    .updatePlansPage .planButton { height: 4.4rem; }
+}
+
+@media (max-width: 1130px), (max-height: 700px) {
+    .updatePlansPage {
+        flex: 1 1 0;
+        overflow-y: auto;
+        overscroll-behavior-block: contain;
+    }
+
+    .updatePlansPage > main { flex: 0 0 auto; }
+
     .updatePlansPage .plansContainer {
         flex-direction: column;
         flex-wrap: nowrap;
@@ -22,5 +81,11 @@
         inline-size: 100%;
         min-inline-size: 100%;
         max-inline-size: 100%;
+        block-size: auto;
+        max-block-size: none;
+        min-block-size: 50rem;
+        flex: 0 0 auto;
     }
+
+    .updatePlansPage .planCard.featured { block-size: auto; max-block-size: none; min-block-size: 58rem; }
 }

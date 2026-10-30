@@ -6,12 +6,13 @@ import "../../../styles/components/StoresFilters/stores-filters.css";
 
 export interface StoresFiltersProps extends GenericComponentProps {
     filters: StoreFilters;
+    loading: boolean;
     locations: ReadonlyArray<StoreLocation>;
     onSearchChange: (search: string) => void;
     onLocationChange: (location: string) => void;
 }
 
-function StoresFilters({ filters, locations, onSearchChange, onLocationChange, className = "", id }: StoresFiltersProps) {
+function StoresFilters({ filters, loading, locations, onSearchChange, onLocationChange, className = "", id }: StoresFiltersProps) {
     const fieldId = useId();
 
     return (
@@ -27,7 +28,7 @@ function StoresFilters({ filters, locations, onSearchChange, onLocationChange, c
                     maxLength={STORE_SEARCH_MAX_LENGTH}
                     value={filters.search}
                     onChange={(event) => onSearchChange(event.currentTarget.value)}
-                    aria-controls="stores-table"
+                    aria-controls={loading ? undefined : "stores-table"}
                 />
             </div>
             <div className="stores-filters__select stores-filters__status">
@@ -45,7 +46,7 @@ function StoresFilters({ filters, locations, onSearchChange, onLocationChange, c
                     name="location"
                     value={filters.location}
                     onChange={(event) => onLocationChange(event.currentTarget.value)}
-                    aria-controls="stores-table"
+                    aria-controls={loading ? undefined : "stores-table"}
                 >
                     <option value="">Localização</option>
                     {locations.map((location) => <option key={location.value} value={location.value}>{location.label}</option>)}

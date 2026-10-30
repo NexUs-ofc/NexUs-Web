@@ -10,7 +10,7 @@ import ErrorAlert from "../../components/ErrorAlert";
 import { useStores } from "../../hooks/useStores";
 import { useStoresContext } from "../../hooks/useStoresContext";
 import { useStoreDialogs } from "../../hooks/useStoreDialogs";
-import "./stores-page.css";
+import "../../../styles/pages/StoresPage/stores-page.css";
 
 export default function StoresPage() {
     const { stores, filters, locations, setSearch, setLocation } = useStores();
@@ -37,6 +37,7 @@ export default function StoresPage() {
             </header>
             <StoresFilters
                 filters={filters}
+                loading={collection.loading}
                 locations={locations}
                 onSearchChange={setSearch}
                 onLocationChange={setLocation}

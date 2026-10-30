@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput";
@@ -8,10 +8,10 @@ import ErrorAlert from "../../components/ErrorAlert";
 import { useLogin } from "../../hooks/useLogin";
 import { LOGIN_MAX_LENGTH, validateLoginForm } from "../../utils/validateLogin";
 import type { LoginFormData, LoginFormErrors } from "../../utils/validateLogin";
-import logoFullUrl from "../../assets/logo-full.svg";
-import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import "../../styles/auth.css";
-import "./login-page.css";
+import logoFullUrl from "../../../assets/logo-full.svg";
+import logoSymbolUrl from "../../../assets/logo-symbol.svg";
+import "../../../styles/auth.css";
+import "../../../styles/pages/LoginPage/login-page.css";
 
 const initialForm: LoginFormData = { email: "", password: "" };
 const initialErrors: LoginFormErrors = { email: "", password: "" };
@@ -35,8 +35,6 @@ export default function LoginPage() {
         },
         [form, reset],
     );
-
-    const fieldErrorsMemo = useMemo(() => fieldErrors, [fieldErrors]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
@@ -65,7 +63,7 @@ export default function LoginPage() {
                 </section>
                 <div className="gradient-sheet" aria-hidden="true" />
             </section>
-            <section className="form-section">
+            <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
                         <h1 className="title huninn auth-title">
@@ -86,7 +84,7 @@ export default function LoginPage() {
                             maxLength={LOGIN_MAX_LENGTH.email}
                             autoComplete="email"
                             required
-                            error={fieldErrorsMemo.email}
+                            error={fieldErrors.email}
                             width="100%"
                         />
                         <FormInput
@@ -99,7 +97,7 @@ export default function LoginPage() {
                             maxLength={LOGIN_MAX_LENGTH.password}
                             autoComplete="current-password"
                             required
-                            error={fieldErrorsMemo.password}
+                            error={fieldErrors.password}
                             width="100%"
                         />
                         <Link to="/esqueci-senha" className="forgot-password-text">
@@ -123,7 +121,7 @@ export default function LoginPage() {
                         </Link>
                     </p>
                 </form>
-            </section>
+            </main>
         </div>
     );
 }

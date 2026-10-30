@@ -20,7 +20,7 @@
 
 .dashboard-page__heading { flex: 0 0 auto; }
 .dashboard-page__heading h1 { line-height: 3.2rem; overflow-wrap: anywhere; }
-.dashboard-page__heading h1:focus { outline: none; }
+.dashboard-page__heading h1:focus { outline: 3px solid var(--primary); outline-offset: 2px; }
 .dashboard-page__content {
     display: flex;
     flex-direction: column;

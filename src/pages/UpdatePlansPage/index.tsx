@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import PlanCard from "../../components/PlanCard";
 import { AVAILABLE_PLANS } from "../../types/registration";
-import "../PlansPage/plans-page.css";
-import "./update-plans-page.css";
+import "../../../styles/pages/PlansPage/plans-page.css";
+import "../../../styles/pages/UpdatePlansPage/update-plans-page.css";
 
 export default function UpdatePlansPage() {
     const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);

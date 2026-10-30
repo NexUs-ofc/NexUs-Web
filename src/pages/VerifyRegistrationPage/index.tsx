@@ -11,10 +11,10 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorAlert from "../../components/ErrorAlert";
 import { useVerifyRegistration } from "../../hooks/useVerifyRegistration";
 import { loadRegistrationId } from "../../utils/registrationStorage";
-import logoFullUrl from "../../assets/logo-full.svg";
-import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import "../../styles/auth.css";
-import "./verify-registration-page.css";
+import logoFullUrl from "../../../assets/logo-full.svg";
+import logoSymbolUrl from "../../../assets/logo-symbol.svg";
+import "../../../styles/auth.css";
+import "../../../styles/pages/VerifyRegistrationPage/verify-registration-page.css";
 
 const OTP_LENGTH = 6;
 
@@ -110,7 +110,7 @@ export default function VerifyRegistrationPage() {
     }
 
     if (loading) {
-        return <LoadingSpinner message="Verificando seu código..." />;
+        return <main aria-label="Verificação de cadastro"><LoadingSpinner message="Verificando seu código..." /></main>;
     }
 
     if (success) {
@@ -134,7 +134,7 @@ export default function VerifyRegistrationPage() {
                 </section>
                 <div className="gradient-sheet" aria-hidden="true" />
             </section>
-            <section className="form-section">
+            <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
                         <h1 className="title huninn auth-title">
@@ -191,7 +191,7 @@ export default function VerifyRegistrationPage() {
                         </Link>
                     </p>
                 </form>
-            </section>
+            </main>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import type GenericComponentProps from "../../types/common";
-import "./error-alert.css";
+import "../../../styles/components/ErrorAlert/error-alert.css";
 
 export interface ErrorAlertProps extends GenericComponentProps {
     message: string;

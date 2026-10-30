@@ -6,7 +6,7 @@ export default function RootRedirect() {
     const { isAuthenticated, isLoading } = useAuth();
 
     if (isLoading) {
-        return <LoadingSpinner message="Verificando autenticação..." />;
+        return <main aria-label="Verificando autenticação"><LoadingSpinner message="Verificando autenticação..." /></main>;
     }
 
     if (!isAuthenticated) {

@@ -65,7 +65,7 @@ export default function LoginPage() {
                 </section>
                 <div className="gradient-sheet" aria-hidden="true" />
             </section>
-            <section className="form-section">
+            <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
                         <h1 className="title huninn auth-title">
@@ -123,7 +123,7 @@ export default function LoginPage() {
                         </Link>
                     </p>
                 </form>
-            </section>
+            </main>
         </div>
     );
 }

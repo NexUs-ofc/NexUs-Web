@@ -37,7 +37,7 @@ export default function PlansPage() {
     );
 
     if (loading) {
-        return <LoadingSpinner message="Iniciando seu cadastro..." />;
+        return <main aria-label="Iniciando cadastro"><LoadingSpinner message="Iniciando seu cadastro..." /></main>;
     }
 
     return (

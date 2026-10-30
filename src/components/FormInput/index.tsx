@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import type { ChangeEvent, HTMLInputTypeAttribute } from "react";
 import type GenericComponentProps from "../../types/common";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
-import "./form-input.css";
+import "../../../styles/components/FormInput/form-input.css";
 
 export interface FormInputProps extends GenericComponentProps {
     label: string;

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import StoreForm from "../../components/StoreForm";
 import { useStoresContext } from "../../hooks/useStoresContext";
 import { EMPTY_STORE_FORM } from "../../utils/validateStore";
-import "./create-store-page.css";
+import "../../../styles/pages/CreateStorePage/create-store-page.css";
 
 export default function CreateStorePage() {
     const { addStore, saving, error } = useStoresContext();

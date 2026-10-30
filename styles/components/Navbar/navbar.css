@@ -104,23 +104,23 @@
 }
 
 .navbar__item-icon--dashboard {
-    -webkit-mask-image: url("../../assets/dashboards/dashboard.svg");
-    mask-image: url("../../assets/dashboards/dashboard.svg");
+    -webkit-mask-image: url("../../../assets/dashboards/dashboard.svg");
+    mask-image: url("../../../assets/dashboards/dashboard.svg");
 }
 
 .navbar__item-icon--stores {
-    -webkit-mask-image: url("../../assets/dashboards/stores.svg");
-    mask-image: url("../../assets/dashboards/stores.svg");
+    -webkit-mask-image: url("../../../assets/dashboards/stores.svg");
+    mask-image: url("../../../assets/dashboards/stores.svg");
 }
 
 .navbar__item-icon--plans {
-    -webkit-mask-image: url("../../assets/dashboards/plans.svg");
-    mask-image: url("../../assets/dashboards/plans.svg");
+    -webkit-mask-image: url("../../../assets/dashboards/plans.svg");
+    mask-image: url("../../../assets/dashboards/plans.svg");
 }
 
 .navbar__item-icon--reports {
-    -webkit-mask-image: url("../../assets/dashboards/reports.svg");
-    mask-image: url("../../assets/dashboards/reports.svg");
+    -webkit-mask-image: url("../../../assets/dashboards/reports.svg");
+    mask-image: url("../../../assets/dashboards/reports.svg");
 }
 
 .navbar__item--active .navbar__item-icon {

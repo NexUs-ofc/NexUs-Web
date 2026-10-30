@@ -13,10 +13,10 @@ import {
     validateRegistrationFormData,
 } from "../../utils/validateRegistration";
 import type { RegistrationFormData, RegistrationFormErrors } from "../../utils/validateRegistration";
-import logoFullUrl from "../../assets/logo-full.svg";
-import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import "../../styles/auth.css";
-import "./register-page.css";
+import logoFullUrl from "../../../assets/logo-full.svg";
+import logoSymbolUrl from "../../../assets/logo-symbol.svg";
+import "../../../styles/auth.css";
+import "../../../styles/pages/RegisterPage/register-page.css";
 
 const initialForm: RegistrationFormData = {
     name: "",

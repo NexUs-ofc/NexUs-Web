@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import type GenericComponentProps from "../../types/common";
-import "./primary-button.css";
+import "../../../styles/components/PrimaryButton/primary-button.css";
 
 export interface PrimaryButtonProps extends GenericComponentProps {
     children: ReactNode;

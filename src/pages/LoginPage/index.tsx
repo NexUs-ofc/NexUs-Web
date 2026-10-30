@@ -8,10 +8,10 @@ import ErrorAlert from "../../components/ErrorAlert";
 import { useLogin } from "../../hooks/useLogin";
 import { LOGIN_MAX_LENGTH, validateLoginForm } from "../../utils/validateLogin";
 import type { LoginFormData, LoginFormErrors } from "../../utils/validateLogin";
-import logoFullUrl from "../../assets/logo-full.svg";
-import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import "../../styles/auth.css";
-import "./login-page.css";
+import logoFullUrl from "../../../assets/logo-full.svg";
+import logoSymbolUrl from "../../../assets/logo-symbol.svg";
+import "../../../styles/auth.css";
+import "../../../styles/pages/LoginPage/login-page.css";
 
 const initialForm: LoginFormData = { email: "", password: "" };
 const initialErrors: LoginFormErrors = { email: "", password: "" };

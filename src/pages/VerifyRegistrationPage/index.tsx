@@ -11,10 +11,10 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorAlert from "../../components/ErrorAlert";
 import { useVerifyRegistration } from "../../hooks/useVerifyRegistration";
 import { loadRegistrationId } from "../../utils/registrationStorage";
-import logoFullUrl from "../../assets/logo-full.svg";
-import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import "../../styles/auth.css";
-import "./verify-registration-page.css";
+import logoFullUrl from "../../../assets/logo-full.svg";
+import logoSymbolUrl from "../../../assets/logo-symbol.svg";
+import "../../../styles/auth.css";
+import "../../../styles/pages/VerifyRegistrationPage/verify-registration-page.css";
 
 const OTP_LENGTH = 6;
 

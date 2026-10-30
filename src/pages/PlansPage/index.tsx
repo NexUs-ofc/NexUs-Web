@@ -6,7 +6,7 @@ import { useRegistration } from "../../hooks/useRegistration";
 import { AVAILABLE_PLANS, REGISTRATION_INITIAL_DATA } from "../../types/registration";
 import type { RegistrationData } from "../../types/registration";
 import { loadRegistrationDraft } from "../../utils/registrationStorage";
-import "./plans-page.css";
+import "../../../styles/pages/PlansPage/plans-page.css";
 
 export default function PlansPage() {
     const navigate = useNavigate();

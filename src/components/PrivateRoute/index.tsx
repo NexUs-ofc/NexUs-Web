@@ -12,7 +12,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     const location = useLocation();
 
     if (isLoading) {
-        return <LoadingSpinner message="Verificando autenticação..." />;
+        return <main aria-label="Verificando autenticação"><LoadingSpinner message="Verificando autenticação..." /></main>;
     }
 
     if (!isAuthenticated) {

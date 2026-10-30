@@ -110,7 +110,7 @@ export default function VerifyRegistrationPage() {
     }
 
     if (loading) {
-        return <LoadingSpinner message="Verificando seu código..." />;
+        return <main aria-label="Verificação de cadastro"><LoadingSpinner message="Verificando seu código..." /></main>;
     }
 
     if (success) {
@@ -134,7 +134,7 @@ export default function VerifyRegistrationPage() {
                 </section>
                 <div className="gradient-sheet" aria-hidden="true" />
             </section>
-            <section className="form-section">
+            <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
                         <h1 className="title huninn auth-title">
@@ -191,7 +191,7 @@ export default function VerifyRegistrationPage() {
                         </Link>
                     </p>
                 </form>
-            </section>
+            </main>
         </div>
     );
 }

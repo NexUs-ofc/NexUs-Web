@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput";
@@ -35,8 +35,6 @@ export default function LoginPage() {
         },
         [form, reset],
     );
-
-    const fieldErrorsMemo = useMemo(() => fieldErrors, [fieldErrors]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
@@ -86,7 +84,7 @@ export default function LoginPage() {
                             maxLength={LOGIN_MAX_LENGTH.email}
                             autoComplete="email"
                             required
-                            error={fieldErrorsMemo.email}
+                            error={fieldErrors.email}
                             width="100%"
                         />
                         <FormInput
@@ -99,7 +97,7 @@ export default function LoginPage() {
                             maxLength={LOGIN_MAX_LENGTH.password}
                             autoComplete="current-password"
                             required
-                            error={fieldErrorsMemo.password}
+                            error={fieldErrors.password}
                             width="100%"
                         />
                         <Link to="/esqueci-senha" className="forgot-password-text">

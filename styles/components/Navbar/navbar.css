@@ -133,6 +133,7 @@
 
 .navbar__item:hover:not(.navbar__item--active) {
     background: #f8f7fb;
+    color: #626270;
 }
 
 .navbar__sign-out {
@@ -169,6 +170,7 @@
 
 .navbar__sign-out:hover {
     background: #fff1f2;
+    color: #b91c1c;
 }
 
 .navbar__item:focus-visible,

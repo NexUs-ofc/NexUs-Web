@@ -4,7 +4,7 @@ import Navbar from "../Navbar";
 import PortalHeader from "../PortalHeader";
 import StoresProvider from "../../contexts/StoresContext";
 import { useAuth } from "../../hooks/useAuth";
-import "./portal-layout.css";
+import "../../../styles/components/PortalLayout/portal-layout.css";
 
 export default function PortalLayout() {
     const { state, signOut } = useAuth();

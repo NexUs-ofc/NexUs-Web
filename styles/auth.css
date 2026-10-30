@@ -95,7 +95,7 @@
         height: 100%;
         border-top-right-radius: 2rem;
         border-bottom-right-radius: 2rem;
-        background-image: url("/src/assets/supermarket-bg.png");
+        background-image: url("../assets/supermarket-bg.png");
         background-position: center;
         background-size: cover;
     }

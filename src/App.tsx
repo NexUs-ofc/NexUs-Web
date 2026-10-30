@@ -5,7 +5,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import PortalLayout from "./components/PortalLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import RootRedirect from "./components/RootRedirect";
-import "./index.css";
+import "../styles/index.css";
 import RegisterPage from "./pages/RegisterPage";
 import VerifyRegistrationPage from "./pages/VerifyRegistrationPage";
 

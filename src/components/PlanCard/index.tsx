@@ -1,4 +1,4 @@
-import "./plan-card.css";
+import "../../../styles/components/PlanCard/plan-card.css";
 
 export interface PlanCardProps {
     id: number;

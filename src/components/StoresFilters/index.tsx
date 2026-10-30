@@ -2,7 +2,7 @@ import { memo, useId } from "react";
 import type GenericComponentProps from "../../types/common";
 import type { StoreFilters, StoreLocation } from "../../types/store";
 import { STORE_SEARCH_MAX_LENGTH } from "../../utils/storeFilters";
-import "./stores-filters.css";
+import "../../../styles/components/StoresFilters/stores-filters.css";
 
 export interface StoresFiltersProps extends GenericComponentProps {
     filters: StoreFilters;

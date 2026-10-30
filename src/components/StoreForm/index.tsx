@@ -9,7 +9,7 @@ import type { StoreFormData, StoreFormMode } from "../../types/store";
 import type GenericComponentProps from "../../types/common";
 import { STORE_MAX_LENGTH, maskStoreCep, maskStorePhone } from "../../utils/validateStore";
 import { maskCnpj } from "../../utils/masks";
-import "./store-form.css";
+import "../../../styles/components/StoreForm/store-form.css";
 
 export interface StoreFormProps extends GenericComponentProps {
     mode: StoreFormMode;

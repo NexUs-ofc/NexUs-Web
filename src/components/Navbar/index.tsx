@@ -1,8 +1,8 @@
 import type GenericComponentProps from "../../types/common";
-import elementsIcon from "../../assets/dashboards/elements.svg";
-import logoutIcon from "../../assets/dashboards/logout.svg";
+import elementsIcon from "../../../assets/dashboards/elements.svg";
+import logoutIcon from "../../../assets/dashboards/logout.svg";
 import { NavLink } from "react-router-dom";
-import "./navbar.css";
+import "../../../styles/components/Navbar/navbar.css";
 
 export type NavbarDestination = "dashboard" | "stores" | "plans" | "reports";
 

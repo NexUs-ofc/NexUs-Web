@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { ChartLegendItem } from "../../types/dashboardChart";
 
 export interface DashboardChartLegendProps { items: ReadonlyArray<ChartLegendItem>; }
@@ -14,4 +15,3 @@ export default function DashboardChartLegend({ items }: DashboardChartLegendProp
         </ul>
     );
 }
-import type { CSSProperties } from "react";

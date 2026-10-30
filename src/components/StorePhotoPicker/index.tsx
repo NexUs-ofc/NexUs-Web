@@ -1,6 +1,6 @@
 import { useId, useRef } from "react";
 import type GenericComponentProps from "../../types/common";
-import "./store-photo-picker.css";
+import "../../../styles/components/StorePhotoPicker/store-photo-picker.css";
 
 export interface StorePhotoPickerProps extends GenericComponentProps {
     value: string;

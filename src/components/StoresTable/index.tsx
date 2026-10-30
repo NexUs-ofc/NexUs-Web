@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type GenericComponentProps from "../../types/common";
 import type { Store } from "../../types/store";
-import "./stores-table.css";
+import "../../../styles/components/StoresTable/stores-table.css";
 
 export interface StoresTableProps extends GenericComponentProps {
     stores: ReadonlyArray<Store>;

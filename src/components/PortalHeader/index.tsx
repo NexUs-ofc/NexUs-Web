@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type GenericComponentProps from "../../types/common";
-import "./portal-header.css";
+import "../../../styles/components/PortalHeader/portal-header.css";
 
 export interface PortalHeaderProps extends GenericComponentProps {
     companyName: string;

@@ -1,4 +1,4 @@
-import "./plan-card.css";
+import "../../../styles/components/PlanCard/plan-card.css";
 
 export interface PlanCardProps {
     id: number;
@@ -25,6 +25,8 @@ const CHECK_SVG = (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        aria-hidden="true"
+        focusable="false"
     >
         <polyline points="20 6 9 17 4 12" />
     </svg>
@@ -41,6 +43,8 @@ const MINUS_SVG = (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        aria-hidden="true"
+        focusable="false"
     >
         <line x1="5" y1="12" x2="19" y2="12" />
     </svg>

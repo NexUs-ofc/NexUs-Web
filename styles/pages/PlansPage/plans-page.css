@@ -29,7 +29,7 @@
     color: #475569;
     max-width: 100%;
 }
-main {
+.plansPage > main {
     display: flex;
     flex: 1;
     flex-direction: column;

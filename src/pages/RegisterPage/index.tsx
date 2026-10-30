@@ -13,10 +13,10 @@ import {
     validateRegistrationFormData,
 } from "../../utils/validateRegistration";
 import type { RegistrationFormData, RegistrationFormErrors } from "../../utils/validateRegistration";
-import logoFullUrl from "../../assets/logo-full.svg";
-import logoSymbolUrl from "../../assets/logo-symbol.svg";
-import "../../styles/auth.css";
-import "./register-page.css";
+import logoFullUrl from "../../../assets/logo-full.svg";
+import logoSymbolUrl from "../../../assets/logo-symbol.svg";
+import "../../../styles/auth.css";
+import "../../../styles/pages/RegisterPage/register-page.css";
 
 const initialForm: RegistrationFormData = {
     name: "",
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                 </section>
                 <div className="gradient-sheet" aria-hidden="true" />
             </section>
-            <section className="form-section">
+            <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
                         <h1 className="title huninn auth-title">
@@ -233,7 +233,7 @@ export default function RegisterPage() {
                         </Link>
                     </p>
                 </form>
-            </section>
+            </main>
         </div>
     );
 }

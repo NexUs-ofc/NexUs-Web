@@ -1,5 +1,5 @@
 import type GenericComponentProps from "../../types/common";
-import "./loading-spinner.css";
+import "../../../styles/components/LoadingSpinner/loading-spinner.css";
 
 export interface LoadingSpinnerProps extends GenericComponentProps {
     message?: string;

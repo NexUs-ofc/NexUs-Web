@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type GenericComponentProps from "../../types/common";
 import { useDialog } from "../../hooks/useDialog";
-import "./modal.css";
+import "../../../styles/components/Modal/modal.css";
 
 export interface ModalProps extends GenericComponentProps {
     title: string;

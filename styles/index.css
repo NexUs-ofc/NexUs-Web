@@ -75,6 +75,15 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+.page-title-focus:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.page-title-focus:focus:not(:focus-visible) {
+    outline: none;
+}
+
 .montserrat {
   font-family: "Montserrat", sans-serif;
 }

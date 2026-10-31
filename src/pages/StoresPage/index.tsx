@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -20,14 +21,13 @@ export default function StoresPage() {
 
     useEffect(() => {
         document.title = "Filiais Cadastradas — NexUs";
-        document.getElementById("stores-title")?.focus();
     }, []);
 
     return (
         <main className="portal-page stores-page" aria-labelledby="stores-title">
             <header className="stores-page__heading">
                 <div>
-                    <h1 id="stores-title" tabIndex={-1}>Filiais Cadastradas</h1>
+                    <PageTitle id="stores-title">Filiais Cadastradas</PageTitle>
                     <p>Gerencie as informações das lojas vinculadas ao seu aplicativo.</p>
                 </div>
                 <PrimaryButton type="button" className="stores-page__new" onClick={() => { collection.clearFeedback(); navigate("/lojas/nova"); }}>

@@ -2,7 +2,8 @@
 
 Revisão aprofundada em 30/10/2026, sobre o commit `0a1aef4` e a árvore de trabalho atual. Cada requisito tem seu estado e suas evidências atualizados na própria linha. **Cumprido** significa confirmado no código; **Em andamento** indica implementação parcial ou validação ainda pendente, sem presumir trabalho ativo; **Não atendido** indica recurso ausente, falha comprovada ou demonstração ainda sem evidência. A inspeção de código não substitui a apresentação presencial nem certifica WCAG integralmente.
 
-Atualizado após a refatoração pontual de 30/10/2026: CSS/imagens movidos para fora de `src`, dez páginas com `lazy`, contraste corrigido, `<main>` nas telas de autenticação e referências ARIA consistentes durante loading. As validações de OTP, reestruturações de estado e funcionalidades ausentes continuam com as pendências concretas registradas abaixo.
+Atualizado após a refatoração pontual de 30/10/2026: CSS/imagens movidos para fora de `src`, dez páginas com `lazy`, contraste corrigido, `<main>` nas telas de autenticação e referências ARIA consistentes durante loading. Em 30/10/2026, foi adicionada configuração de rewrite da Vercel para deep links da SPA; o efeito no domínio publicado depende de deploy e ainda precisa ser confirmado.
+`n`nAtualizado em 30/10/2026: adicionada regra de rewrite da Vercel para servir a SPA em URLs diretas; o acesso ao ambiente publicado ainda precisa ser confirmado após novo deploy.
 
 
 **Estado atual dos 108 itens:** 78 cumpridos; 19 em andamento; 11 não atendidos. A contagem inclui os itens finais e a condição histórica de desenvolvimento desde o início.
@@ -210,6 +211,8 @@ A revisão abaixo já foi realizada. Estes requisitos não aguardam mais auditor
 - **Proteção de renderização contra XSS:** conferidos os destinos JSX, o renderer de tooltip e os formatos de imagem aceitos. As lacunas de validação estrutural de respostas estão identificadas em seu próprio requisito.
 - **Conferência final dos requisitos mínimos e extras:** concluída e marcada como **Cumprido**. Auditar o projeto e encontrar falhas não significa que a auditoria esteja incompleta.
 
+
+| Deep links na Vercel | **Cumprido no repositório; deploy pendente** | `vercel.json`; `src/main.tsx`; `src/App.tsx` | O app usa `BrowserRouter` e define `/dashboard`; o rewrite envia caminhos ao `index.html` para o React Router resolver. A configuração só terá efeito após deploy e o domínio publicado ainda precisa ser conferido. |
 
 ### Percursos analisados
 

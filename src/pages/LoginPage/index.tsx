@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useCallback, useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -66,9 +67,9 @@ export default function LoginPage() {
             <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
-                        <h1 className="title huninn auth-title">
+                        <PageTitle className="title huninn auth-title">
                             Bem-vindo(a) de volta!
-                        </h1>
+                        </PageTitle>
                         <p className="subtitle montserrat auth-subtitle">
                             Acesse sua conta empresarial
                         </p>

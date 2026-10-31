@@ -1,8 +1,9 @@
+import PageTitle from "../../components/PageTitle";
 export default function ReportsPage() {
     return (
         <main className="portal-page">
             <header>
-                <h1>Relatórios</h1>
+                <PageTitle>Relatórios</PageTitle>
             </header>
         </main>
     );

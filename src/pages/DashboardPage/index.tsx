@@ -42,7 +42,7 @@ export default function DashboardPage() {
                     </>
                 ) : null}
                 <footer className="dashboard-page__footer">
-                    <p role="status" aria-live="polite" aria-atomic="true">{!loading && !error && data ? "Dashboard carregado com sucesso. Dados demonstrativos." : ""}</p>
+                    <p role="status" aria-live="polite" aria-atomic="true">{!loading && !error && data ? "Dashboard atualizado com os dados mais recentes disponíveis." : ""}</p>
                 </footer>
             </div>
         </main>

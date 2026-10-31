@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import DashboardSummary from "../../components/DashboardSummary";
 import DashboardChartsGrid from "../../components/DashboardChartsGrid";
@@ -24,7 +25,7 @@ export default function DashboardPage() {
     return (
         <main id="dashboard-main" className="portal-page dashboard-page" aria-labelledby="dashboard-title" tabIndex={0} aria-busy={loading}>
             <header className="dashboard-page__heading">
-                <h1 id="dashboard-title">Bem-vindo{companyName ? `, ${companyName}` : ""}</h1>
+                <PageTitle id="dashboard-title">Bem-vindo{companyName ? `, ${companyName}` : ""}</PageTitle>
             </header>
             <div className="dashboard-page__content">
                 {loading ? <LoadingSpinner message="Carregando indicadores e gráficos..." /> : null}

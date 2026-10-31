@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/pages/NotFoundPage/not-found-page.css";
@@ -16,7 +17,7 @@ export default function NotFoundPage() {
     return (
         <div className="page">
             <main className="notFoundMain">
-                <h1>Página não encontrada</h1>
+                <PageTitle>Página não encontrada</PageTitle>
                 <p>O endereço acessado não existe ou foi movido.</p>
                 <div className="notFoundActions">
                     <button type="button" className="primary-button huninn" onClick={handleGoBack}>

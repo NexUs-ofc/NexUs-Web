@@ -13,19 +13,18 @@ export default function DashboardPage() {
 
     useEffect(() => {
         document.title = "Dashboard — NexUs";
-        document.getElementById("dashboard-title")?.focus();
     }, []);
 
     function handleRetry(): void {
         // Mantém o contexto de teclado antes de o botão de erro sair do DOM.
-        document.getElementById("dashboard-title")?.focus();
+        document.getElementById("dashboard-main")?.focus({ preventScroll: true });
         reload();
     }
 
     return (
         <main id="dashboard-main" className="portal-page dashboard-page" aria-labelledby="dashboard-title" tabIndex={0} aria-busy={loading}>
             <header className="dashboard-page__heading">
-                <h1 id="dashboard-title" tabIndex={-1}>Bem-vindo{companyName ? `, ${companyName}` : ""}</h1>
+                <h1 id="dashboard-title">Bem-vindo{companyName ? `, ${companyName}` : ""}</h1>
             </header>
             <div className="dashboard-page__content">
                 {loading ? <LoadingSpinner message="Carregando indicadores e gráficos..." /> : null}

@@ -9,7 +9,7 @@ npm run build
 npm run lint
 ```
 
-O Vite usa a porta 8080, ou a próxima livre. Para a integração de autenticação, acesse `http://localhost:8080`: essa é a origem autorizada pelo CORS do backend; outra porta ou `127.0.0.1` representa uma origem diferente. Configure as variáveis de ambiente conforme `.env.example`, sem versionar o `.env`. A autenticação mantém a integração existente; os indicadores do dashboard usam dados demonstrativos.
+O Vite usa a porta 8080, ou a próxima livre. Para a integração de autenticação, acesse `http://localhost:8080`: essa é a origem autorizada pelo CORS do backend; outra porta ou `127.0.0.1` representa uma origem diferente. Configure as variáveis de ambiente conforme `.env.example`, sem versionar o `.env`. A autenticação mantém a integração existente; o dashboard e a tela de relatórios consomem a API de relatórios (`VITE_REPORTS_API_BASE_URL` e `VITE_REPORTS_API_KEY`, ver `.env.example`), que exige o token do login.
 
 O dashboard reproduz o [Figma](https://www.figma.com/design/3uQAwIRaRcBgGmSNR6bDBR/Nexus?node-id=805-756): quatro indicadores e sete gráficos funcionais. Usa Apache ECharts para linha com meta, mapa do Brasil por UF, barras empilhadas, heatmap, histograma, boxplot e ranking. Os módulos necessários e a malha local do IBGE são carregados sob demanda. A área principal tem rolagem vertical; gráficos estreitos permitem rolagem horizontal sem comprimir seus rótulos. Cada gráfico oferece **Ver dados**, com uma tabela semântica operável por teclado.
 

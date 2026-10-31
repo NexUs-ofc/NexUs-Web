@@ -8,6 +8,10 @@ RUN npm ci
 
 COPY . .
 # VITE_* são embutidas no build. Em CI/k8s passe via --build-arg ou .env.
+ARG VITE_REPORTS_API_BASE_URL
+ARG VITE_REPORTS_API_KEY
+ENV VITE_REPORTS_API_BASE_URL=$VITE_REPORTS_API_BASE_URL \
+    VITE_REPORTS_API_KEY=$VITE_REPORTS_API_KEY
 RUN npm run build
 
 # ---- Runtime stage (serve estático do dist em 8080) ----

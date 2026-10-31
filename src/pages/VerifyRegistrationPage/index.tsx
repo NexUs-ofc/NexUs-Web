@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
     ChangeEvent,
@@ -24,6 +25,7 @@ export default function VerifyRegistrationPage() {
     const { loading, error, success, execute, reset } = useVerifyRegistration();
     const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(""));
     const [activeIndex, setActiveIndex] = useState(0);
+    const previousActiveIndex = useRef(0);
     const inputRefs = useRef<(HTMLInputElement | null)[]>(
         Array(OTP_LENGTH).fill(null),
     );
@@ -32,6 +34,8 @@ export default function VerifyRegistrationPage() {
     const isComplete = digits.every((digit) => digit.length === 1);
 
     useEffect(() => {
+        if (previousActiveIndex.current === activeIndex) return;
+        previousActiveIndex.current = activeIndex;
         inputRefs.current[activeIndex]?.focus();
     }, [activeIndex]);
 
@@ -137,9 +141,9 @@ export default function VerifyRegistrationPage() {
             <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
-                        <h1 className="title huninn auth-title">
+                        <PageTitle className="title huninn auth-title">
                             Verifique seu cadastro
-                        </h1>
+                        </PageTitle>
                         <p className="subtitle montserrat auth-subtitle">
                             Um código de 6 dígitos foi enviado para o seu e-mail. Digite-o abaixo:
                         </p>

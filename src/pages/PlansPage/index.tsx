@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PlanCard from "../../components/PlanCard";
@@ -44,7 +45,7 @@ export default function PlansPage() {
         <div className="plansPage">
             <main>
                 <header className="plansHeader">
-                    <h1 className="plansTitle">Escolha o plano ideal para o seu negócio</h1>
+                    <PageTitle className="plansTitle">Escolha o plano ideal para o seu negócio</PageTitle>
                     <p className="plansSubtitle">
                         Compare funcionalidades, escalabilidade e suporte para encontrar a melhor opção para a sua operação.
                     </p>

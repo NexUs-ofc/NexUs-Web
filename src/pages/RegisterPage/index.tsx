@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useCallback, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -126,9 +127,9 @@ export default function RegisterPage() {
             <main className="form-section">
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
                     <div className="auth-description-container">
-                        <h1 className="title huninn auth-title">
+                        <PageTitle className="title huninn auth-title">
                             Bem-vindo(a)!
-                        </h1>
+                        </PageTitle>
                         <p className="subtitle montserrat auth-subtitle">
                             Para criar sua conta, preencha os dados abaixo:
                         </p>

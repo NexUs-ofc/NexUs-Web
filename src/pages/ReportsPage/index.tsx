@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import ErrorAlert from "../../components/ErrorAlert";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import PageTitle from "../../components/PageTitle";
 import ReportPdfDialog from "../../components/ReportPdfDialog";
 import ReportsFilters from "../../components/ReportsFilters";
 import ReportsMonthSection from "../../components/ReportsMonthSection";
@@ -14,7 +15,6 @@ export default function ReportsPage() {
 
     useEffect(() => {
         document.title = "Relatórios — NexUs";
-        document.getElementById("reports-title")?.focus();
     }, []);
 
     const ready = !loading && error === "";
@@ -23,7 +23,7 @@ export default function ReportsPage() {
     return (
         <main id="reports-main" className="portal-page reports-page" aria-labelledby="reports-title" aria-busy={loading}>
             <header className="reports-page__heading">
-                <h1 id="reports-title" tabIndex={-1}>Relatórios das filiais</h1>
+                <PageTitle id="reports-title">Relatórios das filiais</PageTitle>
                 <p>Acompanhe indicadores, compare unidades e exporte análises da sua operação.</p>
             </header>
 

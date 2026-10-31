@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StoreForm from "../../components/StoreForm";
@@ -10,7 +11,6 @@ export default function CreateStorePage() {
     const navigate = useNavigate();
     useEffect(() => {
         document.title = "Adicionar Nova Filial — NexUs";
-        document.getElementById("create-store-title")?.focus();
     }, []);
 
     return (
@@ -21,7 +21,7 @@ export default function CreateStorePage() {
                     <img src={`${import.meta.env.BASE_URL}stores/chevron-right.svg`} alt="" />
                     <span aria-current="page">Nova Filial</span>
                 </nav>
-                <h1 id="create-store-title" tabIndex={-1}>Adicionar Nova Filial</h1>
+                <PageTitle id="create-store-title">Adicionar Nova Filial</PageTitle>
                 <p>Preencha os campos abaixo para cadastrar um novo ponto comercial no aplicativo.</p>
             </header>
             <StoreForm mode="create" initialData={EMPTY_STORE_FORM} saving={saving} error={error} onSave={addStore} onSaved={() => navigate("/lojas")} onCancel={() => navigate("/lojas")} />

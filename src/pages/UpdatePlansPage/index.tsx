@@ -1,3 +1,4 @@
+import PageTitle from "../../components/PageTitle";
 import { useCallback, useState } from "react";
 import PlanCard from "../../components/PlanCard";
 import { AVAILABLE_PLANS } from "../../types/registration";
@@ -17,7 +18,7 @@ export default function UpdatePlansPage() {
         <div className="plansPage updatePlansPage">
             <main>
                 <header className="plansHeader">
-                    <h1 className="plansTitle">Atualize seu plano</h1>
+                    <PageTitle className="plansTitle">Atualize seu plano</PageTitle>
                     <p className="plansSubtitle">
                         Compare os planos disponíveis e selecione a opção que melhor atende à sua operação.
                     </p>

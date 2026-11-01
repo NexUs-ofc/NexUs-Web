@@ -40,11 +40,3 @@ export function toValidatedReports(value: unknown): ReportsList {
     });
     return { groups };
 }
-
-/** Aceita só links http(s): um PDF assinado nunca deve virar `javascript:` ou `data:` na interface. */
-export function toSafeHttpUrl(value: unknown): string {
-    const raw = asText(value, 4000);
-    const url = new URL(raw);
-    if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("Link do relatório inválido.");
-    return url.toString();
-}

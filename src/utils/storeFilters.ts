@@ -10,15 +10,10 @@ function normalizeSearch(value: string): string {
     return value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("pt-BR").trim();
 }
 
-export function getStoreLocationValue(store: Store): string {
-    return `${store.city}/${store.state}`;
-}
-
-export function getStoreLocations(stores: ReadonlyArray<Store>): StoreLocation[] {
-    return Array.from(new Map(stores.filter((store) => store.city !== "" || store.state !== "").map((store) => [
-        getStoreLocationValue(store),
-        { value: getStoreLocationValue(store), label: [store.city, store.state].filter(Boolean).join(" - ") },
-    ])).values()).sort((first, second) => first.label.localeCompare(second.label, "pt-BR"));
+export function getStoreFilterOptions(stores: ReadonlyArray<Store>, field: "city" | "state"): StoreLocation[] {
+    return [...new Set(stores.map((store) => store[field]).filter(Boolean))]
+        .sort((first, second) => first.localeCompare(second, "pt-BR"))
+        .map((value) => ({ value, label: value }));
 }
 
 export function filterStores(stores: ReadonlyArray<Store>, filters: StoreFilters): Store[] {
@@ -26,7 +21,8 @@ export function filterStores(stores: ReadonlyArray<Store>, filters: StoreFilters
 
     return stores.filter((store) => {
         const matchesSearch = normalizeSearch(store.name).includes(search) || normalizeSearch(store.city).includes(search);
-        const matchesLocation = filters.location === "" || getStoreLocationValue(store) === filters.location;
-        return matchesSearch && matchesLocation;
+        const matchesCity = filters.city === "" || store.city === filters.city;
+        const matchesState = filters.state === "" || store.state === filters.state;
+        return matchesSearch && matchesCity && matchesState;
     });
 }

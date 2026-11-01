@@ -1,18 +1,17 @@
-import { MOCK_DASHBOARD } from "../mocks/dashboard";
 import type { DashboardData } from "../types/dashboard";
 import { toValidatedDashboard } from "../utils/validateDashboard";
+import { describeReportsError, reportsRequest } from "./reportsClient";
 
 export interface DashboardRequestOptions { signal?: AbortSignal; }
 
 export async function getDashboard(options: DashboardRequestOptions = {}): Promise<DashboardData> {
     try {
-        await Promise.resolve();
-        options.signal?.throwIfAborted();
-        // Quando o contrato HTTP existir, substituir somente esta origem por coreRequest<unknown>(...).
-        // Manter o AbortSignal e o adaptador de validação antes de devolver os dados à UI.
-        return toValidatedDashboard(MOCK_DASHBOARD);
+        // GET /dashboard devolve o formato DashboardData; a validação protege a interface de respostas inesperadas.
+        const data = await reportsRequest<unknown>("/dashboard", options.signal ? { signal: options.signal } : {});
+        return toValidatedDashboard(data);
     } catch (error) {
         if (options.signal?.aborted) throw error;
-        throw new Error("Não foi possível carregar os dados do dashboard. Tente novamente.", { cause: error });
+        const fallback = "Não foi possível carregar os dados do dashboard. Tente novamente.";
+        throw new Error(describeReportsError(error, fallback), { cause: error });
     }
 }

@@ -12,7 +12,6 @@ export interface ProfileAddress {
 }
 
 export interface Profile {
-    cnpj?: string;
     id: number;
     name: string;
     email: string;

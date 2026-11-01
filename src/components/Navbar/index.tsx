@@ -4,7 +4,7 @@ import logoutIcon from "../../../assets/dashboards/logout.svg";
 import { NavLink } from "react-router-dom";
 import "../../../styles/components/Navbar/navbar.css";
 
-export type NavbarDestination = "dashboard" | "stores" | "plans" | "reports";
+export type NavbarDestination = "dashboard" | "stores" | "plans" | "reports" | "payments";
 
 export interface NavbarProps extends GenericComponentProps {
     onSignOut: () => void;
@@ -19,6 +19,7 @@ const navigationItems: ReadonlyArray<{
     { destination: "stores", label: "Lojas", path: "/lojas" },
     { destination: "plans", label: "Planos", path: "/dashboard/planos" },
     { destination: "reports", label: "Relatórios", path: "/relatorios" },
+    { destination: "payments", label: "Pagamentos", path: "/pagamentos" },
 ];
 
 export default function Navbar({

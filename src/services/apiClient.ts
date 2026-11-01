@@ -34,7 +34,7 @@ export async function apiRequest<T>(
             method: options.method ?? "GET",
             credentials: options.credentials ?? "include",
             headers: {
-                ...(!multipart ? { "Content-Type": "application/json" } : {}),
+                ...(!multipart && options.body !== undefined ? { "Content-Type": "application/json" } : {}),
                 ...(options.apiKey ? { "X-API-KEY": options.apiKey } : {}),
                 ...(options.authToken ? { Authorization: `Bearer ${options.authToken}` } : {}),
             },

@@ -5,8 +5,8 @@ import type { Profile } from "../types/profile";
 
 export function useCompanyDetails(profile: Profile) {
     const enabled = profile.profileType === "COMPANY";
-    const [attempt, setAttempt] = useState(0);
     const [state, setState] = useState({
+        attempt: 0,
         company: null as Company | null,
         loading: enabled,
         error: "",
@@ -19,21 +19,20 @@ export function useCompanyDetails(profile: Profile) {
         const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]);
 
         void getCompany({ signal }).then((company) => {
-            if (!signal.aborted) setState({ company, loading: false, error: "" });
+            if (!signal.aborted) setState((previous) => ({ ...previous, company, loading: false, error: "" }));
         }).catch(() => {
-            if (!controller.signal.aborted) setState({
+            if (!controller.signal.aborted) setState((previous) => ({ ...previous,
                 company: null,
                 loading: false,
                 error: "Não foi possível carregar os dados da empresa. Tente novamente.",
-            });
+            }));
         });
 
         return () => controller.abort();
-    }, [attempt, enabled, profile.id]);
+    }, [state.attempt, enabled, profile.id]);
 
     function retry(): void {
-        setState({ company: null, loading: true, error: "" });
-        setAttempt((value) => value + 1);
+        setState((previous) => ({ company: null, loading: true, error: "", attempt: previous.attempt + 1 }));
     }
 
     return { ...state, enabled, retry };

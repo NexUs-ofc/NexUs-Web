@@ -2,24 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 import { getAddressByCep } from "../services/address.service";
 import type { PostalAddress } from "../types/address";
 
-interface StoreAddressState {
+interface AddressLookupState {
     cep: string;
     address: PostalAddress | null;
     error: string;
     revision: number;
 }
 
-export interface UseStoreAddressResult {
+export interface UseAddressLookupResult {
     address: PostalAddress | null;
     loading: boolean;
     error: string;
     retry: () => void;
 }
 
-export function useStoreAddress(cep: string, onResolved: (address: PostalAddress) => void): UseStoreAddressResult {
+export function useAddressLookup(cep: string, onResolved: (address: PostalAddress) => void): UseAddressLookupResult {
     const digits = cep.replace(/\D/gu, "");
     const complete = digits.length === 8;
-    const [state, setState] = useState<StoreAddressState>({ cep: "", address: null, error: "", revision: 0 });
+    const [state, setState] = useState<AddressLookupState>({ cep: "", address: null, error: "", revision: 0 });
 
     useEffect(() => {
         if (digits.length !== 8) return;

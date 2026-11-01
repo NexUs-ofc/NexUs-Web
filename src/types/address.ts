@@ -5,4 +5,3 @@ export interface PostalAddress {
     city: string;
     state: string;
 }
-

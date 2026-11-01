@@ -1,0 +1,32 @@
+.company-plan-badge {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 3.2rem;
+    margin-block-start: 0.6rem;
+    padding-inline: 1.4rem;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+.company-plan-badge--ceris {
+    background: #f3f0ff;
+    color: #4f2078;
+}
+
+.company-plan-badge--enterprise {
+    background: #4f2078;
+    color: #ffffff;
+}
+
+.company-plan-badge--exclusive {
+    border-color: #a278c4;
+    background: #35134f;
+    color: #ffffff;
+}

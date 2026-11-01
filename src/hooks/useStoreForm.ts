@@ -3,8 +3,8 @@ import type { FormEvent, RefObject } from "react";
 import type { StoreFormData, StoreFormErrors, StoreFormMode } from "../types/store";
 import { EMPTY_STORE_FORM, isStoreFormValid, sanitizeStoreData, validateStoreForm } from "../utils/validateStore";
 import type { PostalAddress } from "../types/address";
-import { useStoreAddress } from "./useStoreAddress";
-import type { UseStoreAddressResult } from "./useStoreAddress";
+import { useAddressLookup } from "./useAddressLookup";
+import type { UseAddressLookupResult } from "./useAddressLookup";
 
 const ADDRESS_FIELDS = ["street", "neighborhood", "city", "state"] as const;
 
@@ -19,7 +19,7 @@ export interface UseStoreFormResult {
     form: StoreFormData;
     errors: StoreFormErrors;
     formRef: RefObject<HTMLFormElement | null>;
-    addressLookup: UseStoreAddressResult;
+    addressLookup: UseAddressLookupResult;
     changeField: (field: keyof StoreFormData, value: string) => void;
     submit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
 }
@@ -35,7 +35,7 @@ export function useStoreForm({ initialData, mode, onSave, onSaved }: UseStoreFor
         } : previous);
         setErrors((previous) => ({ ...previous, cep: "", street: "", neighborhood: "", city: "", state: "" }));
     }, []);
-    const addressLookup = useStoreAddress(form.cep, applyAddress);
+    const addressLookup = useAddressLookup(form.cep, applyAddress);
 
     useEffect(() => {
         if (mode === "edit") formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus();

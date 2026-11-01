@@ -61,7 +61,8 @@ export type StoreDialogState = { kind: "closed" } | { kind: "edit" | "delete"; s
 
 export interface StoreFilters {
     search: string;
-    location: string;
+    city: string;
+    state: string;
 }
 
 export interface StoreLocation {

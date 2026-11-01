@@ -14,7 +14,7 @@ import { useStoreDialogs } from "../../hooks/useStoreDialogs";
 import "../../../styles/pages/StoresPage/stores-page.css";
 
 export default function StoresPage() {
-    const { stores, filters, locations, setSearch, setLocation } = useStores();
+    const { stores, filters, cities, states, setSearch, setCity, setState } = useStores();
     const collection = useStoresContext();
     const modal = useStoreDialogs();
     const navigate = useNavigate();
@@ -38,9 +38,11 @@ export default function StoresPage() {
             <StoresFilters
                 filters={filters}
                 loading={collection.loading}
-                locations={locations}
+                cities={cities}
+                states={states}
                 onSearchChange={setSearch}
-                onLocationChange={setLocation}
+                onCityChange={setCity}
+                onStateChange={setState}
             />
             {collection.loading ? <LoadingSpinner message="Carregando filiais..." /> : (
                 <StoresTable stores={stores} onEdit={modal.openEdit} onDelete={modal.openDelete} />

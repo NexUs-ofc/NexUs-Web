@@ -1,6 +1,6 @@
 import { isStorePhotoDataUrl } from "./validateStore";
 
-export const STORE_PHOTO_MAX_BYTES = 1024 * 1024;
+export const STORE_PHOTO_MAX_BYTES = 10 * 1024 * 1024;
 
 export function storePhotoFile(value: string): File {
     if (!isStorePhotoDataUrl(value)) throw new Error("Selecione uma foto PNG, JPEG ou WebP válida.");
@@ -13,7 +13,7 @@ export function storePhotoFile(value: string): File {
 export async function validateStorePhoto(file: File, signal: AbortSignal): Promise<void> {
     signal.throwIfAborted();
     if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) throw new Error("Selecione uma imagem PNG, JPEG ou WebP.");
-    if (file.size > STORE_PHOTO_MAX_BYTES) throw new Error("A foto deve ter no máximo 1 MB.");
+    if (file.size > STORE_PHOTO_MAX_BYTES) throw new Error("A foto deve ter no máximo 10 MB.");
     if (file.size === 0) throw new Error("O arquivo selecionado está vazio.");
     const header = new Uint8Array(await file.slice(0, 12).arrayBuffer());
     signal.throwIfAborted();

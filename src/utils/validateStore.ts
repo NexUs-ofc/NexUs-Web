@@ -3,7 +3,7 @@ import { applyPatternMask, maskCnpj } from "./masks";
 
 export const STORE_MAX_LENGTH = {
     name: 100, cnpj: 18, cep: 9, phone: 15, street: 200, number: 20, neighborhood: 100,
-    city: 100, state: 2, email: 254, openingTime: 5, closingTime: 5, photoDataUrl: 1_400_000,
+    city: 100, state: 2, email: 254, openingTime: 5, closingTime: 5, photoDataUrl: 14_000_000,
 } as const;
 
 export const BRAZILIAN_STATES: ReadonlyArray<string> = [
@@ -94,7 +94,7 @@ export function validateStoreForm(data: StoreFormData, mode: StoreFormMode): Sto
         if (clean[field] && !isStoreTime(clean[field])) errors[field] = "Informe um horário válido entre 00:00 e 23:59 (HH:mm).";
     }
     if (clean.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(clean.email)) errors.email = "Informe um e-mail válido, como filial@empresa.com.br.";
-    if (clean.photoDataUrl && !isStorePhotoDataUrl(clean.photoDataUrl) && !(mode === "edit" && isStoreImageUrl(clean.photoDataUrl))) errors.photoDataUrl = "Selecione uma foto PNG, JPEG ou WebP de até 1 MB.";
+    if (clean.photoDataUrl && !isStorePhotoDataUrl(clean.photoDataUrl) && !(mode === "edit" && isStoreImageUrl(clean.photoDataUrl))) errors.photoDataUrl = "Selecione uma foto PNG, JPEG ou WebP de até 10 MB.";
     return errors;
 }
 

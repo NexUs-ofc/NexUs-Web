@@ -52,7 +52,7 @@ export function sanitizeStoreData(data: StoreFormData): StoreFormData {
     };
 }
 
-function isValidCnpj(value: string): boolean {
+export function isValidCnpj(value: string): boolean {
     const digits = value.replace(/\D/gu, "");
     if (digits.length !== 14 || /^(\d)\1+$/u.test(digits)) return false;
     const check = (length: number): number => {

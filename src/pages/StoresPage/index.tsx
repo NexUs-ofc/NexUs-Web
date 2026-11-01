@@ -1,33 +1,15 @@
-import type { Store } from "../../types/store";
 import PageTitle from "../../components/PageTitle";
-import { useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
 import StoresFilters from "../../components/StoresFilters";
 import StoresTable from "../../components/StoresTable";
 import DeleteStoreModal from "../../components/DeleteStoreModal";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorAlert from "../../components/ErrorAlert";
-import { useStores } from "../../hooks/useStores";
-import { useStoresContext } from "../../hooks/useStoresContext";
-import { useStoreDialogs } from "../../hooks/useStoreDialogs";
 import "../../../styles/pages/StoresPage/stores-page.css";
+import { useStoresPage } from "../../hooks/useStoresPage";
 
 export default function StoresPage() {
-    const { stores, filters, cities, states, setSearch, setCity, setState } = useStores();
-    const collection = useStoresContext();
-    const modal = useStoreDialogs();
-    const navigate = useNavigate();
-    const { clearFeedback } = collection;
-    const openEdit = useCallback((store: Store): void => {
-        clearFeedback();
-        navigate(`/lojas/editar/${encodeURIComponent(store.id)}`);
-    }, [clearFeedback, navigate]);
-
-    useEffect(() => {
-        document.title = "Filiais Cadastradas — NexUs";
-    }, []);
-
+    const { stores, filters, cities, states, setSearch, setCity, setState, collection, modal, openEdit, createNew } = useStoresPage();
     return (
         <main className="portal-page stores-page" aria-labelledby="stores-title">
             <header className="stores-page__heading">
@@ -35,7 +17,7 @@ export default function StoresPage() {
                     <PageTitle id="stores-title">Filiais Cadastradas</PageTitle>
                     <p>Gerencie as informações das lojas vinculadas ao seu aplicativo.</p>
                 </div>
-                <PrimaryButton type="button" className="stores-page__new" onClick={() => { collection.clearFeedback(); navigate("/lojas/nova"); }}>
+                <PrimaryButton type="button" className="stores-page__new" onClick={createNew}>
                     <img src={`${import.meta.env.BASE_URL}stores/plus.svg`} alt="" />
                     Nova Filial
                 </PrimaryButton>

@@ -21,6 +21,9 @@
 .store-form__actions .store-form__cancel { border-color: #e2e8f0; background: #ffffff; color: #0f172a; }
 .store-form__actions button:disabled { cursor: wait; }
 .store-form__status { font-size: 1.3rem; color: #475569; }
+.store-form .formInput:disabled, .store-form select:disabled { background: #f1f5f9; color: #475569; cursor: not-allowed; opacity: 1; }
+.store-form__address-feedback { display: flex; flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+.store-form__address-feedback button { min-block-size: 4.4rem; padding: 0.8rem 1.4rem; border: 1px solid var(--primary); border-radius: 10rem; background: #ffffff; color: var(--primary); font: 600 1.3rem/1.6rem "Montserrat", sans-serif; cursor: pointer; }
 .store-form--edit { gap: 2.4rem; color: #1e1b4b; }
 .store-form__edit-fields { display: flex; flex-direction: column; gap: 1.6rem; }
 .store-form--edit .formLabel { color: #1e1b4b; font-size: 1.3rem; font-weight: 700; line-height: 1.6rem; }

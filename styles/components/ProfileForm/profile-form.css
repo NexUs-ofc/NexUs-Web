@@ -4,6 +4,7 @@
 .profile-form .formLabel { color: #1d193c; font-size: 1.2rem; font-weight: 400; }
 .profile-form .formInput { inline-size: 100%; min-inline-size: 0; block-size: 4.6rem; padding: 1.2rem 1.4rem; border: 1px solid #ded3f4; border-radius: 1.3rem; background: #ffffff; box-shadow: none; color: #1d193c; font-family: inherit; font-size: 1.2rem; }
 .profile-form .formInput[aria-invalid="true"] { border-color: #b91c1c; }
+.profile-form .formInput:disabled { background: #f4f2f9; color: #71618e; opacity: 1; cursor: not-allowed; }
 .profile-form .formInputContainer { min-inline-size: 0; gap: 0.8rem; }
 .profile-form .formFieldError { font-size: 1.2rem; line-height: 1.5; }
 .profile-form__photo { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; margin-block-end: -0.8rem; text-align: center; }

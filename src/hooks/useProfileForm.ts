@@ -1,9 +1,11 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import type { Profile, ProfileAddress, ProfileFormData, ProfileFormErrors } from "../types/profile";
 import { EMPTY_PROFILE_ADDRESS, isProfileFormValid, toProfileForm, validateProfileForm } from "../utils/validateProfile";
-import { useCepLookup } from "./useCepLookup";
-import type { CepAddress } from "../types/cep";
+import { useAddressLookup } from "./useAddressLookup";
+import type { PostalAddress } from "../types/address";
+
+const ADDRESS_FIELDS = ["street", "neighborhood", "city", "state"] as const;
 
 export interface UseProfileFormOptions {
     profile: Profile;
@@ -16,21 +18,20 @@ export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptio
     const [errors, setErrors] = useState<ProfileFormErrors>({ name: "", phones: [], address: { ...EMPTY_PROFILE_ADDRESS } });
     const formRef = useRef<HTMLFormElement>(null);
     const submitting = useRef(false);
-    const editedAddressFields = useRef(new Set<keyof ProfileAddress>());
-    const cepLookup = useCepLookup((address, cep) => {
-        const fields = (Object.keys(address) as Array<keyof CepAddress>).filter((field) => !editedAddressFields.current.has(field));
+    const applyAddress = useCallback((address: PostalAddress): void => {
         setForm((previous) => {
-            if (previous.address.cep.replace(/\D/gu, "") !== cep) return previous;
+            if (previous.address.cep.replace(/\D/gu, "") !== address.cep) return previous;
             const nextAddress = { ...previous.address };
-            for (const field of fields) nextAddress[field] = address[field];
+            for (const field of ADDRESS_FIELDS) nextAddress[field] = address[field];
             return { ...previous, address: nextAddress };
         });
         setErrors((previous) => {
             const nextErrors = { ...previous.address };
-            for (const field of fields) nextErrors[field] = "";
-            return { ...previous, address: nextErrors };
+            for (const field of ADDRESS_FIELDS) nextErrors[field] = "";
+            return { ...previous, address: { ...nextErrors, cep: "" } };
         });
-    });
+    }, []);
+    const addressLookup = useAddressLookup(form.address.cep, applyAddress);
 
     function changeName(value: string): void {
         setForm((previous) => ({ ...previous, name: value }));
@@ -54,18 +55,23 @@ export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptio
     }
 
     function changeAddress(field: keyof ProfileAddress, value: string): void {
+        if (ADDRESS_FIELDS.some((name) => name === field) && (addressLookup.loading || addressLookup.address !== null)) return;
+        if (field === "cep" && value.replace(/\D/gu, "") !== form.address.cep.replace(/\D/gu, "")) {
+            addressLookup.retry();
+            setForm((previous) => ({ ...previous, address: { ...previous.address, cep: value, street: "", neighborhood: "", city: "", state: "" } }));
+            setErrors((previous) => ({ ...previous, address: { ...previous.address, cep: "", street: "", neighborhood: "", city: "", state: "" } }));
+            return;
+        }
         setForm((previous) => ({ ...previous, address: { ...previous.address, [field]: value } }));
         setErrors((previous) => ({ ...previous, address: { ...previous.address, [field]: "" } }));
-        if (field === "cep") {
-            editedAddressFields.current.clear();
-            void cepLookup.lookup(value);
-        } else editedAddressFields.current.add(field);
     }
 
     async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
-        if (submitting.current || cepLookup.loading) return;
+        if (submitting.current) return;
         const validation = validateProfileForm(form, Boolean(profile.address) || profile.profileType === "HOUSEHOLD" || profile.profileType === "STORE");
+        if (addressLookup.loading) validation.address.cep = "Aguarde a consulta do CEP.";
+        else if (addressLookup.error) validation.address.cep = addressLookup.error;
         setErrors(validation);
         if (!isProfileFormValid(validation)) {
             requestAnimationFrame(() => {
@@ -82,5 +88,5 @@ export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptio
         } finally { submitting.current = false; }
     }
 
-    return { form, errors, formRef, cepLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit };
+    return { form, errors, formRef, addressLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit };
 }

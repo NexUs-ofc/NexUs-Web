@@ -2,12 +2,13 @@ import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StoreForm from "../../components/StoreForm";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import { useStoresContext } from "../../hooks/useStoresContext";
 import { EMPTY_STORE_FORM } from "../../utils/validateStore";
 import "../../../styles/pages/CreateStorePage/create-store-page.css";
 
 export default function CreateStorePage() {
-    const { addStore, saving, error } = useStoresContext();
+    const { addStore, saving, loading, error } = useStoresContext();
     const navigate = useNavigate();
     useEffect(() => {
         document.title = "Adicionar Nova Filial — NexUs";
@@ -24,7 +25,7 @@ export default function CreateStorePage() {
                 <PageTitle id="create-store-title">Adicionar Nova Filial</PageTitle>
                 <p>Preencha os campos abaixo para cadastrar um novo ponto comercial no aplicativo.</p>
             </header>
-            <StoreForm mode="create" initialData={EMPTY_STORE_FORM} saving={saving} error={error} onSave={addStore} onSaved={() => navigate("/lojas")} onCancel={() => navigate("/lojas")} />
+            {loading ? <LoadingSpinner message="Carregando filiais..." /> : <StoreForm mode="create" initialData={EMPTY_STORE_FORM} saving={saving} error={error} onSave={addStore} onSaved={() => navigate("/lojas")} onCancel={() => navigate("/lojas")} />}
         </main>
     );
 }

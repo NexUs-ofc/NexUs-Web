@@ -9,7 +9,7 @@ import CompanyPlanBadge from "../CompanyPlanBadge";
 import { useProfileForm } from "../../hooks/useProfileForm";
 import { useProfilePhoto } from "../../hooks/useProfilePhoto";
 import type { Profile, ProfileUpdateData } from "../../types/profile";
-import type { CompanyDetails } from "../../types/company";
+import type { Company } from "../../types/company";
 import { maskProfilePhone, PROFILE_MAX_LENGTH } from "../../utils/validateProfile";
 import "../../../styles/components/ProfileForm/profile-form.css";
 
@@ -17,7 +17,7 @@ export interface ProfileFormProps {
     profile: Profile;
     saving: boolean;
     error: string;
-    company: CompanyDetails | null;
+    company: Company | null;
     companyEnabled: boolean;
     companyLoading: boolean;
     companyError: string;
@@ -30,7 +30,7 @@ export interface ProfileFormProps {
 export default function ProfileForm({ profile, saving, error, company, companyEnabled, companyLoading, companyError, onRetryCompany, onSave, onSaved, onCancel }: ProfileFormProps) {
     const id = useId();
     const photo = useProfilePhoto(profile.profileImageUrl ?? "");
-    const { form, errors, formRef, cepLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit } = useProfileForm({
+    const { form, errors, formRef, addressLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit } = useProfileForm({
         profile, onSaved,
         onSave: (data) => onSave({ ...data, photoFile: photo.file, profileImageUrl: photo.url }),
     });
@@ -76,14 +76,17 @@ export default function ProfileForm({ profile, saving, error, company, companyEn
                             {companyError ? <p className="profile-form__company-error" role="alert">{companyError} <button type="button" onClick={onRetryCompany}>Tentar novamente</button></p> : null}
                         </div>
                     </section>
-                    <ProfileAddressForm address={form.address} errors={errors.address} cepLookup={cepLookup} onRetryCep={() => void cepLookup.lookup(form.address.cep)} onChange={changeAddress} />
+                    <ProfileAddressForm address={form.address} errors={errors.address} addressLookup={addressLookup} onRetryCep={() => {
+                        addressLookup.retry();
+                        formRef.current?.querySelector<HTMLInputElement>('input[name="cep"]')?.focus();
+                    }} onChange={changeAddress} />
                 </fieldset>
                 {error ? <ErrorAlert title="Não foi possível concluir" message={error} /> : null}
                 {saving ? <p className="profile-form__status" role="status">Salvando alterações do perfil...</p> : null}
             </div>
             <footer className="profile-form__actions">
                 <button className="profile-form__cancel" type="button" disabled={saving} onClick={onCancel}>Cancelar</button>
-                <PrimaryButton type="submit" loading={saving} disabled={photo.loading || cepLookup.loading}>Salvar alterações</PrimaryButton>
+                <PrimaryButton type="submit" loading={saving} disabled={photo.loading || addressLookup.loading || Boolean(addressLookup.error)}>Salvar alterações</PrimaryButton>
             </footer>
         </form>
     );

@@ -1,0 +1,76 @@
+.payments-page {
+    gap: 3.2rem;
+    container-type: inline-size;
+    color: #181828;
+    font-family: "Montserrat", sans-serif;
+}
+
+.payments-page__header { display: flex; flex-direction: column; gap: 0.8rem; }
+.payments-page__header h1 { font-size: 3rem; line-height: 1.2; }
+.payments-page__header > p { color: #626270; font-size: 1.4rem; line-height: 1.6; }
+.payments-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4rem; }
+.payments-summary__card { display: flex; flex-direction: column; min-inline-size: 0; gap: 0.8rem; padding: 2.4rem; border: 1px solid #e9e4f0; border-radius: 1.8rem; background: #ffffff; }
+.payments-summary dt { color: #626270; font-size: 1rem; font-weight: 600; letter-spacing: 0.04em; line-height: 1.5; text-transform: uppercase; }
+.payments-summary dd { color: #626270; font-size: 1.1rem; line-height: 1.5; }
+.payments-summary .payments-summary__amount { margin-block-start: 0.8rem; color: var(--primary); font-size: clamp(2rem, 2.6cqi, 2.8rem); font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+.payments-summary .payments-summary__amount--paid { color: #181828; }
+.payments-summary__card--next { border-color: transparent; background: #efe8f8; }
+.payments-summary__card--next dt, .payments-summary__card--next dd { color: var(--primary); }
+.payments-summary .payments-summary__date { margin-block-start: 0.8rem; font-size: clamp(1.8rem, 2.3cqi, 2.5rem); font-weight: 600; line-height: 1.35; }
+.payments-history { display: flex; flex-direction: column; gap: 1.6rem; min-inline-size: 0; }
+.payments-history > h2 { font: 400 2.1rem/1.4 "Huninn", sans-serif; }
+.payments-filters { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+.payments-filters button { display: inline-flex; align-items: center; justify-content: center; gap: 1.6rem; min-block-size: 4.4rem; padding: 0.8rem 1.8rem; border: 1px solid #e9e4f0; border-radius: 10rem; background: #ffffff; color: #626270; cursor: pointer; font: 500 1.3rem/1.5 "Montserrat", sans-serif; }
+.payments-filters button > span { display: grid; min-inline-size: 2.4rem; min-block-size: 2rem; padding-inline: 0.4rem; place-items: center; border-radius: 10rem; background: #f1eff6; color: #626270; font-size: 1rem; font-weight: 600; }
+.payments-filters button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary); color: #ffffff; font-weight: 600; }
+.payments-filters button[aria-pressed="true"] > span { background: rgb(255 255 255 / 18%); color: #ffffff; }
+.payments-filters button:hover:not([aria-pressed="true"]) { border-color: #bea5d3; background: #f9f7fc; color: var(--primary); }
+.payments-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.4rem; margin-block-start: 0.8rem; }
+.payment-card { display: flex; flex-direction: column; min-inline-size: 0; min-block-size: 23rem; padding: 2.4rem; border: 1px solid #e9e4f0; border-radius: 2rem; background: #ffffff; }
+.payment-card--pending, .payment-card--overdue { border-color: #d9c5e8; }
+.payment-card__header { display: grid; grid-template-columns: 4.2rem minmax(0, 1fr) auto; align-items: center; gap: 1.4rem; }
+.payment-card__icon { display: grid; inline-size: 4.2rem; block-size: 4.2rem; place-items: center; border-radius: 1.3rem; background: #f2ebfa; color: var(--primary); font-size: 2rem; }
+.payment-card--paid .payment-card__icon { background: #f1f8f5; color: #16835d; }
+.payment-card--cancelled .payment-card__icon { background: #f1eff6; color: #626270; }
+.payment-card__identity { min-inline-size: 0; }
+.payment-card__identity h3 { font-size: 1.7rem; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+.payment-card__identity p { margin-block-start: 0.4rem; color: #626270; font-size: 1.2rem; line-height: 1.5; }
+.payment-card__identity p::first-letter { text-transform: uppercase; }
+.payment-badge { align-self: start; display: inline-flex; flex-shrink: 0; justify-content: center; padding: 0.6rem 1.2rem; border-radius: 10rem; font-size: 1.1rem; font-weight: 600; line-height: 1.5; white-space: nowrap; }
+.payment-badge--paid { background: #eaf8f0; color: #126747; }
+.payment-badge--pending { background: #fff5db; color: #805011; }
+.payment-badge--overdue { background: #fff0e9; color: #9a3412; }
+.payment-badge--cancelled { background: #f1eff6; color: #626270; }
+.payment-card__amount { margin-block-start: 2.4rem; color: var(--primary); font-size: 3.1rem; font-weight: 600; letter-spacing: -0.035em; line-height: 1.25; overflow-wrap: anywhere; }
+.payment-card__description { margin-block-start: 0.8rem; color: #626270; font-size: 1.2rem; line-height: 1.5; }
+.payment-card__footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem; margin-block-start: 1.8rem; padding-block-start: 1.6rem; border-block-start: 1px solid #e9e4f0; }
+.payment-card__date { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; min-block-size: 4.4rem; color: #626270; font-size: 1.2rem; line-height: 1.5; }
+.payment-card__date > svg { flex-shrink: 0; margin-inline-end: 0.4rem; font-size: 1.7rem; }
+.payment-card--paid .payment-card__date { color: #126747; }
+.payment-card__pay { display: inline-flex; align-items: center; justify-content: space-between; gap: 2.4rem; min-inline-size: 14rem; min-block-size: 4.4rem; padding: 1rem 2.4rem; border: 0; border-radius: 10rem; background: var(--primary); color: #ffffff; cursor: pointer; font: 600 1.3rem/1.5 "Montserrat", sans-serif; }
+.payment-card__pay svg { flex-shrink: 0; font-size: 1.8rem; }
+.payment-card__pay:hover { background: #642b91; }
+.payments-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6rem; min-block-size: 40rem; padding: 4rem 2.4rem; border: 1px solid #e9e4f0; border-radius: 2rem; background: #ffffff; text-align: center; }
+.payments-empty > span { display: grid; inline-size: 8.8rem; block-size: 8.8rem; margin-block-end: 1.2rem; place-items: center; border-radius: 50%; background: #eaf8f0; color: #16835d; font-size: 4rem; }
+.payments-empty h3 { font: 400 2.3rem/1.4 "Huninn", sans-serif; }
+.payments-empty p { color: #626270; font-size: 1.3rem; line-height: 1.6; }
+.payments-page__footer { margin-block-start: auto; color: #626270; font-size: 1.1rem; line-height: 1.6; }
+.payments-page__feedback { display: flex; flex-direction: column; align-items: flex-start; gap: 1.6rem; font-size: 1.3rem; line-height: 1.6; }
+.payments-page__retry { min-block-size: 4.4rem; padding: 1rem 2.4rem; border: 1px solid var(--primary); border-radius: 10rem; background: #ffffff; color: var(--primary); cursor: pointer; font: 600 1.3rem/1.5 "Montserrat", sans-serif; }
+
+@container (max-width: 72rem) {
+    .payments-summary { grid-template-columns: 1fr; gap: 1.6rem; }
+    .payments-summary__card { gap: 0.6rem; }
+    .payments-summary .payments-summary__amount { font-size: 2.8rem; }
+    .payments-summary .payments-summary__date { font-size: 2.5rem; }
+    .payments-grid { grid-template-columns: 1fr; }
+}
+
+@container (max-width: 36rem) {
+    .payments-filters { gap: 0.8rem; }
+    .payments-filters button { flex: 1 1 auto; gap: 0.8rem; padding-inline: 1.2rem; }
+    .payment-card { padding: 2rem; }
+    .payment-card__header { grid-template-columns: 4.2rem minmax(0, 1fr); gap: 1.2rem; }
+    .payment-badge { grid-column: 2; justify-self: start; }
+    .payment-card__pay { inline-size: 100%; }
+}

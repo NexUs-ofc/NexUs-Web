@@ -1,9 +1,9 @@
-import type { Store, StoreFormData, StoreFormErrors, StoreFormMode } from "../types/store";
+import type { Store, StoreFormData, StoreFormErrors, StoreFormMode, StorePayload } from "../types/store";
 import { applyPatternMask, maskCnpj } from "./masks";
 
 export const STORE_MAX_LENGTH = {
-    name: 100, cnpj: 18, cep: 9, phone: 15, address: 200,
-    city: 100, state: 2, email: 254, openingHours: 120, manager: 100, photoDataUrl: 1_400_000,
+    name: 100, cnpj: 18, cep: 9, phone: 15, street: 200, number: 20, neighborhood: 100,
+    city: 100, state: 2, email: 254, openingTime: 5, closingTime: 5, photoDataUrl: 1_400_000,
 } as const;
 
 export const BRAZILIAN_STATES: ReadonlyArray<string> = [
@@ -12,7 +12,7 @@ export const BRAZILIAN_STATES: ReadonlyArray<string> = [
 ];
 
 export const EMPTY_STORE_FORM: StoreFormData = {
-    name: "", cnpj: "", cep: "", phone: "", address: "", city: "", state: "", email: "", openingHours: "", manager: "", photoDataUrl: "",
+    name: "", cnpj: "", cep: "", phone: "", street: "", number: "", neighborhood: "", city: "", state: "", email: "", openingTime: "", closingTime: "", photoDataUrl: "",
 };
 
 export function maskStoreCep(value: string): string {
@@ -23,13 +23,21 @@ export function maskStorePhone(value: string): string {
     return applyPatternMask(value, value.replace(/\D/gu, "").length > 10 ? "(##) #####-####" : "(##) ####-####");
 }
 
+export function maskStoreTime(value: string): string {
+    return applyPatternMask(value, "##:##");
+}
+
+export function isStoreTime(value: string): boolean {
+    return /^(?:[01]\d|2[0-3]):[0-5]\d$/u.test(value);
+}
+
 export function toStoreForm(store: Store): StoreFormData {
     return {
         name: store.name, city: store.city, state: store.state,
         cnpj: maskCnpj(store.cnpj ?? ""), cep: maskStoreCep(store.cep ?? ""),
-        phone: maskStorePhone(store.phone ?? ""), address: store.address ?? "",
-        email: store.email ?? "", openingHours: store.openingHours ?? "",
-        manager: store.manager ?? "", photoDataUrl: store.photoDataUrl ?? "",
+        phone: maskStorePhone(store.phones?.[0] ?? ""), street: store.street,
+        number: store.number, neighborhood: store.neighborhood, email: "",
+        openingTime: store.openingTime, closingTime: store.closingTime, photoDataUrl: store.storeImageUrl,
     };
 }
 
@@ -37,9 +45,10 @@ export function sanitizeStoreData(data: StoreFormData): StoreFormData {
     const clean = (value: string): string => value.replace(/\p{Cc}/gu, "").trim().replace(/\s+/gu, " ");
     return {
         name: clean(data.name), cnpj: clean(data.cnpj), cep: clean(data.cep), phone: clean(data.phone),
-        address: clean(data.address), city: clean(data.city), state: clean(data.state).toUpperCase(),
-        email: clean(data.email).toLowerCase(), openingHours: clean(data.openingHours),
-        manager: clean(data.manager), photoDataUrl: data.photoDataUrl,
+        street: clean(data.street), number: clean(data.number), neighborhood: clean(data.neighborhood),
+        city: clean(data.city), state: clean(data.state).toUpperCase(),
+        email: clean(data.email).toLowerCase(), openingTime: clean(data.openingTime),
+        closingTime: clean(data.closingTime), photoDataUrl: data.photoDataUrl,
     };
 }
 
@@ -63,33 +72,50 @@ export function validateStoreForm(data: StoreFormData, mode: StoreFormMode): Sto
     const clean = sanitizeStoreData(data);
     const errors: StoreFormErrors = { ...EMPTY_STORE_FORM };
     const labels: Record<keyof StoreFormData, string> = {
-        name: "nome da filial", cnpj: "CNPJ", cep: "CEP", phone: "telefone", address: "endereço",
-        city: "nome da cidade", state: "estado", email: "e-mail", openingHours: "horário de funcionamento", manager: "responsável", photoDataUrl: "foto da loja",
+        name: "nome da filial", cnpj: "CNPJ", cep: "CEP", phone: "telefone", street: "rua", number: "número", neighborhood: "bairro",
+        city: "nome da cidade", state: "estado", email: "e-mail", openingTime: "horário de abertura", closingTime: "horário de fechamento", photoDataUrl: "foto da loja",
     };
     for (const field of Object.keys(STORE_MAX_LENGTH) as Array<keyof StoreFormData>) {
         if (data[field].length > STORE_MAX_LENGTH[field]) {
             errors[field] = `O campo ${labels[field]} deve ter no máximo ${STORE_MAX_LENGTH[field]} caracteres.`;
         }
     }
-    if (!clean.name) errors.name = "Informe o nome da filial.";
-    if (mode === "create") {
-        if (!clean.cnpj) errors.cnpj = "Informe o CNPJ da filial.";
-        if (!clean.address) errors.address = "Informe o endereço da filial.";
-        if (!clean.email) errors.email = "Informe o e-mail da filial.";
+    for (const field of ["name", "cnpj", "street"] as const) {
+        if (!clean[field]) errors[field] = `Informe ${labels[field]}.`;
     }
+    if (mode === "create" && !clean.email) errors.email = "Informe o e-mail da filial.";
     if (clean.state && !BRAZILIAN_STATES.includes(clean.state)) errors.state = "Selecione uma UF válida.";
     if (clean.cnpj && (!/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/u.test(clean.cnpj) || !isValidCnpj(clean.cnpj))) {
         errors.cnpj = "Informe um CNPJ válido, com 14 dígitos e dígitos verificadores corretos.";
     }
     if (clean.cep && !/^\d{5}-\d{3}$/u.test(clean.cep)) errors.cep = "Informe um CEP válido com 8 dígitos.";
     if (clean.phone && !/^\([1-9]\d\) \d{4,5}-\d{4}$/u.test(clean.phone)) errors.phone = "Informe um telefone válido com DDD e 10 ou 11 dígitos.";
+    for (const field of ["openingTime", "closingTime"] as const) {
+        if (clean[field] && !isStoreTime(clean[field])) errors[field] = "Informe um horário válido entre 00:00 e 23:59 (HH:mm).";
+    }
     if (clean.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(clean.email)) errors.email = "Informe um e-mail válido, como filial@empresa.com.br.";
-    if (clean.photoDataUrl && !isStorePhotoDataUrl(clean.photoDataUrl)) errors.photoDataUrl = "Selecione uma foto PNG, JPEG ou WebP de até 1 MB.";
+    if (clean.photoDataUrl && !isStorePhotoDataUrl(clean.photoDataUrl) && !(mode === "edit" && isStoreImageUrl(clean.photoDataUrl))) errors.photoDataUrl = "Selecione uma foto PNG, JPEG ou WebP de até 1 MB.";
     return errors;
 }
 
 export function isStorePhotoDataUrl(value: string): boolean {
     return value.length <= STORE_MAX_LENGTH.photoDataUrl && /^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/u.test(value);
+}
+
+export function isStoreImageUrl(value: string): boolean {
+    if (value.length > 4096) return false;
+    try { return ["https:", "http:"].includes(new URL(value).protocol); } catch { return false; }
+}
+
+export function toStorePayload(data: StoreFormData): StorePayload {
+    return {
+        cnpj: data.cnpj.replace(/\D/gu, ""), name: data.name,
+        ...(data.phone ? { phones: [data.phone.replace(/\D/gu, "")] } : {}),
+        address: { street: data.street, number: data.number, neighborhood: data.neighborhood,
+            ...(data.cep ? { cep: data.cep.replace(/\D/gu, "") } : {}), city: data.city, state: data.state },
+        ...(data.openingTime ? { openingTime: data.openingTime } : {}),
+        ...(data.closingTime ? { closingTime: data.closingTime } : {}),
+    };
 }
 
 export function isStoreFormValid(errors: StoreFormErrors): boolean {

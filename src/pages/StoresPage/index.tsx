@@ -51,6 +51,7 @@ export default function StoresPage() {
                     <button type="button" onClick={collection.reload}>Tentar novamente</button>
                 </div>
             ) : null}
+            {collection.warning ? <ErrorAlert title="Foto não atualizada" message={collection.warning} /> : null}
             <footer className="stores-page__footer">
                 <p role="status" aria-live="polite" aria-atomic="true">
                     {collection.success ? `${collection.success} ` : ""}

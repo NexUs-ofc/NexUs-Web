@@ -1,6 +1,6 @@
 import { ApiError } from "./apiError";
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface ApiRequestOptions {
     method?: HttpMethod;
@@ -28,16 +28,17 @@ export async function apiRequest<T>(
 ): Promise<T> {
     const normalizedBase = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
     const url = `${normalizedBase}${endpoint}`;
+    const multipart = options.body instanceof FormData;
     try {
         const response = await fetch(url, {
             method: options.method ?? "GET",
             credentials: options.credentials ?? "include",
             headers: {
-                "Content-Type": "application/json",
+                ...(!multipart ? { "Content-Type": "application/json" } : {}),
                 ...(options.apiKey ? { "X-API-KEY": options.apiKey } : {}),
                 ...(options.authToken ? { Authorization: `Bearer ${options.authToken}` } : {}),
             },
-            ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
+            ...(options.body !== undefined ? { body: multipart ? options.body as FormData : JSON.stringify(options.body) } : {}),
             ...(options.signal ? { signal: options.signal } : {}),
         });
         let data: unknown = null;

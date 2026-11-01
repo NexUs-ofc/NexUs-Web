@@ -25,15 +25,16 @@ export interface UseStoreFormResult {
 }
 
 export function useStoreForm({ initialData, mode, onSave, onSaved }: UseStoreFormOptions): UseStoreFormResult {
-    const [form, setForm] = useState<StoreFormData>(initialData);
-    const [errors, setErrors] = useState<StoreFormErrors>({ ...EMPTY_STORE_FORM });
+    const [state, setState] = useState(() => ({ form: initialData as StoreFormData, errors: { ...EMPTY_STORE_FORM } as StoreFormErrors }));
+    const { form, errors } = state;
+
     const formRef = useRef<HTMLFormElement>(null);
     const submitting = useRef(false);
     const applyAddress = useCallback((address: PostalAddress): void => {
-        setForm((previous) => previous.cep.replace(/\D/gu, "") === address.cep ? {
-            ...previous, street: address.street, neighborhood: address.neighborhood, city: address.city, state: address.state,
+        setState((previous) => previous.form.cep.replace(/\D/gu, "") === address.cep ? {
+            form: { ...previous.form, street: address.street, neighborhood: address.neighborhood, city: address.city, state: address.state },
+            errors: { ...previous.errors, cep: "", street: "", neighborhood: "", city: "", state: "" },
         } : previous);
-        setErrors((previous) => ({ ...previous, cep: "", street: "", neighborhood: "", city: "", state: "" }));
     }, []);
     const addressLookup = useAddressLookup(form.cep, applyAddress);
 
@@ -45,12 +46,10 @@ export function useStoreForm({ initialData, mode, onSave, onSaved }: UseStoreFor
         if (ADDRESS_FIELDS.some((name) => name === field) && (addressLookup.loading || addressLookup.address !== null)) return;
         if (field === "cep" && value.replace(/\D/gu, "") !== form.cep.replace(/\D/gu, "")) {
             addressLookup.retry();
-            setForm((previous) => ({ ...previous, cep: value, street: "", neighborhood: "", city: "", state: "" }));
-            setErrors((previous) => ({ ...previous, cep: "", street: "", neighborhood: "", city: "", state: "" }));
+            setState((previous) => ({ ...previous, form: ({ ...previous.form, cep: value, street: "", neighborhood: "", city: "", state: "" }), errors: ({ ...previous.errors, cep: "", street: "", neighborhood: "", city: "", state: "" }) }));
             return;
         }
-        setForm((previous) => ({ ...previous, [field]: value }));
-        setErrors((previous) => ({ ...previous, [field]: "" }));
+        setState((previous) => ({ ...previous, form: ({ ...previous.form, [field]: value }), errors: ({ ...previous.errors, [field]: "" }) }));
     }
 
     async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -59,7 +58,7 @@ export function useStoreForm({ initialData, mode, onSave, onSaved }: UseStoreFor
         const validation = validateStoreForm(form, mode);
         if (addressLookup.loading) validation.cep = "Aguarde a consulta do CEP.";
         else if (addressLookup.error) validation.cep = addressLookup.error;
-        setErrors(validation);
+        setState((previous) => ({ ...previous, errors: validation }));
         if (!isStoreFormValid(validation)) {
             const first = (Object.keys(validation) as Array<keyof StoreFormData>).find((field) => validation[field] !== "");
             requestAnimationFrame(() => formRef.current?.querySelector<HTMLInputElement | HTMLSelectElement>(`[name="${first}"]`)?.focus());

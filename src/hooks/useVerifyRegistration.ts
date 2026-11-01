@@ -1,3 +1,4 @@
+import { validateVerification } from "../utils/validateAuth";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "./useAuth";
 import { verifyRegistration as verifyRegistrationRequest } from "../services/auth.service";
@@ -16,10 +17,10 @@ export interface UseVerifyRegistrationResult {
 }
 
 export function useVerifyRegistration(): UseVerifyRegistrationResult {
+    const [state, setState] = useState({ loading: false, error: "", success: false });
+    const { loading, error, success } = state;
     const { setAuthenticated } = useAuth();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
-    const [success, setSuccess] = useState<boolean>(false);
+
     const mountedRef = useRef<boolean>(true);
     const abortRef = useRef<AbortController | null>(null);
 
@@ -33,8 +34,7 @@ export function useVerifyRegistration(): UseVerifyRegistrationResult {
 
     const reset = useCallback(() => {
         if (mountedRef.current) {
-            setError("");
-            setSuccess(false);
+            setState((previous) => ({ ...previous, error: "", success: false }));
         }
     }, []);
 
@@ -44,17 +44,15 @@ export function useVerifyRegistration(): UseVerifyRegistrationResult {
             const controller = new AbortController();
             abortRef.current = controller;
             if (mountedRef.current) {
-                setLoading(true);
-                setError("");
-                setSuccess(false);
+                setState((previous) => ({ ...previous, loading: true, error: "", success: false }));
             }
             try {
-                const tokens = await verifyRegistrationRequest(payload, {
+                const tokens = await verifyRegistrationRequest(validateVerification(payload), {
                     signal: controller.signal,
                 });
                 setCoreAuthToken(tokens.accessToken);
                 const profile = await getProfile({ signal: controller.signal });
-                if (!mountedRef.current) {
+                if (!mountedRef.current || controller.signal.aborted) {
                     return false;
                 }
                 clearRegistrationId();
@@ -65,20 +63,17 @@ export function useVerifyRegistration(): UseVerifyRegistrationResult {
                     tokens.refreshToken,
                     tokens.refreshTokenExpiresAt,
                 );
-                setLoading(false);
-                setSuccess(true);
+                setState((previous) => ({ ...previous, loading: false, success: true }));
                 return true;
             } catch (requestError) {
-                if (!mountedRef.current) {
+                if (!mountedRef.current || controller.signal.aborted) {
                     return false;
                 }
                 const message =
                     requestError instanceof ApiError
                         ? requestError.message
                         : "Erro ao verificar o cadastro. Tente novamente.";
-                setError(message);
-                setLoading(false);
-                setSuccess(false);
+                setState((previous) => ({ ...previous, error: message, loading: false, success: false }));
                 return false;
             }
         },

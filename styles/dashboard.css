@@ -122,3 +122,7 @@
     .dashboard-stat, .dashboard-card, .dashboard-data-table, .dashboard-card__data-toggle { border-color: CanvasText; }
     .dashboard-card__data-toggle { color: ButtonText; background: ButtonFace; }
 }
+
+.dashboard-card__tabs { display: flex; gap: .8rem; }
+.dashboard-card__tabs [aria-selected="true"] { background: var(--primary); color: #fff; border-color: var(--primary); }
+.dashboard-card [role="tabpanel"]:focus-visible { outline: 3px solid var(--primary); outline-offset: -3px; }

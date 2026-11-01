@@ -1,66 +1,26 @@
 import type { RegistrationData } from "../types/registration";
-
-export const REGISTRATION_STORAGE_VERSION = 1;
+import { validateRegistrationId } from "./validateAuth";
 
 export const REGISTRATION_STORAGE_KEY = "nexus-registration-draft";
+let draft: RegistrationData | null = null;
 
-export interface PersistedRegistrationDraft {
-    _versao: number;
-    data: RegistrationData;
-}
-
-function isPersistedRegistrationDraft(value: unknown): value is PersistedRegistrationDraft {
-    if (typeof value !== "object" || value === null) {
-        return false;
-    }
-    const record = value as Record<string, unknown>;
-    return (
-        record["_versao"] === REGISTRATION_STORAGE_VERSION &&
-        ("data" in record)
-    );
+function removeLegacyDraft(): void {
+    try { localStorage.removeItem(REGISTRATION_STORAGE_KEY); } catch { /* Storage indisponível. */ }
 }
 
 export function saveRegistrationDraft(data: RegistrationData): void {
-    const payload: PersistedRegistrationDraft = {
-        _versao: REGISTRATION_STORAGE_VERSION,
-        data,
-    };
-    try {
-        localStorage.setItem(REGISTRATION_STORAGE_KEY, JSON.stringify(payload));
-    } catch {
-        return;
-    }
+    removeLegacyDraft();
+    draft = { ...data, phones: [...data.phones] };
 }
 
 export function loadRegistrationDraft(): RegistrationData | null {
-    let raw: string | null;
-    try {
-        raw = localStorage.getItem(REGISTRATION_STORAGE_KEY);
-    } catch {
-        return null;
-    }
-    if (raw === null) {
-        return null;
-    }
-    try {
-        const parsed: unknown = JSON.parse(raw);
-        if (!isPersistedRegistrationDraft(parsed)) {
-            clearRegistrationDraft();
-            return null;
-        }
-        return parsed.data;
-    } catch {
-        clearRegistrationDraft();
-        return null;
-    }
+    removeLegacyDraft();
+    return draft ? { ...draft, phones: [...draft.phones] } : null;
 }
 
 export function clearRegistrationDraft(): void {
-    try {
-        localStorage.removeItem(REGISTRATION_STORAGE_KEY);
-    } catch {
-        return;
-    }
+    draft = null;
+    removeLegacyDraft();
 }
 
 export const REGISTRATION_ID_STORAGE_VERSION = 1;
@@ -80,14 +40,15 @@ function isPersistedRegistrationId(value: unknown): value is PersistedRegistrati
     return (
         record["_versao"] === REGISTRATION_ID_STORAGE_VERSION &&
         typeof record["registrationId"] === "string" &&
-        record["registrationId"].length > 0
+        record["registrationId"].length > 0 &&
+        record["registrationId"].length <= 256 && /^[A-Za-z0-9_-]+$/u.test(record["registrationId"])
     );
 }
 
 export function saveRegistrationId(registrationId: string): void {
     const payload: PersistedRegistrationId = {
         _versao: REGISTRATION_ID_STORAGE_VERSION,
-        registrationId,
+        registrationId: validateRegistrationId(registrationId),
     };
     try {
         localStorage.setItem(REGISTRATION_ID_STORAGE_KEY, JSON.stringify(payload));

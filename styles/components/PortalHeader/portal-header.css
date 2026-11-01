@@ -1,4 +1,7 @@
 .portal-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 10;
     display: flex;
     flex: 0 0 auto;
     align-items: center;

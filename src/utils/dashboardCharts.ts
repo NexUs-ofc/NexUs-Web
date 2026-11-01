@@ -1,7 +1,7 @@
 import type { DashboardData, WasteLevel } from "../types/dashboard";
 import type { DashboardChartModel, ChartLegendItem, ChartTable } from "../types/dashboardChart";
 import type { DashboardChartOption } from "./chartEngine";
-import { formatDashboardKg, formatDashboardNumber as formatNumber, formatDashboardPercent as formatPercent } from "./dashboardFormatters";
+import { formatDashboardItems, formatDashboardNumber as formatNumber, formatDashboardPercent as formatPercent } from "./dashboardFormatters";
 import { consumptionColors } from "./dashboardColors";
 
 export const CHART_COLORS = { primary: "#4f2078", medium: "#9476b4", light: "#c4b3d7", pale: "#d9cfe5", text: "#596273", grid: "#e8eaf0", border: "#7b5799" };
@@ -109,13 +109,13 @@ function consumptionChart(data: DashboardData): DashboardChartModel {
             yAxis: { type: "category", inverse: true, data: data.categories.map((item) => item.name), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { fontSize: 10 } },
             visualMap: { show: false, min: 0, max: maximum, inRange: { color: [CHART_COLORS.pale, CHART_COLORS.light, CHART_COLORS.medium, CHART_COLORS.primary] } },
             series: [{
-                type: "heatmap", name: "Consumo (kg)",
+                type: "heatmap", name: "Consumo (itens)",
                 itemStyle: { borderWidth: 2, borderColor: "#ffffff" }, emphasis: { itemStyle: { borderColor: CHART_COLORS.primary } },
                 label: { show: true, fontSize: 10, formatter: (params) => Array.isArray(params.value) ? formatNumber(Number(params.value[2])) : "" },
                 tooltip: { formatter: (params) => {
                     const entry = Array.isArray(params) ? params[0] : params;
                     if (!Array.isArray(entry.value)) return "Sem dados";
-                    return `${data.categories[Number(entry.value[1])]?.name ?? ""} · ${data.regions[Number(entry.value[0])]?.name ?? ""}\n${formatDashboardKg(Number(entry.value[2]))}`;
+                    return `${data.categories[Number(entry.value[1])]?.name ?? ""} · ${data.regions[Number(entry.value[0])]?.name ?? ""}\n${formatDashboardItems(Number(entry.value[2]))}`;
                 } },
                 data: data.regionalConsumption.map((item) => {
                     const colors = consumptionColors(item.kilograms, maximum);
@@ -123,10 +123,10 @@ function consumptionChart(data: DashboardData): DashboardChartModel {
                 }),
             }],
         },
-        legend: [legend("high", "Consumo alto (kg)", CHART_COLORS.primary), legend("medium", "Consumo médio (kg)", CHART_COLORS.medium), legend("low", "Consumo baixo (kg)", CHART_COLORS.light), legend("minimum", "Consumo mínimo (kg)", CHART_COLORS.pale)],
+        legend: [legend("high", "Consumo alto (itens)", CHART_COLORS.primary), legend("medium", "Consumo médio (itens)", CHART_COLORS.medium), legend("low", "Consumo baixo (itens)", CHART_COLORS.light), legend("minimum", "Consumo mínimo (itens)", CHART_COLORS.pale)],
         axisNotes: [{ id: "x", text: "Eixo X: regiões do Brasil" }, { id: "y", text: "Eixo Y: categorias de produto" }],
-        note: "Consumo (kg) · claro = menor / escuro = maior",
-        table: table([{ id: "category", label: "Categoria" }, { id: "region", label: "Região" }, { id: "consumption", label: "Consumo (kg)" }], data.regionalConsumption.map((item) => ({ id: item.id, cells: [data.categories.find((category) => category.id === item.categoryId)?.name ?? "", data.regions.find((region) => region.id === item.regionId)?.name ?? "", formatDashboardKg(item.kilograms)] }))),
+        note: "Consumo (itens) · claro = menor / escuro = maior",
+        table: table([{ id: "category", label: "Categoria" }, { id: "region", label: "Região" }, { id: "consumption", label: "Consumo (itens)" }], data.regionalConsumption.map((item) => ({ id: item.id, cells: [data.categories.find((category) => category.id === item.categoryId)?.name ?? "", data.regions.find((region) => region.id === item.regionId)?.name ?? "", formatDashboardItems(item.kilograms)] }))),
     };
 }
 

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { getCompanyDetails } from "../services/company.service";
-import type { CompanyDetails } from "../types/company";
+import { getCompany } from "../services/plans.service";
+import type { Company } from "../types/company";
 import type { Profile } from "../types/profile";
 
 export function useCompanyDetails(profile: Profile) {
     const enabled = profile.profileType === "COMPANY";
     const [attempt, setAttempt] = useState(0);
     const [state, setState] = useState({
-        company: null as CompanyDetails | null,
+        company: null as Company | null,
         loading: enabled,
         error: "",
     });
@@ -18,7 +18,7 @@ export function useCompanyDetails(profile: Profile) {
         const controller = new AbortController();
         const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]);
 
-        void getCompanyDetails({ signal }).then((company) => {
+        void getCompany({ signal }).then((company) => {
             if (!signal.aborted) setState({ company, loading: false, error: "" });
         }).catch(() => {
             if (!controller.signal.aborted) setState({

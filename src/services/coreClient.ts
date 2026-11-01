@@ -1,8 +1,8 @@
 import { apiRequest } from "./apiClient";
 import type { ApiRequestOptions } from "./apiClient";
 
-const CORE_API_BASE_URL =
-    import.meta.env.VITE_CORE_API_BASE_URL ?? "https://ceris-core.vercel.app";
+export const CORE_API_BASE_URL =
+    import.meta.env.VITE_CORE_API_BASE_URL ?? "https://ceris-core.discloud.dev";
 
 let coreAuthToken: string | null = null;
 

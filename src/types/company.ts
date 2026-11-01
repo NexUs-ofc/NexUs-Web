@@ -1,9 +1,8 @@
-export interface CompanyDetails {
+export interface Company {
     id: number;
     cnpj: string;
     planId: number;
     planName: string;
     planPrice: number;
-    storeLimit: number;
     storeCount: number;
 }

@@ -31,7 +31,7 @@ export default function PortalLayout() {
                 />
                 {profileSuccess ? <p className="portal-layout__profile-status" role="status">{profileSuccess}</p> : null}
                 {state.profile ? (
-                    <StoresProvider key={state.profile.id} profileId={state.profile.id}>
+                    <StoresProvider key={state.profile.id}>
                         <Outlet />
                     </StoresProvider>
                 ) : null}

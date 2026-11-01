@@ -13,6 +13,17 @@ export function sanitizeReportSearch(value: string): string {
     return value.replace(/\p{Cc}/gu, "").slice(0, REPORT_SEARCH_MAX_LENGTH);
 }
 
+/** Ano do filtro: só 4 dígitos (ex.: "2026"); qualquer outra coisa volta para "todos os anos". */
+export function sanitizeReportYear(value: string): string {
+    return /^\d{4}$/u.test(value) ? value : "";
+}
+
+/** Mês do filtro: "1" a "12"; qualquer outra coisa volta para "todos os meses". */
+export function sanitizeReportMonth(value: string): string {
+    const month = Number(value);
+    return /^\d{1,2}$/u.test(value) && month >= 1 && month <= 12 ? String(month) : "";
+}
+
 function normalize(value: string): string {
     return value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("pt-BR").trim();
 }

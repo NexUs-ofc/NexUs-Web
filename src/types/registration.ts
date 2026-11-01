@@ -6,7 +6,6 @@ export interface Plan {
     price: string;
     priceSuffix: string;
     subtitle: string;
-    featured: boolean;
     benefits: string[];
 }
 
@@ -64,12 +63,11 @@ export interface RegistrationStartResponse {
 
 export const AVAILABLE_PLANS: Plan[] = [
     {
-        id: 0,
+        id: 1,
         title: "Ceris",
         price: "R$359,99",
         priceSuffix: "/licença por mês",
         subtitle: "Funcionalidades limitadas",
-        featured: false,
         benefits: [
             "Visualização de filiais próximas ao cliente",
             "Insights sobre vendas em regiões próximas",
@@ -78,12 +76,11 @@ export const AVAILABLE_PLANS: Plan[] = [
         ],
     },
     {
-        id: 1,
+        id: 2,
         title: "Enterprise",
         price: "R$659,99",
         priceSuffix: "/licença por mês",
         subtitle: "Funcionalidades limitadas",
-        featured: true,
         benefits: [
             "IA",
             "Visualização de filiais próximas ao cliente",
@@ -93,12 +90,11 @@ export const AVAILABLE_PLANS: Plan[] = [
         ],
     },
     {
-        id: 2,
+        id: 3,
         title: "Exclusive",
         price: "R$959,99",
         priceSuffix: "/licença por mês",
         subtitle: "Funcionalidades limitadas",
-        featured: false,
         benefits: [
             "IA + Relatórios",
             "Visualização de filiais próximas ao cliente",

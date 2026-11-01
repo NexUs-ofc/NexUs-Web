@@ -1,3 +1,5 @@
+import { parseAuthTokens, validateVerification, validateRefresh, validateRegistrationId } from "../utils/validateAuth";
+import { asRecord } from "../utils/responseParsers";
 import type { AuthTokens, LoginPayload, RefreshPayload, VerifyRegistrationPayload } from "../types/auth";
 import type { RegistrationData, RegistrationStartResponse } from "../types/registration";
 import { apiRequest } from "./apiClient";
@@ -16,13 +18,13 @@ export async function login(
     options: LoginRequestOptions = {},
 ): Promise<AuthTokens> {
     try {
-        return await apiRequest<AuthTokens>(AUTH_API_BASE_URL, "/api/auth/login/password", {
+        return parseAuthTokens(await apiRequest<unknown>(AUTH_API_BASE_URL, "/api/auth/login/password", {
             method: "POST",
             apiKey: AUTH_API_KEY,
             body: payload,
             credentials: "omit",
             ...(options.signal ? { signal: options.signal } : {}),
-        });
+        }));
     } catch (error) {
         if (error instanceof Error) {
             throw error;
@@ -40,13 +42,13 @@ export async function refreshSession(
     options: RefreshRequestOptions = {},
 ): Promise<AuthTokens> {
     try {
-        return await apiRequest<AuthTokens>(AUTH_API_BASE_URL, "/api/auth/token/refresh", {
+        return parseAuthTokens(await apiRequest<unknown>(AUTH_API_BASE_URL, "/api/auth/token/refresh", {
             method: "POST",
             apiKey: AUTH_API_KEY,
-            body: payload,
+            body: validateRefresh(payload),
             credentials: "omit",
             ...(options.signal ? { signal: options.signal } : {}),
-        });
+        }));
     } catch (error) {
         if (error instanceof Error) {
             throw error;
@@ -64,7 +66,7 @@ export async function startRegistration(
     options: RegistrationStartRequestOptions = {},
 ): Promise<RegistrationStartResponse> {
     try {
-        return await apiRequest<RegistrationStartResponse>(
+        const response = await apiRequest<unknown>(
             AUTH_API_BASE_URL,
             "/api/auth/registrations/password/start",
             {
@@ -75,6 +77,7 @@ export async function startRegistration(
                 ...(options.signal ? { signal: options.signal } : {}),
             },
         );
+        return { registrationId: validateRegistrationId(asRecord(response).registrationId) };
     } catch (error) {
         if (error instanceof Error) {
             throw error;
@@ -92,13 +95,13 @@ export async function verifyRegistration(
     options: VerifyRegistrationRequestOptions = {},
 ): Promise<AuthTokens> {
     try {
-        return await apiRequest<AuthTokens>(AUTH_API_BASE_URL, "/api/auth/registrations/verify", {
+        return parseAuthTokens(await apiRequest<unknown>(AUTH_API_BASE_URL, "/api/auth/registrations/verify", {
             method: "POST",
             apiKey: AUTH_API_KEY,
-            body: payload,
+            body: validateVerification(payload),
             credentials: "omit",
             ...(options.signal ? { signal: options.signal } : {}),
-        });
+        }));
     } catch (error) {
         if (error instanceof Error) {
             throw error;

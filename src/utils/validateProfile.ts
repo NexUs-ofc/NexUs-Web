@@ -59,6 +59,8 @@ export function validateProfileForm(data: ProfileFormData, addressRequired: bool
     else if (data.name.length > PROFILE_MAX_LENGTH.name) errors.name = "O nome deve ter no máximo 150 caracteres.";
     errors.phones = data.phones.map((phone) => {
         if (!phone.trim()) return "";
+        if (phone.length > 30) return "O telefone deve ter no máximo 30 caracteres.";
+        if (!/^[\d ()+-]+$/u.test(phone)) return "Use apenas dígitos e os símbolos de telefone.";
         const normalized = toInternationalPhone(phone);
         const valid = normalized.startsWith("+55")
             ? /^[1-9]\d{9,10}$/u.test(normalized.slice(3))

@@ -1,3 +1,4 @@
+import { isValidCnpj } from "./validateStore";
 import { REGISTRATION_MAX_LENGTH } from "../types/registration";
 import type { RegistrationData, RegistrationErrors } from "../types/registration";
 
@@ -36,8 +37,8 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CNPJ_PATTERN = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
 const PHONE_DIGITS_LENGTH = 11;
 
-function sanitizeField(value: string, maxLength: number): string {
-    return value.trim().slice(0, maxLength);
+function sanitizeField(value: string): string {
+    return value.replace(/\p{Cc}/gu, "").trim();
 }
 
 function sanitizePhone(value: string): string {
@@ -46,10 +47,10 @@ function sanitizePhone(value: string): string {
 
 export function sanitizeRegistrationData(data: RegistrationSanitizableFields): SanitizedRegistrationData {
     return {
-        email: sanitizeField(data.email, REGISTRATION_MAX_LENGTH.email).toLowerCase(),
-        password: data.password.slice(0, REGISTRATION_MAX_LENGTH.password),
-        name: sanitizeField(data.name, REGISTRATION_MAX_LENGTH.name),
-        cnpj: sanitizeField(data.cnpj, REGISTRATION_MAX_LENGTH.cnpj),
+        email: sanitizeField(data.email).toLowerCase(),
+        password: data.password,
+        name: sanitizeField(data.name),
+        cnpj: sanitizeField(data.cnpj),
         planId: data.planId,
     };
 }
@@ -84,6 +85,9 @@ export function validatePasswordConfirmation(password: string, passwordConfirmat
     if (passwordConfirmation.length === 0) {
         return "Confirme a senha de acesso.";
     }
+    if (passwordConfirmation.length > REGISTRATION_MAX_LENGTH.password) {
+        return `A confirmação deve ter no máximo ${REGISTRATION_MAX_LENGTH.password} caracteres.`;
+    }
     if (passwordConfirmation !== password) {
         return "As senhas não coincidem.";
     }
@@ -105,7 +109,7 @@ export function validateCnpj(cnpj: string): string {
     if (cnpj.length === 0) {
         return "Informe o CNPJ.";
     }
-    if (!CNPJ_PATTERN.test(cnpj)) {
+    if ((!CNPJ_PATTERN.test(cnpj) || !isValidCnpj(cnpj))) {
         return "Informe um CNPJ válido, como 00.000.000/0001-00.";
     }
     return "";
@@ -115,7 +119,7 @@ export function validatePhone(phone: string): string {
     if (phone.length === 0) {
         return "Informe o telefone de contato.";
     }
-    if (sanitizePhone(phone).length !== PHONE_DIGITS_LENGTH) {
+    if (phone.length > REGISTRATION_MAX_LENGTH.phone || !/^[\d ()+-]+$/u.test(phone) || sanitizePhone(phone).length !== PHONE_DIGITS_LENGTH) {
         return "Informe um telefone válido com DDD, como (11) 99999-9999.";
     }
     return "";
@@ -164,20 +168,20 @@ export function isRegistrationFormDataValid(errors: RegistrationFormErrors): boo
 }
 
 export function validateRegistrationForm(data: RegistrationData): RegistrationErrors {
-    const sanitized = sanitizeRegistrationData(data);
     return {
-        type: "",
-        email: validateEmail(sanitized.email),
-        password: validatePassword(sanitized.password),
-        name: validateName(sanitized.name),
+        type: data.type === "COMPANY" ? "" : "Tipo de cadastro inválido.",
+        email: validateEmail(data.email),
+        password: validatePassword(data.password),
+        name: validateName(data.name),
         phones: validatePhones(data.phones),
-        cnpj: validateCnpj(sanitized.cnpj),
+        cnpj: validateCnpj(data.cnpj),
         planId: validatePlanId(data.planId),
     };
 }
 
 export function isRegistrationFormValid(errors: RegistrationErrors): boolean {
     return (
+        errors.type === "" &&
         errors.email === "" &&
         errors.password === "" &&
         errors.name === "" &&

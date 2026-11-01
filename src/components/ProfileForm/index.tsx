@@ -30,7 +30,7 @@ export interface ProfileFormProps {
 export default function ProfileForm({ profile, saving, error, company, companyEnabled, companyLoading, companyError, onRetryCompany, onSave, onSaved, onCancel }: ProfileFormProps) {
     const id = useId();
     const photo = useProfilePhoto(profile.profileImageUrl ?? "");
-    const { form, errors, formRef, addressLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit } = useProfileForm({
+    const { form, errors, phoneKeys, formRef, addressLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit } = useProfileForm({
         profile, onSaved,
         onSave: (data) => onSave({ ...data, photoFile: photo.file, profileImageUrl: photo.url }),
     });
@@ -48,9 +48,9 @@ export default function ProfileForm({ profile, saving, error, company, companyEn
                     <FormInput name="name" label="Nome da empresa" placeholder="Nome da empresa" autoComplete="organization" value={form.name} error={errors.name} maxLength={PROFILE_MAX_LENGTH.name} required onChange={(event) => changeName(event.currentTarget.value)} />
                     <div className="profile-form__phones">
                         {form.phones.map((phone, index) => (
-                            <div className="profile-form__phone" data-profile-phone key={index}>
+                            <div className="profile-form__phone" data-profile-phone key={phoneKeys[index]}>
                                 <FiPhone className="profile-form__phone-icon" aria-hidden="true" />
-                                <FormInput name={`phone-${index}`} label={index === 0 ? "Telefone de contato" : `Telefone de contato ${index + 1}`} placeholder="(11) 99999-9999" type="tel" autoComplete="tel" value={phone} error={errors.phones[index]} mask={maskProfilePhone} onChange={(event) => changePhone(index, event.currentTarget.value)} />
+                                <FormInput name={`phone-${index}`} label={index === 0 ? "Telefone de contato" : `Telefone de contato ${index + 1}`} placeholder="(11) 99999-9999" type="tel" maxLength={30} autoComplete="tel" value={phone} error={errors.phones[index]} mask={maskProfilePhone} onChange={(event) => changePhone(index, event.currentTarget.value)} />
                                 {form.phones.length > 1 ? <button className="profile-form__remove-phone" type="button" aria-label={`Remover telefone ${index + 1}`} onClick={() => removePhone(index)}><FiTrash2 aria-hidden="true" /></button> : null}
                             </div>
                         ))}

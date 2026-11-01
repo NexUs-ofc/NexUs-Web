@@ -59,7 +59,6 @@ export default function PlansPage() {
                             price={plan.price}
                             priceSuffix={plan.priceSuffix}
                             subtitle={plan.subtitle}
-                            featured={plan.featured}
                             benefits={plan.benefits}
                             selected={selectedPlanId === plan.id}
                             actionLabel="Contratar Plano"

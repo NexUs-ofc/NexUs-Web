@@ -1,6 +1,6 @@
 import { ApiError } from "./apiError";
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface ApiRequestOptions {
     method?: HttpMethod;

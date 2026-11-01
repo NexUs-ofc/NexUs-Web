@@ -1,3 +1,5 @@
+import PageFooter from "../../components/PageFooter";
+import { Link } from "react-router-dom";
 import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,12 +21,14 @@ export default function NotFoundPage() {
             <main className="notFoundMain">
                 <PageTitle>Página não encontrada</PageTitle>
                 <p>O endereço acessado não existe ou foi movido.</p>
-                <div className="notFoundActions">
+                <nav className="notFoundActions" aria-label="Retornar ao portal">
                     <button type="button" className="primary-button huninn" onClick={handleGoBack}>
                         Voltar ao login
                     </button>
-                </div>
+                </nav>
+                <Link to="/">Página inicial</Link>
             </main>
+            <PageFooter />
         </div>
     );
 }

@@ -31,7 +31,7 @@ function StoresTable({ stores, onEdit, onDelete, className = "", id = "stores-ta
                                 <td>{store.state || "—"}</td>
                                 <td>
                                     <div className="stores-table__actions">
-                                        <button type="button" onClick={() => onEdit(store)} aria-label={`Editar ${store.name}`} aria-haspopup="dialog" title={`Editar ${store.name}`}>
+                                        <button type="button" onClick={() => onEdit(store)} aria-label={`Editar ${store.name}`} title={`Editar ${store.name}`}>
                                             <img src={`${import.meta.env.BASE_URL}stores/edit.svg`} alt="" />
                                         </button>
                                         <button type="button" onClick={() => onDelete(store)} aria-label={`Excluir ${store.name}`} aria-haspopup="dialog" title={`Excluir ${store.name}`}>

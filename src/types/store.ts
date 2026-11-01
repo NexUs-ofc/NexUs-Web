@@ -57,7 +57,7 @@ export interface StoreImageResponse {
 
 export type StoreFormErrors = Record<keyof StoreFormData, string>;
 
-export type StoreDialogState = { kind: "closed" } | { kind: "edit" | "delete"; store: Store };
+export type StoreDialogState = { kind: "closed" } | { kind: "delete"; store: Store };
 
 export interface StoreFilters {
     search: string;

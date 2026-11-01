@@ -9,6 +9,7 @@ const { setCoreAuthToken } = await server.ssrLoadModule("/src/services/coreClien
 const validation = await server.ssrLoadModule("/src/utils/validateStore.ts");
 const { parseStores } = await server.ssrLoadModule("/src/utils/parseStore.ts");
 const { apiRequest } = await server.ssrLoadModule("/src/services/apiClient.ts");
+const { resolveStoreRouteId } = await server.ssrLoadModule("/src/utils/storeRoute.ts");
 const originalFetch = globalThis.fetch;
 const calls = [];
 const responseStore = {
@@ -174,4 +175,20 @@ test("transporte JSON de autenticação/perfil continua incluindo os headers exi
     assert.equal(calls[0].headers["Content-Type"], "application/json");
     assert.equal(calls[0].headers["X-API-KEY"], "test-key");
     assert.equal(calls[0].body, '{"example":true}');
+});
+
+
+test("edit route rejects missing and invalid IDs before requesting the core", () => {
+    for (const value of [undefined, "", "abc", "-1", "../42", "1.5", "9007199254740992"]) {
+        const result = resolveStoreRouteId(value);
+        assert.equal(result.id, undefined);
+        assert.ok(result.error);
+    }
+    assert.equal(calls.length, 0);
+});
+
+test("edit route normalizes valid IDs and preserves zero", () => {
+    assert.deepEqual(resolveStoreRouteId("42"), { id: "42", error: "" });
+    assert.deepEqual(resolveStoreRouteId("0042"), { id: "42", error: "" });
+    assert.deepEqual(resolveStoreRouteId("0"), { id: "0", error: "" });
 });

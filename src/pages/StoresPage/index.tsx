@@ -1,10 +1,10 @@
+import type { Store } from "../../types/store";
 import PageTitle from "../../components/PageTitle";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
 import StoresFilters from "../../components/StoresFilters";
 import StoresTable from "../../components/StoresTable";
-import EditStoreModal from "../../components/EditStoreModal";
 import DeleteStoreModal from "../../components/DeleteStoreModal";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorAlert from "../../components/ErrorAlert";
@@ -18,6 +18,11 @@ export default function StoresPage() {
     const collection = useStoresContext();
     const modal = useStoreDialogs();
     const navigate = useNavigate();
+    const { clearFeedback } = collection;
+    const openEdit = useCallback((store: Store): void => {
+        clearFeedback();
+        navigate(`/lojas/editar/${encodeURIComponent(store.id)}`);
+    }, [clearFeedback, navigate]);
 
     useEffect(() => {
         document.title = "Filiais Cadastradas — NexUs";
@@ -45,7 +50,7 @@ export default function StoresPage() {
                 onStateChange={setState}
             />
             {collection.loading ? <LoadingSpinner message="Carregando filiais..." /> : (
-                <StoresTable stores={stores} onEdit={modal.openEdit} onDelete={modal.openDelete} />
+                <StoresTable stores={stores} onEdit={openEdit} onDelete={modal.openDelete} />
             )}
             {collection.error && modal.dialog.kind === "closed" ? (
                 <div className="stores-page__feedback">
@@ -60,7 +65,6 @@ export default function StoresPage() {
                     {!collection.loading ? (stores.length === 1 ? "1 filial encontrada." : `${stores.length} filiais encontradas.`) : ""}
                 </p>
             </footer>
-            {modal.dialog.kind === "edit" ? <EditStoreModal key={modal.dialog.store.id} store={modal.dialog.store} saving={modal.saving} error={modal.error} onSave={modal.save} onClose={modal.close} /> : null}
             {modal.dialog.kind === "delete" ? <DeleteStoreModal store={modal.dialog.store} saving={modal.saving} error={modal.error} onConfirm={modal.confirmDelete} onClose={modal.close} /> : null}
         </main>
     );

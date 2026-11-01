@@ -25,3 +25,6 @@ No cadastro e na edição de filiais, um CEP com oito dígitos consulta o [ViaCE
 `npm test` executa testes de contratos, transporte autenticado, validação, CEP/ViaCEP, horários, telefone único, imagens, erros e cancelamento com HTTP interceptado, usando o runner nativo do Node e o transformador do Vite. Build, lint e conferência no navegador complementam a suíte; ela não substitui a validação autenticada no ambiente real. O [checklist completo da avaliação](docs/checklist-requisitos-avaliacao.md) registra o estado atualizado de cada requisito, sua localização e as evidências de cumprimento ou pendências.
 
 **Publicação:** o endereço de produção em Vercel ou GitHub Pages ainda não foi informado nem configurado neste repositório. Acrescente aqui o link real após a publicação e confirme o acesso às rotas diretamente pelo navegador. O servidor local não substitui essa entrega.
+
+
+A edicao de filiais abre em `/lojas/editar/:id` e usa `useParams`, com validacao de ID ausente/invalido antes da consulta ao core. Acesso direto, loading, erros e nova tentativa ficam na pagina; salvar ou cancelar retorna para `/lojas`. A exclusao continua usando dialogo.

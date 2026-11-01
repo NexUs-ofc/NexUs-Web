@@ -135,7 +135,7 @@ export function validatePhones(phones: string[]): string {
 }
 
 export function validatePlanId(planId: number): string {
-    if (planId < 0) {
+    if (!Number.isSafeInteger(planId) || planId < 1) {
         return "Selecione um plano antes de continuar.";
     }
     return "";

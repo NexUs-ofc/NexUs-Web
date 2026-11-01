@@ -6,9 +6,10 @@ export interface PlanCardProps {
     price: string;
     priceSuffix: string;
     subtitle: string;
-    featured: boolean;
     benefits: string[];
     selected: boolean;
+    disabled?: boolean;
+    pending?: boolean;
     actionLabel: string;
     actionAriaLabel: string;
     onAction: (planId: number) => void;
@@ -39,7 +40,7 @@ const MINUS_SVG = (
         height="22"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#737380"
+        stroke="#4f2078"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -56,19 +57,22 @@ export default function PlanCard({
     price,
     priceSuffix,
     subtitle,
-    featured,
     benefits,
     selected,
+    disabled = false,
+    pending = false,
     actionLabel,
     actionAriaLabel,
     onAction,
 }: PlanCardProps) {
     return (
         <article
-            className={`planCard ${featured ? "featured" : ""} ${selected ? "selected" : ""}`}
+            className={`planCard${selected ? " selected" : ""}`}
+            aria-current={selected ? "true" : undefined}
+            aria-labelledby={`plan-title-${id}`}
         >
             <header className="planCardHeader">
-                <h2 className="planTitle">{title}</h2>
+                <h2 id={`plan-title-${id}`} className="planTitle">{title}</h2>
                 <div className="planPriceRow">
                     <span className="planPrice">{price}</span>
                     <span className="planPriceSuffix">{priceSuffix}</span>
@@ -76,20 +80,21 @@ export default function PlanCard({
                 <p className="planSubtitle">{subtitle}</p>
                 <hr className="planSeparator" />
             </header>
-            <div className="planBenefits">
+            <ul className="planBenefits">
                 {benefits.map((benefit) => (
-                    <div key={benefit} className={`planBenefit ${!selected ? "notIncluded" : ""}`}>
-                        {selected ? <span className="planBenefitIcon">{CHECK_SVG}</span> : <span className="planBenefitIcon">{MINUS_SVG}</span>}
+                    <li key={benefit} className="planBenefit">
+                        <span className="planBenefitIcon">{benefit.startsWith("IA") ? CHECK_SVG : MINUS_SVG}</span>
                         <p className="planBenefitText">{benefit}</p>
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </ul>
             <button
                 type="button"
                 className="planButton"
                 onClick={() => onAction(id)}
                 aria-label={`${actionAriaLabel} ${title}`}
-                aria-pressed={selected}
+                disabled={disabled}
+                aria-busy={pending}
             >
                 {actionLabel}
             </button>

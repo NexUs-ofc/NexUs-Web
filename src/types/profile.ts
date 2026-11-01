@@ -1,4 +1,4 @@
-export type ProfileType = "HOUSEHOLD" | "BUSINESS" | "ADMIN";
+export type ProfileType = "HOUSEHOLD" | "BUSINESS" | "COMPANY" | "STORE" | "ADMIN";
 
 export type ProfileStatus = "ACTIVE" | "INACTIVE" | "PENDING";
 

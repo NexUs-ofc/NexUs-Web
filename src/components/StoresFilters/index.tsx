@@ -7,12 +7,14 @@ import "../../../styles/components/StoresFilters/stores-filters.css";
 export interface StoresFiltersProps extends GenericComponentProps {
     filters: StoreFilters;
     loading: boolean;
-    locations: ReadonlyArray<StoreLocation>;
+    cities: ReadonlyArray<StoreLocation>;
+    states: ReadonlyArray<StoreLocation>;
     onSearchChange: (search: string) => void;
-    onLocationChange: (location: string) => void;
+    onCityChange: (city: string) => void;
+    onStateChange: (state: string) => void;
 }
 
-function StoresFilters({ filters, loading, locations, onSearchChange, onLocationChange, className = "", id }: StoresFiltersProps) {
+function StoresFilters({ filters, loading, cities, states, onSearchChange, onCityChange, onStateChange, className = "", id }: StoresFiltersProps) {
     const fieldId = useId();
 
     return (
@@ -31,28 +33,20 @@ function StoresFilters({ filters, loading, locations, onSearchChange, onLocation
                     aria-controls={loading ? undefined : "stores-table"}
                 />
             </div>
-            <div className="stores-filters__select stores-filters__status">
-                <label className="stores-filters__label" htmlFor={`${fieldId}-status`}>Status da filial</label>
-                <select id={`${fieldId}-status`} disabled aria-describedby={`${fieldId}-status-help`}>
-                    <option>Status: Todas</option>
-                </select>
-                <img src={`${import.meta.env.BASE_URL}stores/chevron-down.svg`} alt="" />
-                <span className="stores-filters__label" id={`${fieldId}-status-help`}>Filtro de status indisponível nesta versão.</span>
-            </div>
-            <div className="stores-filters__select">
-                <label className="stores-filters__label" htmlFor={`${fieldId}-location`}>Localização da filial</label>
-                <select
-                    id={`${fieldId}-location`}
-                    name="location"
-                    value={filters.location}
-                    onChange={(event) => onLocationChange(event.currentTarget.value)}
-                    aria-controls={loading ? undefined : "stores-table"}
-                >
-                    <option value="">Localização</option>
-                    {locations.map((location) => <option key={location.value} value={location.value}>{location.label}</option>)}
-                </select>
-                <img src={`${import.meta.env.BASE_URL}stores/chevron-down.svg`} alt="" />
-            </div>
+            {([
+                { field: "state", label: "Estado", options: states, onChange: onStateChange },
+                { field: "city", label: "Cidade", options: cities, onChange: onCityChange },
+            ] as const).map(({ field, label, options, onChange }) => (
+                <div className="stores-filters__select" key={field}>
+                    <label className="stores-filters__label" htmlFor={`${fieldId}-${field}`}>{label} da filial</label>
+                    <select id={`${fieldId}-${field}`} name={field} value={filters[field]}
+                        onChange={(event) => onChange(event.currentTarget.value)} aria-controls={loading ? undefined : "stores-table"}>
+                        <option value="">{label === "Estado" ? "Todos os estados" : "Todas as cidades"}</option>
+                        {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    </select>
+                    <img src={`${import.meta.env.BASE_URL}stores/chevron-down.svg`} alt="" />
+                </div>
+            ))}
         </section>
     );
 }

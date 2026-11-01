@@ -12,8 +12,12 @@ export function validateRegistrationId(value: unknown): string {
 
 export function validateVerification(payload: VerifyRegistrationPayload): VerifyRegistrationPayload {
     const registrationId = validateRegistrationId(payload.registrationId);
-    if (!/^\d{6}$/u.test(payload.otp)) throw new Error("Informe os seis dígitos do código de verificação.");
-    return { registrationId, otp: payload.otp };
+    return { registrationId, otp: validateOtp(payload.otp) };
+}
+
+export function validateOtp(value: unknown): string {
+    if (typeof value !== "string" || !/^\d{6}$/u.test(value)) throw new Error("Informe os seis dígitos do código de verificação.");
+    return value;
 }
 
 export function validateToken(value: unknown): string {

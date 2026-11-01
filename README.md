@@ -10,7 +10,7 @@ npm run lint
 npm test
 ```
 
-O Vite usa a porta 8080, ou a próxima livre. Para a integração de autenticação, acesse `http://localhost:8080`: essa é a origem autorizada pelo CORS do backend; outra porta ou `127.0.0.1` representa uma origem diferente. Configure as variáveis de ambiente conforme `.env.example`, sem versionar o `.env`. A autenticação mantém a integração existente; os indicadores do dashboard usam dados demonstrativos.
+O Vite usa a porta 8080, ou a próxima livre. Para a integração de autenticação, acesse `http://localhost:8080`: essa é a origem autorizada pelo CORS do backend; outra porta ou `127.0.0.1` representa uma origem diferente. Configure as variáveis de ambiente conforme `.env.example`, sem versionar o `.env`. A autenticação mantém a integração existente; o dashboard e a tela de relatórios consomem a API de relatórios (`VITE_REPORTS_API_BASE_URL` e `VITE_REPORTS_API_KEY`, ver `.env.example`), que exige o token do login.
 
 As telas de planos mantêm os nomes e benefícios de Ceris, Enterprise e Exclusive no frontend. `GET /api/plans` resolve os IDs e preços reais pela identificação de cada plano; somente opções disponíveis na API são oferecidas. O cadastro envia o ID escolhido ao Auth. A área da empresa consulta `GET /api/companies/me` e confirma a troca com `PATCH /api/companies/me/plan`. O CNPJ fica na resposta da empresa, sem duplicação em `/api/profile`.
 

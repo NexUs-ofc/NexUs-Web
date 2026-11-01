@@ -1,0 +1,22 @@
+.report-actions { display: inline-flex; align-items: center; justify-content: flex-end; gap: 0.8rem; }
+
+.report-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    block-size: 3.6rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.8rem;
+    background: #ffffff;
+    color: var(--primary);
+    font: 600 1.3rem/2rem "Montserrat", sans-serif;
+    cursor: pointer;
+}
+
+.report-actions button svg { font-size: 1.8rem; }
+.report-actions__view { padding-inline: 1.4rem; }
+.report-actions__download { inline-size: 3.6rem; }
+.report-actions button:hover { background: #f3eefa; }
+.report-actions button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.report-actions button[aria-disabled="true"] { opacity: 0.6; cursor: progress; }

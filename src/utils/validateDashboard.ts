@@ -1,30 +1,6 @@
 import type { DashboardData, WasteLevel } from "../types/dashboard";
+import { asList as list, asNumber as number, asRecord as record, asText as text } from "./responseParsers";
 import { BRAZILIAN_STATES } from "./validateStore";
-
-function record(value: unknown): Record<string, unknown> {
-    if (typeof value !== "object" || value === null || Array.isArray(value)) throw new Error("Objeto de dashboard inválido.");
-    return value as Record<string, unknown>;
-}
-
-function text(value: unknown, maxLength = 100): string {
-    if (typeof value !== "string") throw new Error("Texto do dashboard inválido.");
-    // Somente texto simples chega aos gráficos e à interpolação JSX; nunca HTML externo.
-    const sanitized = value.normalize("NFC").replace(/<[^>]*>/gu, "").replace(/[\p{Cc}{}]/gu, "").trim();
-    if (sanitized.length === 0 || sanitized.length > maxLength) throw new Error("Texto do dashboard vazio ou muito longo.");
-    return sanitized;
-}
-
-function number(value: unknown, max = Number.MAX_SAFE_INTEGER): number {
-    if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > max) throw new Error("Valor numérico do dashboard inválido.");
-    return value;
-}
-
-function list<T extends { id: string }>(value: unknown, parse: (item: Record<string, unknown>) => T): T[] {
-    if (!Array.isArray(value)) throw new Error("Lista do dashboard inválida.");
-    const entries = value.map((item: unknown) => parse(record(item)));
-    if (new Set(entries.map((item) => item.id)).size !== entries.length) throw new Error("Identificadores duplicados no dashboard.");
-    return entries;
-}
 
 function wasteLevel(value: unknown): WasteLevel {
     if (value === "highest" || value === "intermediate" || value === "average" || value === "lowest") return value;

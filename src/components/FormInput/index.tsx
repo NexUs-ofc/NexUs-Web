@@ -4,6 +4,21 @@ import type GenericComponentProps from "../../types/common";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import "../../../styles/components/FormInput/form-input.css";
 
+function getMaskedCaretPosition(value: string, masked: string, position: number): number {
+    if (position === value.length) return masked.length;
+    const digits = value.slice(0, position).replace(/\D/gu, "").length;
+    if (!digits) {
+        const firstDigit = masked.search(/\d/u);
+        return Math.min(position, firstDigit < 0 ? masked.length : firstDigit);
+    }
+    let seen = 0;
+    for (let index = 0; index < masked.length; index += 1) {
+        if (/\d/u.test(masked[index])) seen += 1;
+        if (seen === digits) return index + 1;
+    }
+    return masked.length;
+}
+
 export interface FormInputProps extends GenericComponentProps {
     label: string;
     name: string;
@@ -52,7 +67,14 @@ export default function FormInput({
             return;
         }
         const input = event.currentTarget;
-        input.value = mask(input.value);
+        const value = input.value;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const masked = mask(value);
+        input.value = masked;
+        if (start !== null && end !== null) {
+            input.setSelectionRange(getMaskedCaretPosition(value, masked, start), getMaskedCaretPosition(value, masked, end));
+        }
         onChange(event);
     }
 

@@ -37,6 +37,7 @@ export type AuthAction =
         refreshExpiresAt: string | null;
     }
     | { type: "LOGIN_ERROR"; error: string }
+    | { type: "PROFILE_UPDATED"; profile: Profile }
     | { type: "LOGOUT" }
     | { type: "CLEAR_ERROR" };
 
@@ -78,6 +79,10 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
             };
         case "LOGIN_ERROR":
             return { ...state, status: "error", error: action.error };
+        case "PROFILE_UPDATED":
+            return state.profile?.id === action.profile.id && state.status === "authenticated"
+                ? { ...state, profile: action.profile }
+                : state;
         case "LOGOUT":
             return {
                 ...state,
@@ -110,6 +115,7 @@ export interface AuthContextValue {
     setLoginError: (error: string) => void;
     clearError: () => void;
     signOut: () => void;
+    updateProfile: (profile: Profile) => void;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -246,6 +252,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             },
             setLoginError: (error: string) => {
                 dispatch({ type: "LOGIN_ERROR", error });
+            },
+            updateProfile: (profile: Profile) => {
+                dispatch({ type: "PROFILE_UPDATED", profile });
             },
             clearError: () => {
                 dispatch({ type: "CLEAR_ERROR" });

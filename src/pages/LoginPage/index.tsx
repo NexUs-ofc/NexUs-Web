@@ -49,7 +49,7 @@ export default function LoginPage() {
                         error={fieldErrors.password}
                         width="100%"
                     />
-                    <Link to="/esqueci-senha" className="forgot-password-text">
+                    <Link to="/esqueci-senha" state={{ email: form.email }} className="forgot-password-text">
                         Esqueci minha senha
                     </Link>
                 </div>

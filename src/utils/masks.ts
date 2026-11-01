@@ -37,3 +37,11 @@ export function maskCnpj(value: string): string {
 export function maskPhone(value: string): string {
     return applyPatternMask(value, PHONE_MASK);
 }
+
+export function maskEmail(value: string): string {
+    const separator = value.lastIndexOf("@");
+    if (separator < 1) return "***";
+    const localPart = value.slice(0, separator);
+    const lastCharacter = localPart.length > 1 ? localPart.slice(-1) : "";
+    return `${localPart[0]}***${lastCharacter}${value.slice(separator)}`;
+}

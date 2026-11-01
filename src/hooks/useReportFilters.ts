@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import type { ReportFilters } from "../types/report";
-import { INITIAL_REPORT_FILTERS, sanitizeReportSearch } from "../utils/reportFilters";
+import { INITIAL_REPORT_FILTERS, sanitizeReportMonth, sanitizeReportSearch, sanitizeReportYear } from "../utils/reportFilters";
 
 export interface UseReportFiltersResult {
     filters: ReportFilters;
@@ -16,10 +16,10 @@ export function useReportFilters(): UseReportFiltersResult {
         setFilters((previous) => ({ ...previous, search: sanitizeReportSearch(search) }));
     }, []);
     const setYear = useCallback((year: string): void => {
-        setFilters((previous) => ({ ...previous, year }));
+        setFilters((previous) => ({ ...previous, year: sanitizeReportYear(year) }));
     }, []);
     const setMonth = useCallback((month: string): void => {
-        setFilters((previous) => ({ ...previous, month }));
+        setFilters((previous) => ({ ...previous, month: sanitizeReportMonth(month) }));
     }, []);
 
     return { filters, setSearch, setYear, setMonth };

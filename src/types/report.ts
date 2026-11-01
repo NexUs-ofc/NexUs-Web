@@ -38,10 +38,11 @@ export interface ReportPeriodOption {
     label: string;
 }
 
-/** PDF pronto para abrir: link assinado do bucket ou o arquivo baixado pela API. */
-export type ReportPdfSource =
-    | { kind: "remote"; url: string }
-    | { kind: "blob"; blob: Blob };
+/** PDF pronto para abrir: o arquivo baixado pela API (que o lê do bucket do Supabase). */
+export interface ReportPdfSource {
+    kind: "blob";
+    blob: Blob;
+}
 
 export type ReportPdfAction = "view" | "download";
 

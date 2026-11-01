@@ -6,9 +6,9 @@ import type { UseStoreCollectionResult } from "../../hooks/useStoreCollection";
 
 export const StoresContext = createContext<UseStoreCollectionResult | null>(null);
 
-export interface StoresProviderProps { children: ReactNode; profileId: number; }
+export interface StoresProviderProps { children: ReactNode; }
 
-export default function StoresProvider({ children, profileId }: StoresProviderProps) {
-    const value = useStoreCollection(profileId);
+export default function StoresProvider({ children }: StoresProviderProps) {
+    const value = useStoreCollection();
     return <StoresContext.Provider value={value}>{children}</StoresContext.Provider>;
 }

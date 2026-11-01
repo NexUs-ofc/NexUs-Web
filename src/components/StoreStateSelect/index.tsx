@@ -6,16 +6,17 @@ export interface StoreStateSelectProps extends GenericComponentProps {
     value: string;
     error: string;
     mode: "create" | "edit";
+    disabled?: boolean;
     onChange: (value: string) => void;
 }
 
-export default function StoreStateSelect({ value, error, mode, onChange }: StoreStateSelectProps) {
+export default function StoreStateSelect({ value, error, mode, disabled = false, onChange }: StoreStateSelectProps) {
     const id = useId();
     return (
         <div className="formInputContainer store-form__state">
             <label className="formLabel" htmlFor={id}>Estado</label>
             <div className="store-form__select">
-                <select id={id} name="state" value={value} onChange={(event) => onChange(event.currentTarget.value)} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined}>
+                <select id={id} name="state" value={value} disabled={disabled} onChange={(event) => onChange(event.currentTarget.value)} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined}>
                     <option value="">{mode === "create" ? "Selecione o Estado" : "Selecione"}</option>
                     {BRAZILIAN_STATES.map((state) => <option key={state} value={state}>{state}</option>)}
                 </select>

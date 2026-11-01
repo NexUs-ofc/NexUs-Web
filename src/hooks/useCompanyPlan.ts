@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { changeCompanyPlan, getCompany } from "../services/plans.service";
 import type { Company } from "../types/company";
+import { usePlans } from "./usePlans";
 
 export function useCompanyPlan() {
+    const { plans, loading: plansLoading, error: plansError, reload: reloadPlans } = usePlans();
     const [company, setCompany] = useState<Company | null>(null);
     const [loading, setLoading] = useState(true);
     const [pendingPlanId, setPendingPlanId] = useState<number | null>(null);
@@ -28,14 +30,19 @@ export function useCompanyPlan() {
     useEffect(() => () => updateController.current?.abort(), []);
 
     const reload = useCallback(() => {
+        reloadPlans();
+        setCompany(null);
         setLoading(true);
         setError("");
         setSuccess("");
         setRevision((value) => value + 1);
-    }, []);
+    }, [reloadPlans]);
 
     const changePlan = useCallback(async (planId: number): Promise<void> => {
-        if (loading || !company || company.planId === planId || updateController.current) return;
+        if (
+            loading || plansLoading || plansError || !company || company.planId === planId ||
+            !plans.some((plan) => plan.id === planId) || updateController.current
+        ) return;
         const controller = new AbortController();
         updateController.current = controller;
         setPendingPlanId(planId);
@@ -58,7 +65,7 @@ export function useCompanyPlan() {
             if (!controller.signal.aborted) setPendingPlanId(null);
             if (updateController.current === controller) updateController.current = null;
         }
-    }, [company, loading]);
+    }, [company, loading, plans, plansLoading, plansError]);
 
-    return { company, loading, pendingPlanId, error, success, reload, changePlan };
+    return { company, plans, loading: loading || plansLoading, pendingPlanId, error: error || plansError, success, reload, changePlan };
 }

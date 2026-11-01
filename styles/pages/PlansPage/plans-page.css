@@ -43,7 +43,7 @@
 
 .plansContainer {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
     align-items: end;
     gap: clamp(2.4rem, 5cqi, 6rem);
     width: 100%;

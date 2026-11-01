@@ -1,4 +1,4 @@
-export type ProfileType = "HOUSEHOLD" | "BUSINESS" | "ADMIN";
+export type ProfileType = "HOUSEHOLD" | "BUSINESS" | "COMPANY" | "STORE" | "ADMIN";
 
 export type ProfileStatus = "ACTIVE" | "INACTIVE" | "PENDING";
 
@@ -12,6 +12,7 @@ export interface ProfileAddress {
 }
 
 export interface Profile {
+    cnpj?: string;
     id: number;
     name: string;
     email: string;

@@ -1,4 +1,4 @@
-import { AVAILABLE_PLANS, REGISTRATION_MAX_LENGTH } from "../types/registration";
+import { REGISTRATION_MAX_LENGTH } from "../types/registration";
 import type { RegistrationData, RegistrationErrors } from "../types/registration";
 
 export interface RegistrationFormData {
@@ -135,7 +135,7 @@ export function validatePhones(phones: string[]): string {
 }
 
 export function validatePlanId(planId: number): string {
-    if (!AVAILABLE_PLANS.some((plan) => plan.id === planId)) {
+    if (!Number.isSafeInteger(planId) || planId < 1) {
         return "Selecione um plano antes de continuar.";
     }
     return "";

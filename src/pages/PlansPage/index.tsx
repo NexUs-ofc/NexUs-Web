@@ -3,26 +3,26 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PlanCard from "../../components/PlanCard";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { usePlans } from "../../hooks/usePlans";
 import { useRegistration } from "../../hooks/useRegistration";
-import { AVAILABLE_PLANS, REGISTRATION_INITIAL_DATA } from "../../types/registration";
+import { REGISTRATION_INITIAL_DATA } from "../../types/registration";
 import type { RegistrationData } from "../../types/registration";
 import { loadRegistrationDraft } from "../../utils/registrationStorage";
 import "../../../styles/pages/PlansPage/plans-page.css";
 
 export default function PlansPage() {
     const navigate = useNavigate();
-    const { loading, execute } = useRegistration();
+    const { loading: registering, execute } = useRegistration();
+    const { plans, loading, error, reload } = usePlans();
     const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
-    const [draft] = useState<RegistrationData | null>(() => {
-        return loadRegistrationDraft() ?? null;
-    });
+    const [draft] = useState<RegistrationData | null>(() => loadRegistrationDraft() ?? null);
 
     const handleContract = useCallback(
         async (planId: number): Promise<void> => {
+            if (registering || loading || !plans.some((plan) => plan.id === planId)) return;
             setSelectedPlanId(planId);
-            const nextDraft = draft ?? REGISTRATION_INITIAL_DATA;
             const updated: RegistrationData = {
-                ...nextDraft,
+                ...(draft ?? REGISTRATION_INITIAL_DATA),
                 planId,
             };
             const result = await execute(updated);
@@ -34,10 +34,10 @@ export default function PlansPage() {
                 });
             }
         },
-        [draft, execute, navigate],
+        [draft, execute, loading, navigate, plans, registering],
     );
 
-    if (loading) {
+    if (registering) {
         return <main aria-label="Iniciando cadastro"><LoadingSpinner message="Iniciando seu cadastro..." /></main>;
     }
 
@@ -50,23 +50,27 @@ export default function PlansPage() {
                         Compare funcionalidades, escalabilidade e suporte para encontrar a melhor opção para a sua operação.
                     </p>
                 </header>
-                <div className="plansContainer">
-                    {AVAILABLE_PLANS.map((plan) => (
-                        <PlanCard
-                            key={plan.id}
-                            id={plan.id}
-                            title={plan.title}
-                            price={plan.price}
-                            priceSuffix={plan.priceSuffix}
-                            subtitle={plan.subtitle}
-                            benefits={plan.benefits}
-                            selected={selectedPlanId === plan.id}
-                            actionLabel="Contratar Plano"
-                            actionAriaLabel="Contratar o plano"
-                            onAction={handleContract}
-                        />
-                    ))}
-                </div>
+                {loading ? <LoadingSpinner message="Carregando os planos disponíveis..." /> : error ? (
+                    <div className="plansError" role="alert">
+                        <p>{error}</p>
+                        <button type="button" className="plansRetry" onClick={reload}>Tentar novamente</button>
+                    </div>
+                ) : plans.length === 0 ? (
+                    <p className="plansNotice" role="status">Nenhum plano está disponível para contratação no momento.</p>
+                ) : (
+                    <div className="plansContainer" aria-label="Planos disponíveis">
+                        {plans.map((plan) => (
+                            <PlanCard
+                                key={plan.id}
+                                {...plan}
+                                selected={selectedPlanId === plan.id}
+                                actionLabel="Contratar Plano"
+                                actionAriaLabel="Contratar o plano"
+                                onAction={handleContract}
+                            />
+                        ))}
+                    </div>
+                )}
             </main>
         </div>
     );

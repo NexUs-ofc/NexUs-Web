@@ -2,12 +2,11 @@ import PageTitle from "../../components/PageTitle";
 import PlanCard from "../../components/PlanCard";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useCompanyPlan } from "../../hooks/useCompanyPlan";
-import { AVAILABLE_PLANS } from "../../types/registration";
 import "../../../styles/pages/PlansPage/plans-page.css";
 import "../../../styles/pages/UpdatePlansPage/update-plans-page.css";
 
 export default function UpdatePlansPage() {
-    const { company, loading, pendingPlanId, error, success, reload, changePlan } = useCompanyPlan();
+    const { company, plans, loading, pendingPlanId, error, success, reload, changePlan } = useCompanyPlan();
 
     return (
         <div className="plansPage updatePlansPage">
@@ -23,15 +22,18 @@ export default function UpdatePlansPage() {
                         {error ? (
                             <div className="plansError" role="alert">
                                 <p>{error}</p>
-                                {!company ? <button type="button" className="plansRetry" onClick={reload}>Tentar novamente</button> : null}
+                                <button type="button" className="plansRetry" onClick={reload} disabled={pendingPlanId !== null}>Tentar novamente</button>
                             </div>
                         ) : null}
                         {success ? <p className="plansSuccess" role="status">{success}</p> : null}
-                        {company && !AVAILABLE_PLANS.some((plan) => plan.id === company.planId) ? (
-                            <p className="plansNotice" role="status">Seu plano atual é {company.planName}. Conheça as opções disponíveis abaixo.</p>
+                        {!error && plans.length === 0 ? (
+                            <p className="plansNotice" role="status">Nenhum plano está disponível para contratação no momento.</p>
+                        ) : null}
+                        {company && plans.length > 0 && !plans.some((plan) => plan.id === company.planId) ? (
+                            <p className="plansNotice" role="status">Seu plano atual é {company.planName} e não está disponível para novas contratações. Conheça as opções abaixo.</p>
                         ) : null}
                         <div className="plansContainer" aria-label="Planos disponíveis" aria-busy={pendingPlanId !== null}>
-                            {AVAILABLE_PLANS.map((plan) => {
+                            {plans.map((plan) => {
                                 const selected = company?.planId === plan.id;
                                 const pending = pendingPlanId === plan.id;
                                 return (

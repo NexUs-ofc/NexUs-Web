@@ -1,14 +1,5 @@
 export type RegistrationType = "COMPANY";
 
-export interface Plan {
-    id: number;
-    title: string;
-    price: string;
-    priceSuffix: string;
-    subtitle: string;
-    benefits: string[];
-}
-
 export interface RegistrationData {
     type: RegistrationType;
     email: string;
@@ -60,47 +51,3 @@ export const REGISTRATION_INITIAL_ERRORS: RegistrationErrors = {
 export interface RegistrationStartResponse {
     registrationId: string;
 }
-
-export const AVAILABLE_PLANS: Plan[] = [
-    {
-        id: 1,
-        title: "Ceris",
-        price: "R$359,99",
-        priceSuffix: "/licença por mês",
-        subtitle: "Funcionalidades limitadas",
-        benefits: [
-            "Visualização de filiais próximas ao cliente",
-            "Insights sobre vendas em regiões próximas",
-            "Produtos mais desejados por período e por região",
-            "Dashboard estratégico com os produtos cadastrados no estoque do cliente"
-        ],
-    },
-    {
-        id: 2,
-        title: "Enterprise",
-        price: "R$659,99",
-        priceSuffix: "/licença por mês",
-        subtitle: "Funcionalidades limitadas",
-        benefits: [
-            "IA",
-            "Visualização de filiais próximas ao cliente",
-            "Insights sobre vendas em regiões próximas",
-            "Produtos mais desejados por período e por região",
-            "Dashboard estratégico com os produtos cadastrados no estoque do cliente"
-        ],
-    },
-    {
-        id: 3,
-        title: "Exclusive",
-        price: "R$959,99",
-        priceSuffix: "/licença por mês",
-        subtitle: "Funcionalidades limitadas",
-        benefits: [
-            "IA + Relatórios",
-            "Visualização de filiais próximas ao cliente",
-            "Insights sobre vendas em regiões próximas",
-            "Produtos mais desejados por período e por região",
-            "Dashboard estratégico com os produtos cadastrados no estoque do cliente"
-        ],
-    },
-];

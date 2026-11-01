@@ -14,43 +14,43 @@ export interface UseProfileFormOptions {
 }
 
 export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptions) {
-    const [form, setForm] = useState(() => toProfileForm(profile));
-    const [errors, setErrors] = useState<ProfileFormErrors>({ name: "", phones: [], address: { ...EMPTY_PROFILE_ADDRESS } });
+    const [state, setState] = useState(() => {
+        const form = toProfileForm(profile);
+        return { form, phoneKeys: form.phones.map((_, index) => `initial-${index}`),
+            errors: { name: "", phones: [], address: { ...EMPTY_PROFILE_ADDRESS } } as ProfileFormErrors };
+    });
+    const { form, errors, phoneKeys } = state;
+    const nextPhoneId = useRef(0);
+
     const formRef = useRef<HTMLFormElement>(null);
     const submitting = useRef(false);
     const applyAddress = useCallback((address: PostalAddress): void => {
-        setForm((previous) => {
-            if (previous.address.cep.replace(/\D/gu, "") !== address.cep) return previous;
-            const nextAddress = { ...previous.address };
-            for (const field of ADDRESS_FIELDS) nextAddress[field] = address[field];
-            return { ...previous, address: nextAddress };
-        });
-        setErrors((previous) => {
-            const nextErrors = { ...previous.address };
-            for (const field of ADDRESS_FIELDS) nextErrors[field] = "";
-            return { ...previous, address: { ...nextErrors, cep: "" } };
+        setState((previous) => {
+            if (previous.form.address.cep.replace(/\D/gu, "") !== address.cep) return previous;
+            const nextAddress = { ...previous.form.address };
+            const nextErrors = { ...previous.errors.address, cep: "" };
+            for (const field of ADDRESS_FIELDS) { nextAddress[field] = address[field]; nextErrors[field] = ""; }
+            return { ...previous, form: { ...previous.form, address: nextAddress }, errors: { ...previous.errors, address: nextErrors } };
         });
     }, []);
     const addressLookup = useAddressLookup(form.address.cep, applyAddress);
 
     function changeName(value: string): void {
-        setForm((previous) => ({ ...previous, name: value }));
-        setErrors((previous) => ({ ...previous, name: "" }));
+        setState((previous) => ({ ...previous, form: ({ ...previous.form, name: value }), errors: ({ ...previous.errors, name: "" }) }));
     }
 
     function changePhone(index: number, value: string): void {
-        setForm((previous) => ({ ...previous, phones: previous.phones.map((phone, position) => position === index ? value : phone) }));
-        setErrors((previous) => ({ ...previous, phones: previous.phones.map((error, position) => position === index ? "" : error) }));
+        setState((previous) => ({ ...previous, form: ({ ...previous.form, phones: previous.form.phones.map((phone, position) => position === index ? value : phone) }), errors: ({ ...previous.errors, phones: previous.errors.phones.map((error, position) => position === index ? "" : error) }) }));
     }
 
     function addPhone(): void {
-        setForm((previous) => ({ ...previous, phones: [...previous.phones, ""] }));
-        requestAnimationFrame(() => formRef.current?.querySelector<HTMLInputElement>("[data-profile-phone]:last-of-type input")?.focus());
+        const key = `new-${nextPhoneId.current++}`;
+        setState((previous) => ({ ...previous, phoneKeys: [...previous.phoneKeys, key], form: { ...previous.form, phones: [...previous.form.phones, ""] } }));
+        requestAnimationFrame(() => formRef.current?.querySelectorAll<HTMLInputElement>("[data-profile-phone] input").item(form.phones.length)?.focus());
     }
 
     function removePhone(index: number): void {
-        setForm((previous) => ({ ...previous, phones: previous.phones.filter((_, position) => position !== index) }));
-        setErrors((previous) => ({ ...previous, phones: previous.phones.filter((_, position) => position !== index) }));
+        setState((previous) => ({ ...previous, phoneKeys: previous.phoneKeys.filter((_, position) => position !== index), form: ({ ...previous.form, phones: previous.form.phones.filter((_, position) => position !== index) }), errors: ({ ...previous.errors, phones: previous.errors.phones.filter((_, position) => position !== index) }) }));
         requestAnimationFrame(() => formRef.current?.querySelector<HTMLButtonElement>("[data-add-phone]")?.focus());
     }
 
@@ -58,12 +58,10 @@ export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptio
         if (ADDRESS_FIELDS.some((name) => name === field) && (addressLookup.loading || addressLookup.address !== null)) return;
         if (field === "cep" && value.replace(/\D/gu, "") !== form.address.cep.replace(/\D/gu, "")) {
             addressLookup.retry();
-            setForm((previous) => ({ ...previous, address: { ...previous.address, cep: value, street: "", neighborhood: "", city: "", state: "" } }));
-            setErrors((previous) => ({ ...previous, address: { ...previous.address, cep: "", street: "", neighborhood: "", city: "", state: "" } }));
+            setState((previous) => ({ ...previous, form: ({ ...previous.form, address: { ...previous.form.address, cep: value, street: "", neighborhood: "", city: "", state: "" } }), errors: ({ ...previous.errors, address: { ...previous.errors.address, cep: "", street: "", neighborhood: "", city: "", state: "" } }) }));
             return;
         }
-        setForm((previous) => ({ ...previous, address: { ...previous.address, [field]: value } }));
-        setErrors((previous) => ({ ...previous, address: { ...previous.address, [field]: "" } }));
+        setState((previous) => ({ ...previous, form: ({ ...previous.form, address: { ...previous.form.address, [field]: value } }), errors: ({ ...previous.errors, address: { ...previous.errors.address, [field]: "" } }) }));
     }
 
     async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -72,7 +70,7 @@ export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptio
         const validation = validateProfileForm(form, Boolean(profile.address) || profile.profileType === "HOUSEHOLD" || profile.profileType === "STORE");
         if (addressLookup.loading) validation.address.cep = "Aguarde a consulta do CEP.";
         else if (addressLookup.error) validation.address.cep = addressLookup.error;
-        setErrors(validation);
+        setState((previous) => ({ ...previous, errors: validation }));
         if (!isProfileFormValid(validation)) {
             requestAnimationFrame(() => {
                 const first = formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']");
@@ -88,5 +86,5 @@ export function useProfileForm({ profile, onSave, onSaved }: UseProfileFormOptio
         } finally { submitting.current = false; }
     }
 
-    return { form, errors, formRef, addressLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit };
+    return { form, errors, phoneKeys, formRef, addressLookup, changeName, changePhone, addPhone, removePhone, changeAddress, submit };
 }

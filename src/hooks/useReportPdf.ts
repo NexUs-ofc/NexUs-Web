@@ -62,12 +62,8 @@ export function useReportPdf(): UseReportPdfResult {
         const signal = begin(report, "view");
         getReportPdfSource(report, { signal }).then((source) => {
             if (signal.aborted) return;
-            if (source.kind === "blob") {
-                blobUrlRef.current = URL.createObjectURL(source.blob);
-                dispatch({ type: "VIEW_READY", report, url: blobUrlRef.current });
-            } else {
-                dispatch({ type: "VIEW_READY", report, url: source.url });
-            }
+            blobUrlRef.current = URL.createObjectURL(source.blob);
+            dispatch({ type: "VIEW_READY", report, url: blobUrlRef.current });
         }).catch((error: unknown) => fail(error, signal));
     }, [begin, fail]);
 

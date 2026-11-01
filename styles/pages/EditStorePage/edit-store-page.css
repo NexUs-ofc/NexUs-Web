@@ -1,0 +1,9 @@
+.edit-store-page { gap: 2.4rem; font-family: "Montserrat", sans-serif; }
+.edit-store-page__header { display: flex; flex-direction: column; gap: 0.4rem; }
+.edit-store-page__header > p { color: #475569; font-size: 1.4rem; line-height: 2rem; }
+.edit-store-page__breadcrumbs { display: flex; align-items: center; gap: 0.4rem; color: #475569; font-size: 1.2rem; }
+.edit-store-page__breadcrumbs a, .edit-store-page__actions a { color: var(--primary); font-weight: 600; }
+.edit-store-page .store-form { padding: 3.2rem; border: 1px solid #e2e8f0; border-radius: 1.2rem; background: #ffffff; }
+.edit-store-page__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem; font-size: 1.4rem; }
+.edit-store-page__actions a, .edit-store-page__actions button { display: inline-flex; align-items: center; min-block-size: 4.4rem; padding: 1rem 2.4rem; border: 1px solid var(--primary); border-radius: 10rem; }
+@media (max-width: 48rem) { .edit-store-page .store-form { padding: 2.4rem 1.6rem; } }

@@ -31,6 +31,9 @@
 .store-dialog__actions { display: flex; gap: 1.2rem; }
 .store-dialog__actions button { flex: 1; padding: 1.2rem 2rem; border: 1px solid #e2e2e9; border-radius: 10rem; background: #ffffff; color: #626270; cursor: pointer; font: 700 1.4rem/2rem "Montserrat", sans-serif; }
 .store-dialog__actions .store-dialog__delete { border-color: #be123c; background: #be123c; color: #ffffff; }
+.store-dialog--edit .store-dialog__actions { justify-content: flex-end; flex-wrap: wrap; }
+.store-dialog--edit .store-dialog__actions button { flex: 0 1 auto; min-block-size: 4.4rem; padding: 1rem 2.4rem; border-color: var(--primary); color: var(--primary); }
+.store-dialog--edit .store-dialog__actions .primary-button { border-color: transparent; background: var(--primary); color: #ffffff; }
 .store-dialog button:disabled { cursor: wait; opacity: 0.7; }
 
 @media (max-width: 30rem) {

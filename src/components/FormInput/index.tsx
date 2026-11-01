@@ -15,6 +15,7 @@ export interface FormInputProps extends GenericComponentProps {
     maxLength?: number;
     autoComplete?: string;
     required?: boolean;
+    disabled?: boolean;
     error?: string;
     mask?: (value: string) => string;
     reserveErrorSpace?: boolean;
@@ -33,6 +34,7 @@ export default function FormInput({
     maxLength,
     autoComplete,
     required = false,
+    disabled = false,
     error = "",
     mask,
     reserveErrorSpace = false,
@@ -70,6 +72,7 @@ export default function FormInput({
                     maxLength={maxLength}
                     autoComplete={autoComplete}
                     required={required}
+                    disabled={disabled}
                     aria-invalid={error !== ""}
                     aria-describedby={errorId}
                 />

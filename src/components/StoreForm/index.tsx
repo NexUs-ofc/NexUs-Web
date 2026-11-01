@@ -7,7 +7,7 @@ import { useStoreForm } from "../../hooks/useStoreForm";
 import { useStorePhoto } from "../../hooks/useStorePhoto";
 import type { StoreFormData, StoreFormMode } from "../../types/store";
 import type GenericComponentProps from "../../types/common";
-import { STORE_MAX_LENGTH, maskStoreCep, maskStorePhone } from "../../utils/validateStore";
+import { STORE_MAX_LENGTH, maskStoreCep, maskStorePhone, maskStoreTime } from "../../utils/validateStore";
 import { maskCnpj } from "../../utils/masks";
 import "../../../styles/components/StoreForm/store-form.css";
 
@@ -27,7 +27,7 @@ export default function StoreForm({ mode, initialData, saving, error, onSave, on
     const isCreate = mode === "create";
 
     function field(name: keyof StoreFormData, label: string, placeholder: string, type: "text" | "email" | "tel" = "text", mask?: (value: string) => string) {
-        const required = name === "name" || isCreate && (name === "cnpj" || name === "address" || name === "email");
+        const required = name === "name" || name === "cnpj" || name === "street" || isCreate && name === "email";
         return <FormInput name={name} label={`${label}${required ? " *" : ""}`} placeholder={placeholder} type={type} value={form[name]} error={errors[name]} onChange={(event) => changeField(name, event.currentTarget.value)} maxLength={STORE_MAX_LENGTH[name]} required={required} mask={mask} />;
     }
 
@@ -57,7 +57,11 @@ export default function StoreForm({ mode, initialData, saving, error, onSave, on
                                 {stateSelect}
                             </div>
                             <div className="store-form__divider" aria-hidden="true" />
-                            {field("address", "Endereço completo", "Av. Lins de Vasconcelos, 1200")}
+                            {field("street", "Rua", "Av. Lins de Vasconcelos")}
+                            <div className="store-form__grid store-form__grid--two">
+                                {field("number", "Número", "1200")}
+                                {field("neighborhood", "Bairro", "Vila Mariana")}
+                            </div>
                         </section>
                         <section className="store-form__section" aria-labelledby="store-contact">
                             <h2 id="store-contact">3. Contato e Horário</h2>
@@ -65,24 +69,35 @@ export default function StoreForm({ mode, initialData, saving, error, onSave, on
                             <div className="store-form__grid">
                                 {field("phone", "Telefone", "(11) 99999-9999", "tel", maskStorePhone)}
                                 {field("email", "E-mail", "filial@empresa.com.br", "email")}
-                                {field("openingHours", "Horário de funcionamento", "Seg a Sáb: 7h às 22h | Dom: 8h às 20h")}
+                            </div>
+                            <div className="store-form__grid store-form__grid--two">
+                                {field("openingTime", "Abertura", "08:00", "text", maskStoreTime)}
+                                {field("closingTime", "Fechamento", "18:30", "text", maskStoreTime)}
                             </div>
                         </section>
                     </>
                 ) : (
                     <div className="store-form__edit-fields">
+                        <p className="store-form__status">CNPJ: {form.cnpj}</p>
                         {photoPicker}
                         {field("name", "Nome da loja", "Ex: Loja Vila Mariana")}
                         <div className="store-form__grid store-form__grid--two">
                             {field("cep", "CEP", "00000-000", "text", maskStoreCep)}
                             {field("phone", "Telefone", "(11) 99999-9999", "tel", maskStorePhone)}
                         </div>
-                        {field("address", "Endereço", "Av. Lins de Vasconcelos, 1200")}
+                        {field("street", "Rua", "Av. Lins de Vasconcelos")}
+                        <div className="store-form__grid store-form__grid--two">
+                            {field("number", "Número", "1200")}
+                            {field("neighborhood", "Bairro", "Vila Mariana")}
+                        </div>
                         <div className="store-form__grid store-form__grid--city">
                             {field("city", "Cidade", "Digite a cidade")}
                             {stateSelect}
                         </div>
-                        {field("manager", "Responsável", "Digite o nome do responsável")}
+                        <div className="store-form__grid store-form__grid--two">
+                            {field("openingTime", "Abertura", "08:00", "text", maskStoreTime)}
+                            {field("closingTime", "Fechamento", "18:30", "text", maskStoreTime)}
+                        </div>
                     </div>
                 )}
             </fieldset>

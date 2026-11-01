@@ -29,7 +29,7 @@ export default function StorePhotoPicker({ value, loading, disabled, error, onSe
                     <button type="button" disabled={disabled || loading} onClick={() => fileRef.current?.click()}>{value ? "Alterar foto" : "Selecionar foto"}</button>
                     {value ? <button type="button" disabled={disabled || loading} onClick={onRemove}>Remover foto</button> : null}
                 </div>
-                <p id={`${id}-help`}>PNG, JPEG ou WebP, até 1 MB. Pré-visualização local, sem upload.</p>
+                <p id={`${id}-help`}>PNG, JPEG ou WebP, até 1 MB. A foto será atualizada ao salvar a filial.</p>
                 {loading ? <p role="status">Carregando foto...</p> : null}
                 {error ? <p className="store-photo__error" id={`${id}-error`} role="alert">{error}</p> : null}
             </div>

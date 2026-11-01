@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent, RefObject } from "react";
 import type { StoreFormData, StoreFormErrors, StoreFormMode } from "../types/store";
 import { EMPTY_STORE_FORM, isStoreFormValid, sanitizeStoreData, validateStoreForm } from "../utils/validateStore";
+
 
 export interface UseStoreFormOptions {
     initialData: StoreFormData;
@@ -23,6 +24,9 @@ export function useStoreForm({ initialData, mode, onSave, onSaved }: UseStoreFor
     const [errors, setErrors] = useState<StoreFormErrors>({ ...EMPTY_STORE_FORM });
     const formRef = useRef<HTMLFormElement>(null);
     const submitting = useRef(false);
+    useEffect(() => {
+        if (mode === "edit") formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus();
+    }, [mode]);
 
     function changeField(field: keyof StoreFormData, value: string): void {
         setForm((previous) => ({ ...previous, [field]: value }));

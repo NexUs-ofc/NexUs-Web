@@ -4,25 +4,22 @@ import type { Company } from "../types/company";
 import { usePlans } from "./usePlans";
 
 export function useCompanyPlan() {
+    const [state, setState] = useState({ company: null as Company | null, loading: true, pendingPlanId: null as number | null, error: "", success: "", revision: 0 });
+    const { company, loading, pendingPlanId, error, success, revision } = state;
     const { plans, loading: plansLoading, error: plansError, reload: reloadPlans } = usePlans();
-    const [company, setCompany] = useState<Company | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [pendingPlanId, setPendingPlanId] = useState<number | null>(null);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
-    const [revision, setRevision] = useState(0);
+
     const updateController = useRef<AbortController | null>(null);
 
     useEffect(() => {
         const controller = new AbortController();
         void getCompany({ signal: controller.signal }).then((data) => {
-            if (!controller.signal.aborted) setCompany(data);
+            if (!controller.signal.aborted) setState((previous) => ({ ...previous, company: data }));
         }).catch((cause: unknown) => {
             if (!controller.signal.aborted) {
-                setError(cause instanceof Error ? cause.message : "Não foi possível carregar o plano atual.");
+                setState((previous) => ({ ...previous, error: cause instanceof Error ? cause.message : "Não foi possível carregar o plano atual." }));
             }
         }).finally(() => {
-            if (!controller.signal.aborted) setLoading(false);
+            if (!controller.signal.aborted) setState((previous) => ({ ...previous, loading: false }));
         });
         return () => controller.abort();
     }, [revision]);
@@ -31,11 +28,7 @@ export function useCompanyPlan() {
 
     const reload = useCallback(() => {
         reloadPlans();
-        setCompany(null);
-        setLoading(true);
-        setError("");
-        setSuccess("");
-        setRevision((value) => value + 1);
+        setState((previous) => ({ ...previous, company: null, loading: true, error: "", success: "", revision: previous.revision + 1 }));
     }, [reloadPlans]);
 
     const changePlan = useCallback(async (planId: number): Promise<void> => {
@@ -45,24 +38,22 @@ export function useCompanyPlan() {
         ) return;
         const controller = new AbortController();
         updateController.current = controller;
-        setPendingPlanId(planId);
-        setError("");
-        setSuccess("");
+        setState((previous) => ({ ...previous, pendingPlanId: planId, error: "", success: "" }));
         try {
             const updated = await changeCompanyPlan(planId, { signal: controller.signal });
             if (controller.signal.aborted) return;
-            setCompany(updated);
+            setState((previous) => ({ ...previous, company: updated }));
             if (updated.planId !== planId) {
-                setError("A API não confirmou o plano solicitado. Confira seu plano atual e tente novamente.");
+                setState((previous) => ({ ...previous, error: "A API não confirmou o plano solicitado. Confira seu plano atual e tente novamente." }));
                 return;
             }
-            setSuccess(`Plano ${updated.planName} contratado com sucesso.`);
+            setState((previous) => ({ ...previous, success: `Plano ${updated.planName} contratado com sucesso.` }));
         } catch (cause: unknown) {
             if (!controller.signal.aborted) {
-                setError(cause instanceof Error ? cause.message : "Não foi possível alterar o plano. Tente novamente.");
+                setState((previous) => ({ ...previous, error: cause instanceof Error ? cause.message : "Não foi possível alterar o plano. Tente novamente." }));
             }
         } finally {
-            if (!controller.signal.aborted) setPendingPlanId(null);
+            if (!controller.signal.aborted) setState((previous) => ({ ...previous, pendingPlanId: null }));
             if (updateController.current === controller) updateController.current = null;
         }
     }, [company, loading, plans, plansLoading, plansError]);

@@ -1,0 +1,37 @@
+.profile-modal {
+    position: fixed;
+    inset: 9rem 1.2rem auto auto;
+    display: flex;
+    flex-direction: column;
+    inline-size: min(39rem, calc(100% - 2.4rem));
+    block-size: min(90rem, calc(100dvh - 10.2rem));
+    max-inline-size: none;
+    max-block-size: none;
+    margin: 0;
+    padding: 0 2.2rem;
+    overflow: hidden;
+    border: 1px solid #e2e2e9;
+    border-radius: 1.6rem;
+    background: #ffffff;
+    color: #1d193c;
+    box-shadow: 0 0.8rem 2.8rem rgb(30 27 75 / 8%);
+    font-family: "Montserrat", sans-serif;
+}
+
+.profile-modal:not([open]) { display: none; }
+.profile-modal::backdrop { background: transparent; }
+.profile-modal__header { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.4rem 1rem; border-block-end: 1px solid #ebe6f5; }
+.profile-modal__header h2 { font-size: 2.2rem; font-weight: 700; line-height: 1.4; }
+.profile-modal__header p { margin-block-start: 0.6rem; color: #71668b; font-size: 1.2rem; line-height: 1.5; }
+.profile-modal__close { display: grid; flex: 0 0 3.2rem; place-items: center; inline-size: 3.2rem; block-size: 3.2rem; border: 1px solid #e2e8f0; border-radius: 50%; background: #f8fafc; color: #475569; cursor: pointer; font-size: 1.8rem; }
+.profile-modal__close:hover { background: #eee7fb; }
+.profile-modal__close:disabled { opacity: 0.6; cursor: wait; }
+
+@media (max-width: 48rem), (max-height: 35rem) {
+    .profile-modal { inset: 1.2rem 1.2rem auto auto; block-size: calc(100dvh - 2.4rem); }
+}
+
+@media (max-width: 30rem) {
+    .profile-modal { padding-inline: 1.6rem; }
+    .profile-modal__header h2 { font-size: 2rem; }
+}

@@ -20,10 +20,10 @@ export interface UseLoginResult {
 }
 
 export function useLogin(): UseLoginResult {
+    const [state, setState] = useState({ loading: false, error: "", success: false });
+    const { loading, error, success } = state;
     const { setAuthenticated, setLoginError } = useAuth();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
-    const [success, setSuccess] = useState<boolean>(false);
+
     const mountedRef = useRef<boolean>(true);
     const abortRef = useRef<AbortController | null>(null);
 
@@ -37,8 +37,7 @@ export function useLogin(): UseLoginResult {
 
     const reset = useCallback(() => {
         if (mountedRef.current) {
-            setError("");
-            setSuccess(false);
+            setState((previous) => ({ ...previous, error: "", success: false }));
         }
     }, []);
 
@@ -48,8 +47,7 @@ export function useLogin(): UseLoginResult {
             if (!isLoginFormValid(errors)) {
                 const firstError = errors.email !== "" ? errors.email : errors.password;
                 if (mountedRef.current) {
-                    setError(firstError);
-                    setSuccess(false);
+                    setState((previous) => ({ ...previous, error: firstError, success: false }));
                 }
                 setLoginError(firstError);
                 return false;
@@ -58,16 +56,14 @@ export function useLogin(): UseLoginResult {
             const controller = new AbortController();
             abortRef.current = controller;
             if (mountedRef.current) {
-                setLoading(true);
-                setError("");
-                setSuccess(false);
+                setState((previous) => ({ ...previous, loading: true, error: "", success: false }));
             }
             try {
                 const payload = toLoginPayload(data);
                 const tokens = await loginRequest(payload, { signal: controller.signal });
                 setCoreAuthToken(tokens.accessToken);
                 const profile = await getProfile({ signal: controller.signal });
-                if (!mountedRef.current) {
+                if (!mountedRef.current || controller.signal.aborted) {
                     return false;
                 }
                 setAuthenticated(
@@ -77,21 +73,19 @@ export function useLogin(): UseLoginResult {
                     tokens.refreshToken,
                     tokens.refreshTokenExpiresAt,
                 );
-                setLoading(false);
-                setSuccess(true);
+                setState((previous) => ({ ...previous, loading: false, success: true }));
                 return true;
             } catch (requestError) {
-                if (!mountedRef.current) {
+                if (!mountedRef.current || controller.signal.aborted) {
                     return false;
                 }
                 const message =
                     requestError instanceof ApiError
                         ? requestError.message
                         : "Erro ao fazer login. Tente novamente.";
-                setError(message);
+                setState((previous) => ({ ...previous, error: message }));
                 setLoginError(message);
-                setLoading(false);
-                setSuccess(false);
+                setState((previous) => ({ ...previous, loading: false, success: false }));
                 return false;
             }
         },

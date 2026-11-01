@@ -25,7 +25,7 @@ export default function PortalLayout() {
                     profileImageUrl={state.profile?.profileImageUrl ?? ""}
                 />
                 {state.profile ? (
-                    <StoresProvider key={state.profile.id} profileId={state.profile.id}>
+                    <StoresProvider key={state.profile.id}>
                         <Outlet />
                     </StoresProvider>
                 ) : null}

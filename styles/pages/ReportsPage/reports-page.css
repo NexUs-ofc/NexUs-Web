@@ -9,7 +9,13 @@
 .reports-page__heading h1:focus { outline: 3px solid var(--primary); outline-offset: 2px; }
 .reports-page__heading p { margin-block-start: 0.8rem; color: var(--reports-text); font-size: 1.4rem; line-height: 2rem; }
 
-.reports-page__content { display: flex; flex-direction: column; gap: 3.2rem; min-block-size: 0; }
+.reports-page__content { display: flex; flex-direction: column; gap: 3.2rem; min-inline-size: 0; min-block-size: 0; }
+
+.reports-page :where(input, select, button, .reports-table) { scroll-margin-block: 12rem 2rem; }
+
+@container portal-content (max-width: 64rem) {
+    .reports-page { padding: 3.2rem 2.4rem; }
+}
 
 .reports-page__empty { padding: 3.2rem 2.4rem; border: 1px dashed #cbd5e1; border-radius: 1.2rem; background: #ffffff; color: var(--reports-text); font-size: 1.4rem; line-height: 2rem; text-align: center; }
 

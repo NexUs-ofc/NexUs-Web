@@ -21,7 +21,7 @@ export function useDashboardChart(container: RefObject<HTMLDivElement | null>, o
             } catch {
                 chart?.dispose();
                 chart = null;
-                if (!disposed) setError("Não foi possível desenhar este gráfico. Consulte os valores em Ver dados.");
+                if (!disposed) setError("Não foi possível desenhar este gráfico. Consulte os valores na aba Dados.");
             }
         };
         // Aguarda o layout e observa o card, inclusive ao redimensionar ou ampliar a página.

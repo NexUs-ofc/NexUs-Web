@@ -13,6 +13,7 @@ export default function PortalLayout() {
     const { state, signOut } = useAuth();
     const navigate = useNavigate();
     const isAccessibilityPage = useMatch("/acessibilidade") !== null;
+    const isDashboardPage = useMatch("/dashboard") !== null;
     const [profileDialog, setProfileDialog] = useState({ open: false, success: "" });
     const { open: profileOpen, success: profileSuccess } = profileDialog;
 
@@ -24,6 +25,7 @@ export default function PortalLayout() {
     return (
         <div className="portal-layout">
             {isAccessibilityPage ? <a className="portal-layout__skip-link" href="#accessibility-title">Pular para as preferências de acessibilidade</a> : null}
+            {isDashboardPage ? <a className="portal-layout__skip-link" href="#dashboard-title">Pular para o dashboard</a> : null}
             <Navbar onSignOut={handleSignOut} />
             <div className="portal-layout__content">
                 <PortalHeader

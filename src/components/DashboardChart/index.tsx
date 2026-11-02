@@ -14,7 +14,7 @@ export default function DashboardChart({ title, option, mapSource }: DashboardCh
     const error = useDashboardChart(container, option, mapSource);
     return (
         <>
-            <div ref={container} className="dashboard-chart" role="img" aria-label={`${title}. Valores disponíveis no botão Ver dados.`} />
+            <div ref={container} className="dashboard-chart" role="img" aria-label={`${title}. Valores disponíveis na aba Dados.`} />
             {error ? <ErrorAlert title="Gráfico indisponível" message={error} /> : null}
         </>
     );

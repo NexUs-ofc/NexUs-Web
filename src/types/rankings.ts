@@ -4,6 +4,7 @@ export type RankingCategory = "registered" | "expired";
 
 export interface RankedProduct {
     productId: string;
+    productName: string;
     score: number;
 }
 

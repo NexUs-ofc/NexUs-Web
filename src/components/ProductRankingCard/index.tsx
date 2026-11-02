@@ -50,9 +50,9 @@ export default function ProductRankingCard({
                 {!loading && !error && items.length > 0 ? (
                     <ol className="product-ranking-card__list">
                         {items.map((item, index) => (
-                            <li key={`${item.productId}-${index}`} className="product-ranking-card__item">
+                            <li key={item.productId} className="product-ranking-card__item">
                                 <span className="product-ranking-card__rank">{index + 1}</span>
-                                <span className="product-ranking-card__name">{item.productId}</span>
+                                <span className="product-ranking-card__name">{item.productName}</span>
                                 <span className="product-ranking-card__score">{formatDashboardNumber(item.score)}</span>
                             </li>
                         ))}

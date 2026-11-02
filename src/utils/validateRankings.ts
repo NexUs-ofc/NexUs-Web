@@ -4,7 +4,7 @@ import { BRAZILIAN_STATES } from "./validateStore";
 
 function toRankedProduct(value: unknown): RankedProduct {
     const item = record(value);
-    return { productId: text(item.productId, 200), score: number(item.score) };
+    return { productId: text(item.productId, 200), productName: text(item.productName, 150), score: number(item.score) };
 }
 
 function toRankedProducts(value: unknown): RankedProduct[] {

@@ -1,5 +1,6 @@
 import PageFooter from "../PageFooter";
 import { useCallback, useState } from "react";
+import Chatbot from "../Chatbot";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import PortalHeader from "../PortalHeader";
@@ -38,6 +39,7 @@ export default function PortalLayout() {
                 ) : null}
                 <PageFooter />
             </div>
+            <Chatbot />
             {profileOpen && state.profile ? <ProfileModal key={state.profile.id} profile={state.profile} onClose={() => setProfileDialog((previous) => ({ ...previous, open: false }))} onSaved={() => { setProfileDialog({ open: false, success: "Perfil atualizado com sucesso." }); }} /> : null}
         </div>
     );

@@ -58,6 +58,7 @@
 .dashboard-stat dt { color: #475569; font-size: 1.3rem; font-weight: 600; line-height: 1.6rem; }
 .dashboard-stat dd { color: #0f172a; font-size: clamp(2.4rem, 2.3vw, 3.2rem); font-weight: 700; line-height: 4rem; overflow-wrap: anywhere; }
 .dashboard-charts { display: grid; grid-template-columns: minmax(0, 1.56fr) minmax(0, 1fr); align-items: start; gap: 4rem 2rem; }
+.dashboard-product-rankings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 2rem; }
 .dashboard-card { display: flex; flex-direction: column; gap: 1.6rem; padding: 2.4rem; }
 .dashboard-card--full { grid-column: 1 / -1; }
 .dashboard-card__heading h2 { color: #0f172a; font-size: 1.6rem; font-weight: 600; line-height: 2.4rem; overflow-wrap: anywhere; }
@@ -99,6 +100,7 @@
     .dashboard-summary { gap: 1.6rem; }
     .dashboard-stat { padding: 2rem 1.6rem; }
     .dashboard-charts { grid-template-columns: minmax(0, 1fr); gap: 2.4rem; }
+    .dashboard-product-rankings { grid-template-columns: minmax(0, 1fr); gap: 2.4rem; }
 }
 
 @media (max-width: 48rem) {

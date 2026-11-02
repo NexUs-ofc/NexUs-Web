@@ -2,6 +2,7 @@ import PageTitle from "../../components/PageTitle";
 import { useEffect } from "react";
 import DashboardSummary from "../../components/DashboardSummary";
 import DashboardChartsGrid from "../../components/DashboardChartsGrid";
+import ProductRankingsGrid from "../../components/ProductRankingsGrid";
 import ErrorAlert from "../../components/ErrorAlert";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useDashboard } from "../../hooks/useDashboard";
@@ -38,6 +39,7 @@ export default function DashboardPage() {
                 {!loading && !error && data && mapSource ? (
                     <>
                         <DashboardSummary summary={data.summary} />
+                        <ProductRankingsGrid />
                         <DashboardChartsGrid charts={charts} mapSource={mapSource} />
                     </>
                 ) : null}

@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import Chatbot from "../Chatbot";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import PortalHeader from "../PortalHeader";
@@ -30,6 +31,7 @@ export default function PortalLayout() {
                     </StoresProvider>
                 ) : null}
             </div>
+            <Chatbot />
         </div>
     );
 }

@@ -1,0 +1,87 @@
+/* O projeto usa rem com base de 10px. A escala preserva o zoom do navegador. */
+html[data-a11y-text-size="125"] { font-size: 78.125%; }
+html[data-a11y-text-size="150"] { font-size: 93.75%; }
+
+/* Desativar o reforço mantém os indicadores de foco já existentes. */
+html[data-a11y-highlight-focus="true"] body :focus-visible {
+    outline: 3px solid var(--primary) !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 2px #fff !important;
+    scroll-margin-block: 12rem 2rem;
+}
+
+html[data-a11y-highlight-focus="true"] .accessibility-choice__option input:focus-visible + span {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+html[data-a11y-underline-links="true"] a[href]:not(.navbar__item) {
+    text-decoration-line: underline !important;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: max(1px, 0.08em);
+}
+
+/* Também respeita a preferência do sistema antes de o React montar. */
+html[data-a11y-reduce-motion="true"] *,
+html[data-a11y-reduce-motion="true"] *::before,
+html[data-a11y-reduce-motion="true"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Paleta de alto contraste sem filtros sobre fotos, gráficos e outros conteúdos. */
+html[data-a11y-contrast="high"] {
+    --primary: #000;
+    --background: #fff;
+    --light-gray-text: #000;
+    --input-text-color: #000;
+}
+
+html[data-a11y-contrast="high"] body :where(*:not(svg, svg *, img, video, canvas)) {
+    background-color: #fff !important;
+    background-image: none !important;
+    color: #000 !important;
+    border-color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+html[data-a11y-contrast="high"] body :where(input, select, textarea) { border: 1px solid #000 !important; accent-color: #000; }
+html[data-a11y-contrast="high"] body ::placeholder { color: #000 !important; opacity: 1; }
+html[data-a11y-contrast="high"] body :where(button, .navbar__item, .accessibility-choice__option > span) { border: 1px solid #000 !important; }
+html[data-a11y-contrast="high"] body .navbar__item-icon { background-color: #000 !important; }
+html[data-a11y-contrast="high"] body .navbar__brand-mark { background-color: #000 !important; }
+html[data-a11y-contrast="high"] body .accessibility-toggle__dot--active { background-color: #000 !important; }
+html[data-a11y-contrast="high"] body :where(.navbar__item--active, .accessibility-choice__option input:checked + span, button[aria-checked="true"], button[aria-selected="true"], button[aria-pressed="true"]) {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+html[data-a11y-contrast="high"] body :where(.navbar__item--active *, button[aria-checked="true"] *, button[aria-selected="true"] *, button[aria-pressed="true"] *) { background-color: transparent !important; color: #fff !important; }
+html[data-a11y-contrast="high"] body .navbar__item--active .navbar__item-icon,
+html[data-a11y-contrast="high"] body button[aria-checked="true"] .accessibility-toggle__dot { background-color: #fff !important; }
+html[data-a11y-contrast="high"] body :where(:focus-visible, .accessibility-choice__option input:focus-visible + span) { outline: 3px solid #000 !important; outline-offset: 3px !important; box-shadow: 0 0 0 2px #fff !important; }
+
+@media (forced-colors: active) {
+    .accessibility-choice__option input:checked + span { border: 3px solid Highlight; }
+    .accessibility-toggle__dot--active { background: Highlight; forced-color-adjust: none; }
+}
+
+@media (max-width: 48rem) {
+    /* Mantém espaço para o conteúdo ao ampliar a tipografia em telas estreitas. */
+    html[data-a11y-text-size="125"] .navbar,
+    html[data-a11y-text-size="150"] .navbar { flex-basis: 68px; inline-size: 68px; padding-inline: 8px; }
+}

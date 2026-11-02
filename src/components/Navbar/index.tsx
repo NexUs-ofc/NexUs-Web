@@ -2,9 +2,10 @@ import type GenericComponentProps from "../../types/common";
 import elementsIcon from "../../../assets/dashboards/elements.svg";
 import logoutIcon from "../../../assets/dashboards/logout.svg";
 import { NavLink } from "react-router-dom";
+import { MdOutlineAccessibleForward } from "react-icons/md";
 import "../../../styles/components/Navbar/navbar.css";
 
-export type NavbarDestination = "dashboard" | "stores" | "plans" | "reports" | "payments";
+export type NavbarDestination = "dashboard" | "stores" | "plans" | "reports" | "payments" | "accessibility";
 
 export interface NavbarProps extends GenericComponentProps {
     onSignOut: () => void;
@@ -20,6 +21,7 @@ const navigationItems: ReadonlyArray<{
     { destination: "plans", label: "Planos", path: "/dashboard/planos" },
     { destination: "reports", label: "Relatórios", path: "/relatorios" },
     { destination: "payments", label: "Pagamentos", path: "/pagamentos" },
+    { destination: "accessibility", label: "Acessibilidade", path: "/acessibilidade" },
 ];
 
 export default function Navbar({
@@ -50,10 +52,14 @@ export default function Navbar({
                                 aria-label={item.label}
                                 title={item.label}
                             >
-                                <span
-                                    className={`navbar__item-icon navbar__item-icon--${item.destination}`}
-                                    aria-hidden="true"
-                                />
+                                {item.destination === "accessibility" ? (
+                                    <MdOutlineAccessibleForward className="navbar__accessibility-icon" aria-hidden="true" />
+                                ) : (
+                                    <span
+                                        className={`navbar__item-icon navbar__item-icon--${item.destination}`}
+                                        aria-hidden="true"
+                                    />
+                                )}
                                 <span className="navbar__item-label">{item.label}</span>
                             </NavLink>
                         );

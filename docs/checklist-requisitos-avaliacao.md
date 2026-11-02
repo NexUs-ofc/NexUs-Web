@@ -1,6 +1,6 @@
 # Checklist de requisitos da avaliação
 
-**Revisão vigente: NI-552/recuperação de senha — 01/11/2026.** As linhas de requisitos e a contagem abaixo são atuais. Seções anteriores datadas são registros históricos.
+**Revisão vigente: página de acessibilidade — 02/11/2026.** As linhas de requisitos e a contagem abaixo são atuais. Seções anteriores datadas são registros históricos.
 
 Revisão aprofundada em 30/10/2026, sobre o commit `0a1aef4` e a árvore de trabalho atual. Cada requisito tem seu estado e suas evidências atualizados na própria linha. **Cumprido** significa confirmado no código; **Em andamento** indica implementação parcial ou validação ainda pendente, sem presumir trabalho ativo; **Não atendido** indica recurso ausente, falha comprovada ou demonstração ainda sem evidência. A inspeção de código não substitui a apresentação presencial nem certifica WCAG integralmente.
 
@@ -11,6 +11,20 @@ Atualizado em 31/10/2026: filiais integradas ao core autenticado, com CRUD remot
 **Estado atual dos 108 itens:** 98 cumpridos; 5 em andamento; 5 não atendidos. Contagem das linhas atuais após a revisão NI-550 em 01/11/2026.
 
 Atualização final em 01/11/2026: edição por `/lojas/editar/:id` cobre os três requisitos de useParams, presença do ID e tratamento de undefined. O header compartilhado permanece no topo em todas as páginas do portal por `position:sticky`, `inset-block-start:0` e camada própria, sem sobrepor o fluxo do formulário. Verificado em navegador com página longa e componentes reais: após rolar 1.088px, headerTop permaneceu em 0 e altura em 80px. Dashboard e planos mantêm suas áreas internas de rolagem. Essa correção visual não altera a contagem dos requisitos nem comprova acessibilidade integral. A evidência atual substitui referências históricas ao modal de edição, às dez páginas e aos três requisitos de rota ainda ausentes: agora são doze páginas lazy; a exclusão de filial permanece em diálogo; o perfil da empresa também utiliza diálogo na PR #24.
+
+## Página de acessibilidade — 02/11/2026
+
+Entrega na branch `feature/acessibility-page`, baseada na main atualizada em 02/11/2026. Mantida a contagem de **98 cumpridos, 5 em andamento e 5 não atendidos** (108 requisitos); as novas evidências não concluem demonstrações presenciais nem pendências históricas.
+
+| Entrega | Evidência atual e limites |
+| --- | --- |
+| Página e navegação | Rota autenticada `/acessibilidade`, carregada por lazy e acessível pelo menu lateral. Tela baseada na referência fornecida, com leitura/navegação, exemplo interativo, instruções de teclado e restauração. O rodapé “NexUs · Gestão empresarial” foi retirado desta tela por solicitação do usuário. |
+| Preferências | `AccessibilityProvider`, `useAccessibility`, contratos em `types/accessibility.ts` e utilitários em `utils/accessibilityPreferences.ts`. Texto em 100%, 125% e 150%, contraste padrão/alto, redução de movimento, reforço de foco e sublinhado de links de conteúdo. Desativar o reforço de foco preserva os indicadores básicos existentes. |
+| Persistência e privacidade | Armazenamento local na chave `nexus-accessibility-preferences`, validação dos dados lidos e sincronização entre abas da mesma origem. A restauração remove somente essa chave. Falha na gravação mantém o ajuste aplicado e mostra aviso. Nenhuma preferência é enviada à API ou altera dados da conta. |
+| Teclado e movimento | Radios nativos com fieldset/legend e switches com nomes, descrições e estados acessíveis; foco no título e mensagens de status. Estilos globais respeitam a redução de movimento pessoal e do sistema. O chatbot também respeita essa escolha na rolagem e deixou de tomar o foco inicial do título ao carregar. |
+| Correção de Maior | Reproduzida a falha em sessão autenticada, janela de 1396 px e texto em 150%: o botão deixava só 31 px para a descrição da restauração. Consultas ao contêiner em rem reorganizam as colunas conforme fonte/espaço disponível; o bloco de restauração permite quebra entre texto e botão. Na mesma janela, a descrição passou a 487 px, sem reduzir a fonte selecionada. |
+| Conferência funcional | Preferências conferidas com dados inválidos, armazenamento bloqueado e restauração sem apagar a sessão. Navegador com prévia temporária: setas nos radios, Espaço nos switches, Enter, Tab/Shift+Tab, recarga e navegação. Correção de Maior validada na página real autenticada em 15 combinações: 100%, 125% e 150%, cada um nas larguras observadas de 320, 1025, 1440, 1920 e 2560 px; descrição legível, botão contido e ausência de transbordamento horizontal. Recarga preservou 150%. Cenários temporários removidos, sem novas dependências ou arquivos de teste. |
+| Verificações e limites | TypeScript, ESLint, build de produção e diff sem erros de whitespace. Permanece o aviso existente de tamanho do chunk dos gráficos (~661 kB). Não houve teste com leitor de tela ou comprovação do zoom nativo de 200%, nem auditoria integral WCAG. O chatbot ainda precisa de contenção de foco e fechamento com Escape; gráficos mantêm suas cores e tabelas alternativas e precisam de revisão específica. |
 
 ## Recuperação de senha — 01/11/2026
 

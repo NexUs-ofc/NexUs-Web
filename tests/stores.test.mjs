@@ -2,8 +2,6 @@ import assert from "node:assert/strict";
 import { registerHooks } from "node:module";
 import test from "node:test";
 
-const coreUrl = new URL("../src/services/coreClient.ts", import.meta.url).href;
-
 registerHooks({
     resolve(specifier, context, nextResolve) {
         try {
@@ -15,8 +13,11 @@ registerHooks({
     },
     load(url, context, nextLoad) {
         const result = nextLoad(url, context);
-        if (url !== coreUrl) return result;
-        return { ...result, source: String(result.source).replace("import.meta.env.VITE_CORE_API_BASE_URL", '"https://core.test"') };
+        if (!url.endsWith(".ts")) return result;
+        const source = String(result.source)
+            .replace("import.meta.env.VITE_CORE_API_BASE_URL", '"https://core.test"')
+            .replace(/import\.meta\.env\.\w+/gu, "undefined");
+        return { ...result, source };
     },
 });
 

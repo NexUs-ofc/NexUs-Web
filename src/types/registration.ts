@@ -51,3 +51,8 @@ export const REGISTRATION_INITIAL_ERRORS: RegistrationErrors = {
 export interface RegistrationStartResponse {
     registrationId: string;
 }
+
+export type RegistrationResult =
+    | { status: "success" }
+    | { status: "error"; error: string }
+    | { status: "cancelled" };

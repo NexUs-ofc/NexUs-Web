@@ -9,14 +9,14 @@ import {
     toRegistrationPayload,
     validateRegistrationForm,
 } from "../utils/validateRegistration";
-import type { RegistrationData } from "../types/registration";
+import type { RegistrationData, RegistrationResult } from "../types/registration";
 
 export interface UseRegistrationResult {
     loading: boolean;
     error: string;
     success: boolean;
     registrationId: string | null;
-    execute: (data: RegistrationData) => Promise<{ success: boolean; error: string | null }>;
+    execute: (data: RegistrationData) => Promise<RegistrationResult>;
     reset: () => void;
 }
 
@@ -44,15 +44,15 @@ export function useRegistration(): UseRegistrationResult {
     }, []);
 
     const execute = useCallback(
-        async (data: RegistrationData): Promise<{ success: boolean; error: string | null }> => {
+        async (data: RegistrationData): Promise<RegistrationResult> => {
+            if (!mountedRef.current || abortRef.current !== null) return { status: "cancelled" };
             const errors = validateRegistrationForm(data);
             if (!isRegistrationFormValid(errors)) {
                 if (mountedRef.current) {
                     setState((previous) => ({ ...previous, error: INCOMPLETE_DRAFT_MESSAGE, success: false }));
                 }
-                return { success: false, error: INCOMPLETE_DRAFT_MESSAGE };
+                return { status: "error", error: INCOMPLETE_DRAFT_MESSAGE };
             }
-            abortRef.current?.abort();
             const controller = new AbortController();
             abortRef.current = controller;
             if (mountedRef.current) {
@@ -62,22 +62,24 @@ export function useRegistration(): UseRegistrationResult {
                 const payload = toRegistrationPayload(data);
                 const response = await startRegistration(payload, { signal: controller.signal });
                 if (!mountedRef.current || controller.signal.aborted) {
-                    return { success: false, error: null };
+                    return { status: "cancelled" };
                 }
                 saveRegistrationId(response.registrationId);
                 clearRegistrationDraft();
                 setState((previous) => ({ ...previous, registrationId: response.registrationId, loading: false, success: true }));
-                return { success: true, error: null };
+                return { status: "success" };
             } catch (requestError) {
                 if (!mountedRef.current || controller.signal.aborted) {
-                    return { success: false, error: null };
+                    return { status: "cancelled" };
                 }
                 const message =
                     requestError instanceof ApiError
                         ? requestError.message
                         : "Erro ao iniciar o cadastro. Tente novamente.";
                 setState((previous) => ({ ...previous, error: message, loading: false, success: false }));
-                return { success: false, error: message };
+                return { status: "error", error: message };
+            } finally {
+                if (abortRef.current === controller) abortRef.current = null;
             }
         },
         [],

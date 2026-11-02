@@ -20,7 +20,8 @@ export function maskStoreCep(value: string): string {
 }
 
 export function maskStorePhone(value: string): string {
-    return applyPatternMask(value, value.replace(/\D/gu, "").length > 10 ? "(##) #####-####" : "(##) ####-####");
+    const national = value.replace(/^\+55(?=[1-9]\d{9,10}$)/u, "");
+    return applyPatternMask(national, national.replace(/\D/gu, "").length > 10 ? "(##) #####-####" : "(##) ####-####");
 }
 
 export function maskStoreTime(value: string): string {
@@ -110,7 +111,7 @@ export function isStoreImageUrl(value: string): boolean {
 export function toStorePayload(data: StoreFormData): StorePayload {
     return {
         cnpj: data.cnpj.replace(/\D/gu, ""), name: data.name,
-        ...(data.phone ? { phones: [data.phone.replace(/\D/gu, "")] } : {}),
+        ...(data.phone ? { phones: [`+55${data.phone.replace(/\D/gu, "")}`] } : {}),
         address: { street: data.street, number: data.number, neighborhood: data.neighborhood,
             ...(data.cep ? { cep: data.cep.replace(/\D/gu, "") } : {}), city: data.city, state: data.state },
         ...(data.openingTime ? { openingTime: data.openingTime } : {}),

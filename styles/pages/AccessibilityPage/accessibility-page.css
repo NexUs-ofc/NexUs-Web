@@ -1,0 +1,89 @@
+.accessibility-page {
+    container: accessibility / inline-size;
+    gap: 2.8rem;
+    color: #0f172a;
+    font: 400 1.4rem/1.5 "Montserrat", sans-serif;
+    overflow-wrap: anywhere;
+}
+
+.accessibility-page__heading > p { margin-block-start: 0.8rem; color: #475569; font-size: 1.5rem; }
+.accessibility-page__layout { display: grid; grid-template-columns: minmax(0, 2.05fr) minmax(28rem, 1fr); align-items: start; gap: 2.4rem; }
+.accessibility-page__settings, .accessibility-page__help { display: flex; min-inline-size: 0; flex-direction: column; gap: 2.4rem; }
+.accessibility-card { min-inline-size: 0; padding: 2.4rem; border: 1px solid #e3daf4; border-radius: 1.2rem; background: #fff; }
+.accessibility-card h2, .accessibility-example h3 { font-size: 1.6rem; font-weight: 600; line-height: 1.5; }
+.accessibility-card__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.8rem; margin-block-end: 2.2rem; }
+.accessibility-card__heading > span { color: var(--primary); font-size: 1.2rem; }
+.accessibility-choice { min-inline-size: 0; margin-block-end: 2.4rem; border: 0; }
+.accessibility-choice legend { margin-block-end: 0.4rem; font-size: 1.4rem; font-weight: 600; }
+.accessibility-choice > p { margin-block-end: 1rem; color: #475569; font-size: 1.3rem; }
+.accessibility-choice__options { display: flex; gap: 0.8rem; }
+.accessibility-choice__option { position: relative; display: flex; flex: 1; min-inline-size: 0; cursor: pointer; }
+.accessibility-choice__option input { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.accessibility-choice__option > span { display: flex; flex: 1; align-items: center; gap: 0.4rem; min-block-size: 5.4rem; padding: 1.4rem 1.6rem; border: 1px solid #dedee8; border-radius: 1.2rem; color: #281938; font-weight: 600; overflow-wrap: anywhere; }
+.accessibility-choice__option svg { flex-shrink: 0; inline-size: 1.4rem; block-size: 1.4rem; }
+.accessibility-choice__option input:checked + span { border-color: var(--primary); background: var(--primary); color: #fff; }
+.accessibility-choice__option:hover input:not(:checked) + span { background: #f8f5fc; border-color: var(--primary); }
+.accessibility-choice__option input:focus-visible + span { outline: 3px solid var(--primary); outline-offset: 3px; }
+.accessibility-toggles { margin-block-start: 2.4rem; }
+.accessibility-toggle { display: flex; align-items: center; gap: 1.6rem; padding-block: 1.8rem; border-block-end: 1px solid #dedee8; }
+.accessibility-toggle:first-child { padding-block-start: 1.8rem; }
+.accessibility-toggle__icon { display: grid; flex: 0 0 4rem; inline-size: 4rem; block-size: 4rem; place-items: center; border-radius: 1.2rem; background: #f3f0ff; color: var(--primary); font-size: 2.2rem; }
+.accessibility-toggle__copy { flex: 1; min-inline-size: 0; }
+.accessibility-toggle h3 { font-size: 1.4rem; font-weight: 600; }
+.accessibility-toggle p { margin-block-start: 0.4rem; color: #475569; font-size: 1.3rem; }
+.accessibility-toggle button, .accessibility-reset button { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 0.5rem; min-block-size: 5.4rem; padding: 1.4rem 1.6rem; border: 1px solid #dedee8; border-radius: 1.2rem; background: #fff; color: #281938; cursor: pointer; font: 600 1.4rem/1.5 "Montserrat", sans-serif; }
+.accessibility-toggle button { min-inline-size: 14.2rem; }
+.accessibility-toggle button:hover, .accessibility-reset button:hover { border-color: var(--primary); background: #f8f5fc; }
+.accessibility-toggle__dot { inline-size: 1.1rem; block-size: 1.1rem; border: 1px solid currentColor; border-radius: 50%; }
+.accessibility-toggle__dot--active { background: currentColor; }
+.accessibility-preferences__privacy { margin-block-start: 2.4rem; color: #475569; font-size: 1.2rem; }
+.accessibility-reset { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.6rem; padding: 1.9rem; }
+.accessibility-reset > div { flex: 1 1 24rem; min-inline-size: 0; }
+.accessibility-reset h2 { font-size: 1.4rem; }
+.accessibility-reset p { margin-block-start: 0.4rem; color: #475569; font-size: 1.3rem; }
+.accessibility-reset button { flex: 0 1 24.2rem; min-inline-size: 0; max-inline-size: 100%; }
+.accessibility-example > h2 { display: flex; align-items: center; gap: 0.8rem; color: var(--primary); font-size: 1.4rem; }
+.accessibility-example > h2 svg { flex-shrink: 0; }
+.accessibility-example__content { display: flex; flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-block-start: 1.8rem; padding: 2rem; border-radius: 0.8rem; background: #faf8fd; }
+.accessibility-example__content > p { color: #475569; line-height: 1.3; }
+.accessibility-example__content > a { color: var(--primary); font-weight: 600; }
+.accessibility-example__content > button { max-inline-size: 100%; min-block-size: 4.4rem; margin-block-start: 0.4rem; padding: 1.1rem 2rem; border: 1px solid var(--primary); border-radius: 0.8rem; background: var(--primary); color: #fff; cursor: pointer; font: 600 1.4rem/1.5 "Montserrat", sans-serif; overflow-wrap: anywhere; }
+.accessibility-example__content > button:hover { background: #60298e; }
+html[data-a11y-highlight-focus="true"] .accessibility-example__content > button { outline: 2px solid var(--primary); outline-offset: 2px; }
+.accessibility-example__caption { margin-block-start: 2rem; color: #475569; font-size: 1.2rem; }
+.accessibility-keyboard dl { display: flex; flex-direction: column; gap: 1.4rem; margin-block-start: 1.4rem; }
+.accessibility-keyboard dt { color: var(--primary); font-weight: 600; }
+.accessibility-keyboard dd { margin-block-start: 0.4rem; color: #475569; font-size: 1.3rem; }
+.accessibility-page__storage-error { color: #991b1b; }
+
+@media (max-width: 75rem) {
+    .accessibility-page__layout { grid-template-columns: minmax(0, 1fr); }
+    .accessibility-page__help { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+@media (max-width: 48rem) {
+    .accessibility-page { padding-inline: 1.2rem; }
+    .accessibility-page__help { display: flex; }
+    .accessibility-card { padding: 1.2rem; }
+    .accessibility-example__content { padding: 1.2rem; }
+    .accessibility-example__content > button { padding-inline: 1rem; }
+    .accessibility-choice__options { flex-direction: column; }
+    .accessibility-toggle { flex-wrap: wrap; gap: 1.2rem; }
+    .accessibility-toggle__copy { flex-basis: calc(100% - 5.2rem); }
+    .accessibility-toggle button { flex: 1; min-inline-size: 0; }
+}
+
+/* As consultas acompanham a fonte raiz; media queries usam a fonte inicial do
+   navegador e, sozinhas, não detectam a ampliação de texto das preferências. */
+@container accessibility (max-width: 100rem) {
+    .accessibility-page__layout { grid-template-columns: minmax(0, 1fr); }
+    .accessibility-page__help { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+@container accessibility (max-width: 60rem) {
+    .accessibility-page__help { display: flex; }
+    .accessibility-choice__options { flex-direction: column; }
+    .accessibility-toggle { flex-wrap: wrap; gap: 1.2rem; }
+    .accessibility-toggle__copy { flex-basis: calc(100% - 5.2rem); }
+    .accessibility-toggle button { flex: 1; min-inline-size: 0; }
+}

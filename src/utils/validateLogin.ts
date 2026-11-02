@@ -17,14 +17,14 @@ export const LOGIN_MAX_LENGTH = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function sanitizeField(value: string, maxLength: number): string {
-    return value.trim().slice(0, maxLength);
+function sanitizeField(value: string): string {
+    return value.replace(/\p{Cc}/gu, "").trim();
 }
 
 export function sanitizeLoginForm(data: LoginFormData): LoginFormData {
     return {
-        email: sanitizeField(data.email, LOGIN_MAX_LENGTH.email).toLowerCase(),
-        password: data.password.slice(0, LOGIN_MAX_LENGTH.password),
+        email: sanitizeField(data.email).toLowerCase(),
+        password: data.password,
     };
 }
 

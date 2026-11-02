@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { startRegistration } from "../services/auth.service";
 import { ApiError } from "../services/apiError";
 import {
-    saveRegistrationId,
+    saveRegistrationId, clearRegistrationDraft,
 } from "../utils/registrationStorage";
 import {
     isRegistrationFormValid,
@@ -23,10 +23,9 @@ export interface UseRegistrationResult {
 const INCOMPLETE_DRAFT_MESSAGE = "Preencha os dados do cadastro antes de contratar o plano.";
 
 export function useRegistration(): UseRegistrationResult {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
-    const [success, setSuccess] = useState<boolean>(false);
-    const [registrationId, setRegistrationId] = useState<string | null>(null);
+    const [state, setState] = useState({ loading: false, error: "", success: false, registrationId: null as string | null });
+    const { loading, error, success, registrationId } = state;
+
     const mountedRef = useRef<boolean>(true);
     const abortRef = useRef<AbortController | null>(null);
 
@@ -40,8 +39,7 @@ export function useRegistration(): UseRegistrationResult {
 
     const reset = useCallback(() => {
         if (mountedRef.current) {
-            setError("");
-            setSuccess(false);
+            setState((previous) => ({ ...previous, error: "", success: false }));
         }
     }, []);
 
@@ -50,8 +48,7 @@ export function useRegistration(): UseRegistrationResult {
             const errors = validateRegistrationForm(data);
             if (!isRegistrationFormValid(errors)) {
                 if (mountedRef.current) {
-                    setError(INCOMPLETE_DRAFT_MESSAGE);
-                    setSuccess(false);
+                    setState((previous) => ({ ...previous, error: INCOMPLETE_DRAFT_MESSAGE, success: false }));
                 }
                 return { success: false, error: INCOMPLETE_DRAFT_MESSAGE };
             }
@@ -59,32 +56,27 @@ export function useRegistration(): UseRegistrationResult {
             const controller = new AbortController();
             abortRef.current = controller;
             if (mountedRef.current) {
-                setLoading(true);
-                setError("");
-                setSuccess(false);
+                setState((previous) => ({ ...previous, loading: true, error: "", success: false }));
             }
             try {
                 const payload = toRegistrationPayload(data);
                 const response = await startRegistration(payload, { signal: controller.signal });
-                if (!mountedRef.current) {
+                if (!mountedRef.current || controller.signal.aborted) {
                     return { success: false, error: null };
                 }
                 saveRegistrationId(response.registrationId);
-                setRegistrationId(response.registrationId);
-                setLoading(false);
-                setSuccess(true);
+                clearRegistrationDraft();
+                setState((previous) => ({ ...previous, registrationId: response.registrationId, loading: false, success: true }));
                 return { success: true, error: null };
             } catch (requestError) {
-                if (!mountedRef.current) {
+                if (!mountedRef.current || controller.signal.aborted) {
                     return { success: false, error: null };
                 }
                 const message =
                     requestError instanceof ApiError
                         ? requestError.message
                         : "Erro ao iniciar o cadastro. Tente novamente.";
-                setError(message);
-                setLoading(false);
-                setSuccess(false);
+                setState((previous) => ({ ...previous, error: message, loading: false, success: false }));
                 return { success: false, error: message };
             }
         },

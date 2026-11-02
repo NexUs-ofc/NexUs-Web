@@ -1,3 +1,5 @@
+import { parseProfile } from "./parseProfile";
+import { validateToken, parseExpiration } from "./validateAuth";
 import type { Profile } from "../types/profile";
 
 export const AUTH_STORAGE_VERSION = 3;
@@ -18,14 +20,17 @@ function isPersistedAuthSession(value: unknown): value is PersistedAuthSession {
         return false;
     }
     const record = value as Record<string, unknown>;
-    return (
-        record["_versao"] === AUTH_STORAGE_VERSION &&
-        ("profile" in record) &&
-        ("accessToken" in record) &&
-        ("expiresAt" in record) &&
-        ("refreshToken" in record) &&
-        ("refreshExpiresAt" in record)
-    );
+    try {
+        if (record["_versao"] !== AUTH_STORAGE_VERSION) return false;
+        if (record.profile !== null) parseProfile(record.profile);
+        for (const field of ["accessToken", "refreshToken"]) {
+            if (record[field] !== null) validateToken(record[field]);
+        }
+        for (const field of ["expiresAt", "refreshExpiresAt"]) {
+            if (record[field] !== null) parseExpiration(record[field]);
+        }
+        return true;
+    } catch { return false; }
 }
 
 export interface SaveAuthSessionInput {
@@ -76,14 +81,15 @@ export function loadAuthSession(): PersistedAuthSession | null {
             clearAuthSession();
             return null;
         }
+        const validated = { ...parsed, profile: parsed.profile === null ? null : parseProfile(parsed.profile) };
         if (parsed.refreshToken === null || isExpiredAt(parsed.refreshExpiresAt)) {
             if (isExpiredAt(parsed.expiresAt)) {
                 clearAuthSession();
                 return null;
             }
-            return { ...parsed, refreshToken: null, refreshExpiresAt: null };
+            return { ...validated, refreshToken: null, refreshExpiresAt: null };
         }
-        return parsed;
+        return validated;
     } catch {
         clearAuthSession();
         return null;

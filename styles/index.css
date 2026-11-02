@@ -94,3 +94,9 @@ button:focus-visible {
 .metade {
   width: 50%;
 }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.page-footer { flex-shrink: 0; padding: 1.2rem 1.6rem; color: #475569; font: 400 1.2rem/1.5 "Montserrat", sans-serif; text-align: center; }
+.otp-field-error { color: #991b1b; font-size: 1.2rem; }
+.plansHeader nav { margin-bottom: 1.6rem; font: 400 1.4rem/1.5 "Montserrat", sans-serif; }
+.plansHeader nav a { display: inline-flex; align-items: center; min-height: 4.4rem; color: var(--primary); text-decoration: underline; }

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 
-export function useDialog(fallbackFocusId: string): RefObject<HTMLDialogElement | null> {
+export function useDialog(fallbackFocusId: string, modal = true): RefObject<HTMLDialogElement | null> {
     const dialogRef = useRef<HTMLDialogElement>(null);
 
     useEffect(() => {
@@ -9,12 +9,19 @@ export function useDialog(fallbackFocusId: string): RefObject<HTMLDialogElement 
         if (!dialog) return;
         const origin = document.activeElement instanceof HTMLElement ? document.activeElement : null;
         const previousOverflow = document.body.style.overflow;
-        dialog.showModal();
-        document.body.style.overflow = "hidden";
+        if (modal) {
+            dialog.showModal();
+            document.body.style.overflow = "hidden";
+        } else dialog.show();
         const initial = dialog.querySelector<HTMLElement>("[data-initial-focus]")
             ?? dialog.querySelector<HTMLElement>("input:not([type='file']), select")
             ?? dialog.querySelector<HTMLElement>("button");
         initial?.focus();
+        let focusedWithin = dialog.contains(document.activeElement);
+        const trackFocus = (event: FocusEvent): void => {
+            focusedWithin = event.target instanceof Node && dialog.contains(event.target);
+        };
+        if (!modal) document.addEventListener("focusin", trackFocus);
         const containFocus = (event: KeyboardEvent): void => {
             if (event.key !== "Tab") return;
             const controls = Array.from(dialog.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href], [tabindex]"))
@@ -27,15 +34,19 @@ export function useDialog(fallbackFocusId: string): RefObject<HTMLDialogElement 
                 event.preventDefault(); first?.focus();
             }
         };
-        dialog.addEventListener("keydown", containFocus);
+        if (modal) dialog.addEventListener("keydown", containFocus);
         return () => {
+            const restoreFocus = modal || focusedWithin;
+            document.removeEventListener("focusin", trackFocus);
             dialog.removeEventListener("keydown", containFocus);
             dialog.close();
-            document.body.style.overflow = previousOverflow;
-            if (origin?.isConnected) origin.focus();
-            else document.getElementById(fallbackFocusId)?.focus();
+            if (modal) document.body.style.overflow = previousOverflow;
+            if (restoreFocus) {
+                if (origin?.isConnected) origin.focus();
+                else document.getElementById(fallbackFocusId)?.focus();
+            }
         };
-    }, [fallbackFocusId]);
+    }, [fallbackFocusId, modal]);
 
     return dialogRef;
 }

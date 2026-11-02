@@ -15,11 +15,11 @@ export interface ProfileModalProps {
 
 export default function ProfileModal({ profile, onClose, onSaved }: ProfileModalProps) {
     const id = useId();
-    const dialogRef = useDialog("portal-profile-trigger");
+    const dialogRef = useDialog("portal-profile-trigger", false);
     const { saving, error, save } = useProfileEditor(profile);
     const companyDetails = useCompanyDetails(profile);
     return (
-        <dialog ref={dialogRef} className="profile-modal" aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} aria-modal="true" aria-busy={saving} onCancel={(event) => { event.preventDefault(); if (!saving) onClose(); }}>
+        <dialog ref={dialogRef} className="profile-modal" aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} aria-busy={saving} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); if (!saving) onClose(); } }} onCancel={(event) => { event.preventDefault(); if (!saving) onClose(); }}>
             <header className="profile-modal__header">
                 <div>
                     <h2 id={`${id}-title`}>Perfil da empresa</h2>

@@ -1,0 +1,172 @@
+.product-ranking-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    min-inline-size: 0;
+    padding: 2.4rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 1.2rem;
+    background: #ffffff;
+    box-shadow: 0 4px 6px rgb(15 23 42 / 4%);
+}
+
+.product-ranking-card__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.2rem;
+}
+
+.product-ranking-card__title {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    min-inline-size: 0;
+}
+
+.product-ranking-card__icon {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    inline-size: 3.6rem;
+    block-size: 3.6rem;
+    border-radius: 0.8rem;
+    background: #f3f0ff;
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.product-ranking-card__title h2 {
+    color: #0f172a;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 2.4rem;
+    overflow-wrap: anywhere;
+}
+
+.product-ranking-card__title p {
+    margin-block-start: 0.4rem;
+    color: #475569;
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+}
+
+.product-ranking-card__select {
+    position: relative;
+    flex: 0 0 auto;
+    inline-size: 11rem;
+}
+
+.product-ranking-card__select-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.product-ranking-card__select select {
+    inline-size: 100%;
+    block-size: 3.6rem;
+    padding: 0.6rem 3.2rem 0.6rem 1.2rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.8rem;
+    background: #fafafc;
+    color: #0f172a;
+    font: 600 1.2rem/1.6rem "Montserrat", sans-serif;
+    appearance: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+}
+
+.product-ranking-card__select-icon {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 1rem;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 1.6rem;
+    pointer-events: none;
+}
+
+.product-ranking-card__select select:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.product-ranking-card__body { min-block-size: 22rem; }
+
+.product-ranking-card__empty {
+    display: grid;
+    min-block-size: 20rem;
+    place-items: center;
+    color: #475569;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.product-ranking-card__list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.product-ranking-card__item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 0;
+    border-block-end: 1px solid #f1f0f5;
+}
+
+.product-ranking-card__item:last-child { border-block-end: none; }
+
+.product-ranking-card__rank {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    inline-size: 2.4rem;
+    block-size: 2.4rem;
+    border-radius: 50%;
+    background: #f3f0ff;
+    color: var(--primary);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.product-ranking-card__name {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: #0f172a;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-ranking-card__score {
+    flex: 0 0 auto;
+    color: var(--primary);
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 2rem;
+    text-align: end;
+}
+
+@media (max-width: 48rem) {
+    .product-ranking-card { padding: 1.6rem; }
+    .product-ranking-card__heading { flex-direction: column; align-items: stretch; }
+    .product-ranking-card__select { inline-size: 100%; }
+    .product-ranking-card__name { white-space: normal; }
+}
+
+@media (forced-colors: active) {
+    .product-ranking-card,
+    .product-ranking-card__select select { border-color: CanvasText; }
+    .product-ranking-card__icon,
+    .product-ranking-card__rank { forced-color-adjust: none; }
+}

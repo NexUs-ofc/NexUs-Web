@@ -1,23 +1,16 @@
 import { ApiError } from "./apiError";
 import { apiRequest, apiRequestBlob } from "./apiClient";
 import type { ApiRequestOptions } from "./apiClient";
-import { getCoreAuthToken } from "./coreClient";
+import { withAuthSession } from "./sessionManager";
 
 const REPORTS_API_BASE_URL: string | undefined = import.meta.env.VITE_CHATBOT_API_BASE_URL;
 const REPORTS_API_KEY: string | undefined = import.meta.env.VITE_CHATBOT_API_KEY;
 
 export type ReportsRequestOptions = Pick<ApiRequestOptions, "signal">;
 
-// Relatórios e dashboard agora são servidos pela mesma API do chatbot (NexUs-BI-AI/app/app.py), por isso
-// usam VITE_CHATBOT_API_BASE_URL/VITE_CHATBOT_API_KEY. A API exige X-API-Key + Bearer do NexUs-Auth e usa CORS
-// aberto (allow_origins="*"), que o navegador só aceita sem cookies: por isso credentials = "omit".
-function buildOptions(options: ReportsRequestOptions): ApiRequestOptions {
-    const token = getCoreAuthToken();
-    if (token === null) {
-        throw new ApiError("Sua sessão expirou. Entre novamente para continuar.", 401);
-    }
+function buildOptions(token: string | null, options: ReportsRequestOptions): ApiRequestOptions {
     return {
-        authToken: token,
+        ...(token !== null ? { authToken: token } : {}),
         credentials: "omit",
         ...(REPORTS_API_KEY ? { apiKey: REPORTS_API_KEY } : {}),
         ...(options.signal ? { signal: options.signal } : {}),
@@ -32,14 +25,15 @@ function baseUrl(): string {
 }
 
 export async function reportsRequest<T>(endpoint: string, options: ReportsRequestOptions = {}): Promise<T> {
-    return apiRequest<T>(baseUrl(), endpoint, buildOptions(options));
+    const url = baseUrl();
+    return withAuthSession((token) => apiRequest<T>(url, endpoint, buildOptions(token, options)), options.signal, true);
 }
 
 export async function reportsRequestBlob(endpoint: string, options: ReportsRequestOptions = {}): Promise<Blob> {
-    return apiRequestBlob(baseUrl(), endpoint, buildOptions(options));
+    const url = baseUrl();
+    return withAuthSession((token) => apiRequestBlob(url, endpoint, buildOptions(token, options)), options.signal, true);
 }
 
-/** Mensagem compreensível para o usuário a partir de um erro da API de relatórios. */
 export function describeReportsError(error: unknown, fallback: string): string {
     if (error instanceof ApiError) {
         if (error.status === 401) return "Sua sessão expirou. Entre novamente para continuar.";

@@ -1,9 +1,3 @@
-.verify-registration-page {
-    display: flex;
-    flex-direction: column;
-    gap: 1.6rem;
-}
-
 .otp-inputs {
     display: flex;
     gap: 1rem;
@@ -15,6 +9,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 0 1 4rem;
+    min-width: 0;
+}
+
+.otp-input-wrapper .otp-field-error {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: center;
 }
 
 .otp-label {
@@ -59,6 +61,10 @@
 }
 
 @media (max-width: 520px) {
+    .otp-input-wrapper .otp-field-error {
+        font-size: 1rem;
+    }
+
     .otp-input {
         width: 3.2rem;
         height: 3.2rem;

@@ -27,9 +27,9 @@ function displayPhone(value: string): string {
 export function maskProfilePhone(value: string): string {
     const trimmed = value.trimStart();
     const digits = trimmed.replace(/\D/gu, "");
-    if (!trimmed.startsWith("+")) return formatNationalPhone(digits);
-    if (digits.startsWith("55")) return `+55${digits.length > 2 ? ` ${formatNationalPhone(digits.slice(2))}` : ""}`;
-    return `+${trimmed.slice(1).replace(/[^\d ()-]/gu, "")}`;
+    if (!trimmed.startsWith("+")) return formatNationalPhone(digits.slice(0, 11));
+    if (digits.startsWith("55")) return `+55${digits.length > 2 ? ` ${formatNationalPhone(digits.slice(2, 13))}` : ""}`;
+    return `+${digits.slice(0, 15)}`;
 }
 
 export function toProfileForm(profile: Profile): ProfileFormData {

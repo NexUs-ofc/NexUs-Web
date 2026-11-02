@@ -123,6 +123,11 @@
     mask-image: url("../../../assets/dashboards/reports.svg");
 }
 
+.navbar__item-icon--payments {
+    -webkit-mask-image: url("../../../assets/dashboards/payments.svg");
+    mask-image: url("../../../assets/dashboards/payments.svg");
+}
+
 .navbar__item--active .navbar__item-icon {
     background-color: #4f2078;
 }

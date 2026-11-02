@@ -21,7 +21,9 @@ interface AccessibilityContextValue {
 
 export const AccessibilityContext = createContext<AccessibilityContextValue | null>(null);
 
-export default function AccessibilityProvider({ children }: { children: ReactNode }) {
+interface AccessibilityProviderProps { children: ReactNode; }
+
+export default function AccessibilityProvider({ children }: AccessibilityProviderProps) {
     const [preferences, setPreferences] = useState(loadAccessibilityPreferences);
     const [storageError, setStorageError] = useState(false);
     const [systemReducedMotion, setSystemReducedMotion] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);

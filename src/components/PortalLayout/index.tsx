@@ -23,6 +23,7 @@ export default function PortalLayout() {
 
     return (
         <div className="portal-layout">
+            {isAccessibilityPage ? <a className="portal-layout__skip-link" href="#accessibility-title">Pular para as preferências de acessibilidade</a> : null}
             <Navbar onSignOut={handleSignOut} />
             <div className="portal-layout__content">
                 <PortalHeader

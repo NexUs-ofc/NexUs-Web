@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FiCheck, FiEye, FiLink, FiPause } from "react-icons/fi";
+import { FiCheck, FiEye, FiType, FiDroplet } from "react-icons/fi";
 import { MdOutlineCenterFocusStrong } from "react-icons/md";
 import PageTitle from "../../components/PageTitle";
 import { useAccessibility } from "../../hooks/useAccessibility";
@@ -13,15 +13,14 @@ const textSizes = [
 ] as const;
 
 const toggleOptions = [
-    { key: "reduceMotion", title: "Reduzir movimento", description: "Diminui animações e transições da interface.", Icon: FiPause },
-    { key: "highlightFocus", title: "Destacar foco do teclado", description: "Reforça o contorno do elemento em foco.", Icon: MdOutlineCenterFocusStrong },
-    { key: "underlineLinks", title: "Sublinhar links", description: "Diferencia os links também pelo sublinhado.", Icon: FiLink },
+    { key: "dyslexiaFont", title: "Fonte para dislexia", description: "Usa a fonte OpenDyslexic nos textos do site.", Icon: FiType },
+    { key: "monochrome", title: "Paleta monocromática", description: "Exibe o site em tons de cinza.", Icon: FiDroplet },
+    { key: "highlightFocus", title: "Destacar foco do teclado", description: "Mostra um contorno no elemento em foco. Sem ele, uma linha interna indica a navegação por teclado.", Icon: MdOutlineCenterFocusStrong },
 ] as const;
 
 export default function AccessibilityPage() {
-    const { preferences, setPreference, resetPreferences, storageError, systemReducedMotion } = useAccessibility();
+    const { preferences, setPreference, resetPreferences, storageError } = useAccessibility();
     const [notice, setNotice] = useState("");
-    const previewButton = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         const previousTitle = document.title;
@@ -77,11 +76,10 @@ export default function AccessibilityPage() {
                                     <div className="accessibility-toggle__copy">
                                         <h3 id={`${key}-title`}>{title}</h3>
                                         <p id={`${key}-description`}>{description}</p>
-                                        {key === "reduceMotion" && systemReducedMotion ? <p>A redução de movimento do seu sistema também é respeitada.</p> : null}
                                     </div>
-                                    <button type="button" role="switch" aria-checked={preferences[key]} aria-labelledby={`${key}-title`} aria-describedby={`${key}-description`} onClick={() => setPreference(key, !preferences[key])}>
+                                    <button type="button" role="switch" aria-checked={preferences[key]} aria-labelledby={`${key}-title ${key}-state`} aria-describedby={`${key}-description`} onClick={() => setPreference(key, !preferences[key])}>
                                         <span className={`accessibility-toggle__dot${preferences[key] ? " accessibility-toggle__dot--active" : ""}`} aria-hidden="true" />
-                                        {preferences[key] ? "Ativado" : "Desativado"}
+                                        <span id={`${key}-state`}>{preferences[key] ? "Ativado" : "Desativado"}</span>
                                     </button>
                                 </div>
                             ))}
@@ -108,9 +106,9 @@ export default function AccessibilityPage() {
                             <h3>Uma leitura mais clara</h3>
                             <p>Encontre informações e navegue no seu ritmo.</p>
                             <Link to="/dashboard">Conheça o Ceris</Link>
-                            <button ref={previewButton} type="button" onClick={() => { previewButton.current?.focus(); setNotice("Exemplo acionado. Use Tab para continuar navegando."); }}>Continuar</button>
+                            <button type="button" onClick={() => setNotice("Exemplo acionado. Use Tab para continuar navegando.")}>Continuar</button>
                         </div>
-                        <p className="accessibility-example__caption">Exemplo com link sublinhado e destaque de foco.</p>
+                        <p className="accessibility-example__caption">Confira aqui o tamanho do texto, a fonte, as cores e o foco do teclado escolhidos.</p>
                     </section>
 
                     <section className="accessibility-card accessibility-keyboard" aria-labelledby="keyboard-title">
@@ -118,7 +116,9 @@ export default function AccessibilityPage() {
                         <dl>
                             <div><dt>Tab</dt><dd>Avançar entre elementos</dd></div>
                             <div><dt>Shift + Tab</dt><dd>Voltar ao elemento anterior</dd></div>
-                            <div><dt>Enter / Espaço</dt><dd>Acionar botões e controles</dd></div>
+                            <div><dt>Setas</dt><dd>Alterar as opções de tamanho do texto e contraste</dd></div>
+                            <div><dt>Espaço</dt><dd>Selecionar opções e ativar ou desativar ajustes</dd></div>
+                            <div><dt>Enter</dt><dd>Acionar botões e abrir links</dd></div>
                         </dl>
                     </section>
                 </aside>

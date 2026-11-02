@@ -14,7 +14,6 @@ import {
 interface AccessibilityContextValue {
     preferences: AccessibilityPreferences;
     reducedMotion: boolean;
-    systemReducedMotion: boolean;
     storageError: boolean;
     setPreference: <K extends keyof AccessibilityPreferences>(key: K, value: AccessibilityPreferences[K]) => void;
     resetPreferences: () => void;
@@ -59,7 +58,7 @@ export default function AccessibilityProvider({ children }: { children: ReactNod
     }
 
     return (
-        <AccessibilityContext.Provider value={{ preferences, reducedMotion: preferences.reduceMotion || systemReducedMotion, systemReducedMotion, storageError, setPreference, resetPreferences }}>
+        <AccessibilityContext.Provider value={{ preferences, reducedMotion: systemReducedMotion, storageError, setPreference, resetPreferences }}>
             {children}
         </AccessibilityContext.Provider>
     );

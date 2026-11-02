@@ -1,8 +1,110 @@
+@font-face {
+    font-family: "OpenDyslexic";
+    src: url("/fonts/opendyslexic/OpenDyslexic-Regular.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    src: url("/fonts/opendyslexic/OpenDyslexic-Bold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 500 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    src: url("/fonts/opendyslexic/OpenDyslexic-Italic.woff2") format("woff2");
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "OpenDyslexic";
+    src: url("/fonts/opendyslexic/OpenDyslexic-BoldItalic.woff2") format("woff2");
+    font-style: italic;
+    font-weight: 500 900;
+    font-display: swap;
+}
+
 /* O projeto usa rem com base de 10px. A escala preserva o zoom do navegador. */
 html[data-a11y-text-size="125"] { font-size: 78.125%; }
 html[data-a11y-text-size="150"] { font-size: 93.75%; }
 
-/* Desativar o reforço mantém os indicadores de foco já existentes. */
+html[data-a11y-dyslexia-font="true"] body,
+html[data-a11y-dyslexia-font="true"] body :where(*:not(svg, svg *)) {
+    font-family: "OpenDyslexic", sans-serif !important;
+}
+
+/* A fonte tem métricas mais largas: o espaço e a altura acompanham a leitura. */
+html[data-a11y-dyslexia-font="true"] body :where(h1, h2, h3, p, dt, dd, li, label, button, input, select, textarea, summary) { line-height: 1.6 !important; }
+html[data-a11y-dyslexia-font="true"] body :where(h1, h2, h3, p, dt, dd, li) { hyphens: auto; overflow-wrap: anywhere; }
+html[data-a11y-dyslexia-font="true"] .navbar { flex-basis: 28rem; inline-size: 28rem; }
+html[data-a11y-dyslexia-font="true"] .navbar__item-label { overflow-wrap: normal; }
+html[data-a11y-dyslexia-font="true"] .navbar__sign-out { margin-inline-start: 0; white-space: normal; }
+html[data-a11y-dyslexia-font="true"] .navbar__sign-out-label { overflow-wrap: anywhere; }
+html[data-a11y-dyslexia-font="true"] .portal-header { position: static; flex-wrap: wrap; gap: 1.2rem 2.4rem; padding: 1.6rem clamp(16px, 2.5vw, 40px); }
+html[data-a11y-dyslexia-font="true"] .portal-header__profile { max-inline-size: 100%; margin-inline-start: auto; }
+html[data-a11y-dyslexia-font="true"] :where(.portal-header__name, .portal-header__email) { line-height: 1.6; }
+html[data-a11y-dyslexia-font="true"] :where(.portal-page, .plansPage) { padding: clamp(16px, 2.5vw, 40px); }
+html[data-a11y-dyslexia-font="true"] .portal-layout__content:has(> .dashboard-page) { block-size: auto; overflow: visible; }
+html[data-a11y-dyslexia-font="true"] .dashboard-page { overflow: visible; }
+html[data-a11y-dyslexia-font="true"] .dashboard-stat dd { white-space: normal; }
+html[data-a11y-dyslexia-font="true"] .stores-page { block-size: auto; }
+html[data-a11y-dyslexia-font="true"] .stores-page__heading { flex-wrap: wrap; }
+html[data-a11y-dyslexia-font="true"] :where(.stores-filters, .reports-filters) { flex-wrap: wrap; }
+html[data-a11y-dyslexia-font="true"] :where(.stores-filters__search, .reports-filters__search) { flex: 1 1 100%; }
+html[data-a11y-dyslexia-font="true"] :where(.stores-filters__select, .reports-filters__select) { flex: 1 1 20rem; }
+html[data-a11y-dyslexia-font="true"] :is(.stores-filters, .reports-filters, .store-form, .profile-form, .product-ranking-card__select) :where(input, select) { block-size: auto; min-block-size: 4.6rem; }
+html[data-a11y-dyslexia-font="true"] .product-ranking-card__select { inline-size: min(100%, 20rem); }
+html[data-a11y-dyslexia-font="true"] .product-ranking-card__name { white-space: normal; overflow-wrap: anywhere; }
+html[data-a11y-dyslexia-font="true"] .planPrice { white-space: normal; overflow-wrap: anywhere; line-height: 1.6; letter-spacing: normal; }
+html[data-a11y-dyslexia-font="true"] .planButton { overflow-wrap: anywhere; }
+html[data-a11y-dyslexia-font="true"] :where(.dashboard-card__tabs, .profile-form__actions) { flex-wrap: wrap; }
+html[data-a11y-dyslexia-font="true"] .profile-modal { inset: 16px 16px auto auto; inline-size: min(46rem, calc(100% - 32px)); block-size: calc(100dvh - 32px); padding-inline: clamp(16px, 2vw, 32px); }
+html[data-a11y-dyslexia-font="true"] .profile-modal__close { flex-basis: 44px; inline-size: 44px; block-size: 44px; }
+html[data-a11y-dyslexia-font="true"] .profile-form__actions { padding-block: 16px; }
+html[data-a11y-dyslexia-font="true"] .profile-form__actions button { flex: 1 1 14rem; min-inline-size: 0; overflow-wrap: anywhere; }
+html[data-a11y-dyslexia-font="true"] .chatbot { inset-block-end: 16px; inset-inline-end: 16px; }
+html[data-a11y-dyslexia-font="true"] .chatbot__toggle { inline-size: 56px; block-size: 56px; }
+
+/* As consultas usam a fonte ampliada, em vez de esperar o breakpoint de celular. */
+@container portal (max-width: 100rem) {
+    html[data-a11y-dyslexia-font="true"] .navbar { flex-basis: 80px; inline-size: 80px; align-items: center; padding: 24px 8px 16px; }
+    html[data-a11y-dyslexia-font="true"] .navbar__top { inline-size: 100%; gap: 24px; }
+    html[data-a11y-dyslexia-font="true"] .navbar__brand { justify-content: center; }
+    html[data-a11y-dyslexia-font="true"] :where(.navbar__brand-name, .navbar__item-label, .navbar__sign-out-label) { display: none; }
+    html[data-a11y-dyslexia-font="true"] .navbar__brand-mark { flex-basis: 36px; inline-size: 36px; block-size: 36px; border-radius: 12px; }
+    html[data-a11y-dyslexia-font="true"] .navbar__item { justify-content: center; min-block-size: 52px; padding: 12px 0; }
+    html[data-a11y-dyslexia-font="true"] .navbar__sign-out { align-self: center; justify-content: center; min-block-size: 48px; padding: 12px; }
+}
+
+@container portal-content (max-width: 96rem) {
+    html[data-a11y-dyslexia-font="true"] .dashboard-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem; }
+    html[data-a11y-dyslexia-font="true"] .dashboard-charts { grid-template-columns: minmax(0, 1fr); }
+    html[data-a11y-dyslexia-font="true"] .plansContainer { grid-template-columns: minmax(0, 1fr); align-items: stretch; justify-items: stretch; gap: 2.4rem; }
+    html[data-a11y-dyslexia-font="true"] .planCard { inline-size: 100%; max-inline-size: none; min-block-size: 0; }
+}
+
+@container portal-content (max-width: 80rem) {
+    html[data-a11y-dyslexia-font="true"] :where(.dashboard-product-rankings, .store-form__grid, .payments-summary, .payments-grid) { grid-template-columns: minmax(0, 1fr); }
+}
+
+@container portal-content (max-width: 48rem) {
+    html[data-a11y-dyslexia-font="true"] .dashboard-summary { grid-template-columns: minmax(0, 1fr); }
+    html[data-a11y-dyslexia-font="true"] :where(.dashboard-stat, .dashboard-card, .product-ranking-card, .payments-summary__card, .payment-card) { padding: 1.2rem; }
+    html[data-a11y-dyslexia-font="true"] .product-ranking-card__item { flex-wrap: wrap; }
+    html[data-a11y-dyslexia-font="true"] .product-ranking-card__score { margin-inline-start: auto; }
+    html[data-a11y-dyslexia-font="true"] .payment-card__header { grid-template-columns: minmax(0, 1fr); }
+    html[data-a11y-dyslexia-font="true"] .payment-badge { grid-column: 1; max-inline-size: 100%; white-space: normal; }
+    html[data-a11y-dyslexia-font="true"] .payment-card__pay { min-inline-size: 0; inline-size: 100%; }
+}
+
+html[data-a11y-monochrome="true"] { filter: grayscale(1); }
+
 html[data-a11y-highlight-focus="true"] body :focus-visible {
     outline: 3px solid var(--primary) !important;
     outline-offset: 3px !important;
@@ -16,23 +118,7 @@ html[data-a11y-highlight-focus="true"] .accessibility-choice__option input:focus
     box-shadow: 0 0 0 2px #fff;
 }
 
-html[data-a11y-underline-links="true"] a[href]:not(.navbar__item) {
-    text-decoration-line: underline !important;
-    text-underline-offset: 0.18em;
-    text-decoration-thickness: max(1px, 0.08em);
-}
-
 /* Também respeita a preferência do sistema antes de o React montar. */
-html[data-a11y-reduce-motion="true"] *,
-html[data-a11y-reduce-motion="true"] *::before,
-html[data-a11y-reduce-motion="true"] *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -75,13 +161,48 @@ html[data-a11y-contrast="high"] body .navbar__item--active .navbar__item-icon,
 html[data-a11y-contrast="high"] body button[aria-checked="true"] .accessibility-toggle__dot { background-color: #fff !important; }
 html[data-a11y-contrast="high"] body :where(:focus-visible, .accessibility-choice__option input:focus-visible + span) { outline: 3px solid #000 !important; outline-offset: 3px !important; box-shadow: 0 0 0 2px #fff !important; }
 
+/* Sem contorno, o teclado mantém uma indicação interna em fundos claros e escuros. */
+html[data-a11y-highlight-focus="false"] body :where(:focus) {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+html[data-a11y-highlight-focus="false"] body :where(:focus-visible, .accessibility-choice__option input:focus-visible + span) {
+    outline: none !important;
+    box-shadow: inset 0 -3px #fff, inset 0 -6px var(--primary) !important;
+    scroll-margin-block: 12rem 2rem;
+}
+
+/* O input transparente recebe o foco; o indicador fica na opção visível. */
+html[data-a11y-highlight-focus="false"] .accessibility-choice__option input:focus-visible { box-shadow: none !important; }
+
 @media (forced-colors: active) {
     .accessibility-choice__option input:checked + span { border: 3px solid Highlight; }
     .accessibility-toggle__dot--active { background: Highlight; forced-color-adjust: none; }
+    html[data-a11y-highlight-focus="false"] body :where(:focus-visible, .accessibility-choice__option input:focus-visible + span) { border-block-end: 3px solid Highlight !important; }
 }
 
 @media (max-width: 48rem) {
     /* Mantém espaço para o conteúdo ao ampliar a tipografia em telas estreitas. */
     html[data-a11y-text-size="125"] .navbar,
     html[data-a11y-text-size="150"] .navbar { flex-basis: 68px; inline-size: 68px; padding-inline: 8px; }
+    html[data-a11y-text-size="125"] .navbar__brand-mark,
+    html[data-a11y-text-size="150"] .navbar__brand-mark { flex-basis: 36px; inline-size: 36px; block-size: 36px; }
+
+    /* O cabeçalho ampliado acompanha a rolagem para não cobrir os controles. */
+    html[data-a11y-text-size="125"] .portal-header,
+    html[data-a11y-text-size="150"] .portal-header,
+    html[data-a11y-dyslexia-font="true"] .portal-header { position: static; }
+
+    /* Em telas pequenas, o menu passa para o topo e devolve a largura ao texto. */
+    html[data-a11y-dyslexia-font="true"] .portal-layout { flex-direction: column; }
+    html[data-a11y-dyslexia-font="true"] .portal-layout .navbar { position: static; display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 12px; flex-basis: auto; align-self: stretch; inline-size: 100%; block-size: auto; padding: 12px 8px; border-inline-end: 0; border-block-end: 1px solid #e2e2e9; }
+    html[data-a11y-dyslexia-font="true"] .navbar__top { display: contents; }
+    html[data-a11y-dyslexia-font="true"] .navbar__brand { justify-content: flex-start; }
+    html[data-a11y-dyslexia-font="true"] .navbar__brand-name { display: block; }
+    html[data-a11y-dyslexia-font="true"] .navbar__navigation { display: grid; grid-column: 1 / -1; grid-row: 2; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+    html[data-a11y-dyslexia-font="true"] .navbar__item { min-block-size: 44px; padding: 10px 0; }
+    html[data-a11y-dyslexia-font="true"] :where(.navbar__item-icon, .navbar__accessibility-icon) { inline-size: 20px; block-size: 20px; }
+    html[data-a11y-dyslexia-font="true"] .navbar__sign-out { grid-column: 2; grid-row: 1; min-block-size: 44px; margin: 0; padding: 10px; }
+    html[data-a11y-dyslexia-font="true"] .portal-header__title { overflow-wrap: anywhere; }
 }

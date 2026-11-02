@@ -9,7 +9,9 @@ function toRankedProduct(value: unknown): RankedProduct {
 
 function toRankedProducts(value: unknown): RankedProduct[] {
     if (!Array.isArray(value)) throw new Error("Lista de ranking inválida.");
-    return value.map(toRankedProduct);
+    const items = value.map(toRankedProduct);
+    if (new Set(items.map((item) => item.productId)).size !== items.length) throw new Error("Identificadores duplicados no ranking de produtos.");
+    return items;
 }
 
 function toRankingState(value: unknown): string | null {

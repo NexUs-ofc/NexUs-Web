@@ -89,6 +89,17 @@ test("rejects missing or blank catalog names instead of displaying IDs as names"
     }
 });
 
+test("rejects repeated IDs within either ranking and allows the same food in separate rankings", () => {
+    for (const category of ["registered", "expired"]) {
+        const data = response();
+        data[category].push({ ...data[category][0], productName: "Outro nome" });
+        assert.throws(() => toValidatedProductRankings(data), /duplicados/u);
+    }
+    const data = response();
+    data.expired[0].productId = data.registered[0].productId;
+    assert.equal(toValidatedProductRankings(data).expired[0].productId, "42");
+});
+
 test("keeps an empty state ranking empty and shows loading and failures separately", async () => {
     respondWith({ registered: [], expired: [], state: "AC" });
     const state = await getProductRankings("AC");

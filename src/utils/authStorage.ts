@@ -41,7 +41,7 @@ export interface SaveAuthSessionInput {
     refreshExpiresAt: string | null;
 }
 
-export function saveAuthSession(input: SaveAuthSessionInput): void {
+export function saveAuthSession(input: SaveAuthSessionInput): boolean {
     const payload: PersistedAuthSession = {
         _versao: AUTH_STORAGE_VERSION,
         profile: input.profile,
@@ -52,8 +52,9 @@ export function saveAuthSession(input: SaveAuthSessionInput): void {
     };
     try {
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
+        return true;
     } catch {
-        return;
+        return false;
     }
 }
 

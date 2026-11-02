@@ -8,6 +8,13 @@ import ErrorAlert from "../../components/ErrorAlert";
 import "../../../styles/pages/StoresPage/stores-page.css";
 import { useStoresPage } from "../../hooks/useStoresPage";
 
+const ERROR_TITLES = {
+    load: "Não foi possível carregar as filiais",
+    create: "Não foi possível cadastrar a filial",
+    update: "Não foi possível salvar a filial",
+    delete: "Não foi possível excluir a filial",
+};
+
 export default function StoresPage() {
     const { stores, filters, cities, states, setSearch, setCity, setState, collection, modal, openEdit, createNew } = useStoresPage();
     return (
@@ -36,8 +43,8 @@ export default function StoresPage() {
             )}
             {collection.error && modal.dialog.kind === "closed" ? (
                 <div className="stores-page__feedback">
-                    <ErrorAlert title="Não foi possível carregar as filiais" message={collection.error} />
-                    <button type="button" onClick={collection.reload}>Tentar novamente</button>
+                    <ErrorAlert title={ERROR_TITLES[collection.errorOperation ?? "load"]} message={collection.error} />
+                    {collection.errorOperation === "load" ? <button type="button" onClick={collection.reload}>Tentar novamente</button> : null}
                 </div>
             ) : null}
             {collection.warning ? <ErrorAlert title="Foto não atualizada" message={collection.warning} /> : null}

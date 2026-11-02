@@ -103,6 +103,8 @@
     mask-size: contain;
 }
 
+.navbar__accessibility-icon { flex-shrink: 0; inline-size: 2rem; block-size: 2rem; }
+
 .navbar__item-icon--dashboard {
     -webkit-mask-image: url("../../../assets/dashboards/dashboard.svg");
     mask-image: url("../../../assets/dashboards/dashboard.svg");

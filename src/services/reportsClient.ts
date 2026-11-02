@@ -3,12 +3,13 @@ import { apiRequest, apiRequestBlob } from "./apiClient";
 import type { ApiRequestOptions } from "./apiClient";
 import { getCoreAuthToken } from "./coreClient";
 
-const REPORTS_API_BASE_URL: string | undefined = import.meta.env.VITE_REPORTS_API_BASE_URL;
-const REPORTS_API_KEY: string | undefined = import.meta.env.VITE_REPORTS_API_KEY;
+const REPORTS_API_BASE_URL: string | undefined = import.meta.env.VITE_CHATBOT_API_BASE_URL;
+const REPORTS_API_KEY: string | undefined = import.meta.env.VITE_CHATBOT_API_KEY;
 
 export type ReportsRequestOptions = Pick<ApiRequestOptions, "signal">;
 
-// A API de relatórios (NexUs-BI-AI/report_generator) exige X-API-Key + Bearer do NexUs-Auth e usa CORS
+// Relatórios e dashboard agora são servidos pela mesma API do chatbot (NexUs-BI-AI/app/app.py), por isso
+// usam VITE_CHATBOT_API_BASE_URL/VITE_CHATBOT_API_KEY. A API exige X-API-Key + Bearer do NexUs-Auth e usa CORS
 // aberto (allow_origins="*"), que o navegador só aceita sem cookies: por isso credentials = "omit".
 function buildOptions(options: ReportsRequestOptions): ApiRequestOptions {
     const token = getCoreAuthToken();
@@ -25,7 +26,7 @@ function buildOptions(options: ReportsRequestOptions): ApiRequestOptions {
 
 function baseUrl(): string {
     if (!REPORTS_API_BASE_URL) {
-        throw new ApiError("O serviço de relatórios não está configurado (VITE_REPORTS_API_BASE_URL).", 0);
+        throw new ApiError("O serviço de relatórios não está configurado (VITE_CHATBOT_API_BASE_URL).", 0);
     }
     return REPORTS_API_BASE_URL;
 }

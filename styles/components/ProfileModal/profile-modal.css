@@ -1,5 +1,6 @@
 .profile-modal {
     position: fixed;
+    z-index: 30;
     inset: 9rem 1.2rem auto auto;
     display: flex;
     flex-direction: column;

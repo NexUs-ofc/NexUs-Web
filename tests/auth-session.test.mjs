@@ -262,7 +262,8 @@ test("aborting one caller does not cancel the refresh needed by other callers", 
     const controller = new AbortController();
     const calls = mockHttp(t, async (call) => {
         if (!call.url.startsWith("https://auth.test")) return Response.json({});
-        assert.equal(call.signal, undefined);
+        assert.notEqual(call.signal, controller.signal);
+        assert.equal(call.signal.aborted, false);
         started.resolve(); await gate.promise; return Response.json(tokens());
     });
     const cancelled = coreRequest("/cancelled", { signal: controller.signal });

@@ -6,7 +6,7 @@ import { withAuthSession } from "./sessionManager";
 const CHATBOT_API_BASE_URL: string | undefined = import.meta.env.VITE_CHATBOT_API_BASE_URL;
 const CHATBOT_API_KEY: string | undefined = import.meta.env.VITE_CHATBOT_API_KEY;
 
-export type ChatbotRequestOptions = Pick<ApiRequestOptions, "signal" | "method" | "body">;
+export type ChatbotRequestOptions = Pick<ApiRequestOptions, "signal" | "method" | "body" | "timeoutMs">;
 
 function buildAuth(token: string | null): Pick<ApiRequestOptions, "authToken" | "apiKey" | "credentials"> {
     return {

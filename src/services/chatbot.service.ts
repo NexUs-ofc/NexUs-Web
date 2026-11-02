@@ -7,6 +7,8 @@
  */
 import type { ChatRequest, ChatResponse, SessionClosedResponse } from "../types/chatbot";
 import { chatbotRequest, describeChatbotError } from "./chatbotClient";
+import { ApiError } from "./apiError";
+import { parseChatResponse, parseSessionClosedResponse, validateChatRequest, validateChatSessionId } from "../utils/validateChatbot";
 
 export interface ChatbotServiceOptions {
     signal?: AbortSignal;
@@ -17,16 +19,19 @@ export async function sendMessage(
     request: ChatRequest,
     options: ChatbotServiceOptions = {},
 ): Promise<ChatResponse> {
+    const payload = validateChatRequest(request);
     try {
-        return await chatbotRequest<ChatResponse>("/chat", {
+        return parseChatResponse(await chatbotRequest<unknown>("/chat", {
             method: "POST",
-            body: request,
+            body: payload,
+            timeoutMs: 90_000,
             ...(options.signal ? { signal: options.signal } : {}),
-        });
+        }));
     } catch (error) {
         if (options.signal?.aborted) throw error;
         throw new Error(
-            describeChatbotError(error, "Não foi possível enviar a mensagem. Tente novamente."),
+            error instanceof ApiError ? describeChatbotError(error, "Não foi possível enviar a mensagem. Tente novamente.")
+                : error instanceof Error ? error.message : "O assistente retornou uma resposta inválida. Tente novamente.",
             { cause: error },
         );
     }
@@ -37,14 +42,15 @@ export async function closeSession(
     sessionId: string,
     options: ChatbotServiceOptions = {},
 ): Promise<SessionClosedResponse> {
+    const validatedId = validateChatSessionId(sessionId);
     try {
-        return await chatbotRequest<SessionClosedResponse>(
-            `/chat/${encodeURIComponent(sessionId)}`,
+        return parseSessionClosedResponse(await chatbotRequest<unknown>(
+            `/chat/${encodeURIComponent(validatedId)}`,
             {
                 method: "DELETE",
                 ...(options.signal ? { signal: options.signal } : {}),
             },
-        );
+        ), validatedId);
     } catch (error) {
         if (options.signal?.aborted) throw error;
         throw new Error(

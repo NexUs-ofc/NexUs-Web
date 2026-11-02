@@ -2,6 +2,8 @@ import { useEffect, useRef, useCallback } from "react";
 import ceritaAvatarUrl from "../../../assets/cerita-avatar.png";
 import { useChatbot } from "../../hooks/useChatbot";
 import { useAccessibility } from "../../hooks/useAccessibility";
+import { useDialog } from "../../hooks/useDialog";
+import { CHAT_QUESTION_MAX_LENGTH } from "../../utils/validateChatbot";
 import "../../../styles/components/Chatbot/chatbot.css";
 
 export default function Chatbot() {
@@ -16,28 +18,21 @@ export default function Chatbot() {
         close,
         setInputValue,
         sendQuestion,
-        clearError,
     } = useChatbot();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
-    const toggleBtnRef = useRef<HTMLButtonElement>(null);
-    const wasOpenRef = useRef(false);
+    const dialogRef = useDialog("chatbot-toggle", true, isOpen);
+
+    function handleSend(): void {
+        inputRef.current?.focus();
+        sendQuestion();
+    }
 
     // Rola para a última mensagem sempre que a lista muda ou o loading aparece.
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
     }, [messages, loading, reducedMotion]);
-
-    // Foca o campo de texto ao abrir; devolve foco ao botão ao fechar.
-    useEffect(() => {
-        if (isOpen) {
-            inputRef.current?.focus();
-        } else if (wasOpenRef.current) {
-            toggleBtnRef.current?.focus();
-        }
-        wasOpenRef.current = isOpen;
-    }, [isOpen]);
 
     const handleKeyDown = useCallback(
         (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
@@ -55,11 +50,13 @@ export default function Chatbot() {
         <div className="chatbot">
             {/* Painel de chat */}
             {isOpen && (
-                <section
+                <dialog
+                    ref={dialogRef}
+                    id="chatbot-dialog"
                     className="chatbot__panel"
-                    role="dialog"
                     aria-label="Assistente Cerita"
                     aria-modal="true"
+                    onCancel={(event) => { event.preventDefault(); close(); }}
                 >
                     {/* Cabeçalho */}
                     <header className="chatbot__header">
@@ -125,10 +122,10 @@ export default function Chatbot() {
                                         </div>
                                     </li>
                                 )}
-                                <div ref={messagesEndRef} aria-hidden="true" />
                             </ul>
                         )}
 
+                        <div ref={messagesEndRef} aria-hidden="true" />
                         {loading && !hasMessages && (
                             <div className="chatbot__initial-loading" role="status" aria-label="Aguardando resposta...">
                                 <span className="chatbot__typing">
@@ -138,13 +135,13 @@ export default function Chatbot() {
                         )}
 
                         {error && (
-                            <div className="chatbot__error" role="alert">
+                            <div id="chatbot-error" className="chatbot__error" role="alert">
                                 <p>{error}</p>
                                 <button
                                     type="button"
                                     className="chatbot__error-dismiss"
-                                    onClick={clearError}
-                                    aria-label="Fechar mensagem de erro"
+                                    onClick={handleSend}
+                                    aria-label="Tentar enviar a mensagem novamente"
                                 >
                                     Tentar novamente
                                 </button>
@@ -165,8 +162,11 @@ export default function Chatbot() {
                                 placeholder="Digite sua pergunta..."
                                 value={inputValue}
                                 rows={1}
-                                disabled={loading}
-                                aria-disabled={loading}
+                                readOnly={loading}
+                                aria-busy={loading}
+                                data-initial-focus
+                                maxLength={CHAT_QUESTION_MAX_LENGTH}
+                                aria-describedby={`chatbot-input-hint${error ? " chatbot-error" : ""}`}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyDown={handleKeyDown}
                             />
@@ -175,28 +175,30 @@ export default function Chatbot() {
                                 className="chatbot__send-btn"
                                 aria-label="Enviar mensagem"
                                 disabled={!inputValue.trim() || loading}
-                                onClick={() => sendQuestion()}
+                                onClick={handleSend}
                             >
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
                                     <path d="M15.75 9L2.25 2.25l2.625 6.75L2.25 15.75 15.75 9z" fill="currentColor" />
                                 </svg>
                             </button>
                         </div>
+                        <p id="chatbot-input-hint" className="chatbot__input-hint">Até {CHAT_QUESTION_MAX_LENGTH.toLocaleString("pt-BR")} caracteres.</p>
                         <p className="chatbot__disclaimer">
                             O assistente ajuda a apontar caminhos. Revise os dados críticos antes de tomar decisões.
                         </p>
                     </footer>
-                </section>
+                </dialog>
             )}
 
             {/* Botão flutuante */}
             <button
-                ref={toggleBtnRef}
+                id="chatbot-toggle"
                 type="button"
                 className={`chatbot__toggle${isOpen ? " chatbot__toggle--open" : ""}`}
                 aria-label={isOpen ? "Fechar assistente Cerita" : "Abrir assistente Cerita"}
                 aria-expanded={isOpen}
                 aria-haspopup="dialog"
+                aria-controls={isOpen ? "chatbot-dialog" : undefined}
                 onClick={toggle}
             >
                 {isOpen ? (

@@ -3,12 +3,15 @@ import type { Store, StoreFormData } from "../types/store";
 import { createStore, deleteStore, deleteStoreImage, getStores, updateStore, updateStoreImage } from "../services/stores.service";
 
 interface StoreMutationResult { store?: Store; removedId?: string; warning?: string; }
+type StoreMutationOperation = "create" | "update" | "delete";
+type StoreOperation = "load" | StoreMutationOperation;
 
 export interface StoreCollectionState {
     stores: ReadonlyArray<Store>;
     loading: boolean;
     saving: boolean;
     error: string;
+    errorOperation: StoreOperation | null;
     success: string;
     warning: string;
 }
@@ -18,28 +21,28 @@ type StoreCollectionAction =
     | { type: "loaded"; stores: ReadonlyArray<Store> }
     | { type: "start" }
     | { type: "saved"; result: StoreMutationResult; message: string }
-    | { type: "error"; message: string }
+    | { type: "error"; message: string; operation: StoreOperation }
     | { type: "clear" }
     | { type: "clear-error" };
 
-const initialState: StoreCollectionState = { stores: [], loading: true, saving: false, error: "", success: "", warning: "" };
+const initialState: StoreCollectionState = { stores: [], loading: true, saving: false, error: "", errorOperation: null, success: "", warning: "" };
 
 function reducer(state: StoreCollectionState, action: StoreCollectionAction): StoreCollectionState {
     switch (action.type) {
-        case "load": return { ...state, loading: true, error: "" };
-        case "loaded": return { ...state, stores: action.stores, loading: false, error: "" };
-        case "start": return { ...state, loading: false, saving: true, error: "", success: "", warning: "" };
+        case "load": return { ...state, loading: true, error: "", errorOperation: null };
+        case "loaded": return { ...state, stores: action.stores, loading: false, error: "", errorOperation: null };
+        case "start": return { ...state, loading: false, saving: true, error: "", errorOperation: null, success: "", warning: "" };
         case "saved": {
             const { store, removedId, warning = "" } = action.result;
             const stores = removedId !== undefined ? state.stores.filter((item) => item.id !== removedId)
                 : store ? state.stores.some((item) => item.id === store.id)
                     ? state.stores.map((item) => item.id === store.id ? { ...item, ...store } : item)
                     : [...state.stores, store] : state.stores;
-            return { ...state, stores, saving: false, error: "", success: action.message, warning };
+            return { ...state, stores, saving: false, error: "", errorOperation: null, success: action.message, warning };
         }
-        case "error": return { ...state, loading: false, saving: false, error: action.message, success: "" };
-        case "clear": return { ...state, error: "", success: "", warning: "" };
-        case "clear-error": return { ...state, error: "" };
+        case "error": return { ...state, loading: false, saving: false, error: action.message, errorOperation: action.operation, success: "" };
+        case "clear": return { ...state, error: "", errorOperation: null, success: "", warning: "" };
+        case "clear-error": return { ...state, error: "", errorOperation: null };
     }
 }
 
@@ -67,7 +70,7 @@ export function useStoreCollection(): UseStoreCollectionResult {
         void getStores({ signal: controller.signal }).then((stores) => {
             if (mounted.current && !controller.signal.aborted) dispatch({ type: "loaded", stores });
         }).catch((error: unknown) => {
-            if (mounted.current && !controller.signal.aborted) dispatch({ type: "error", message: error instanceof Error ? error.message : "Erro ao carregar filiais." });
+            if (mounted.current && !controller.signal.aborted) dispatch({ type: "error", operation: "load", message: error instanceof Error ? error.message : "Erro ao carregar filiais." });
         });
     }, []);
 
@@ -81,7 +84,7 @@ export function useStoreCollection(): UseStoreCollectionResult {
         };
     }, [reload]);
 
-    const mutate = useCallback(async (operation: (signal: AbortSignal) => Promise<StoreMutationResult>, message: string): Promise<boolean> => {
+    const mutate = useCallback(async (operation: (signal: AbortSignal) => Promise<StoreMutationResult>, message: string, errorOperation: StoreMutationOperation): Promise<boolean> => {
         if (mutationController.current !== null || !mounted.current) return false;
         const controller = new AbortController();
         mutationController.current = controller;
@@ -93,7 +96,7 @@ export function useStoreCollection(): UseStoreCollectionResult {
             dispatch({ type: "saved", result, message });
             return true;
         } catch (error) {
-            if (mounted.current && !controller.signal.aborted) dispatch({ type: "error", message: error instanceof Error ? error.message : "Não foi possível concluir a operação." });
+            if (mounted.current && !controller.signal.aborted) dispatch({ type: "error", operation: errorOperation, message: error instanceof Error ? error.message : "Não foi possível concluir a operação." });
             return false;
         } finally {
             if (mutationController.current === controller) mutationController.current = null;
@@ -103,19 +106,18 @@ export function useStoreCollection(): UseStoreCollectionResult {
     const addStore = useCallback((data: StoreFormData): Promise<boolean> => mutate(async (signal) => {
         const store = await createStore(data, { signal });
         return savePhoto(store, data.photoDataUrl, signal);
-    }, "Filial cadastrada com sucesso."), [mutate]);
+    }, "Filial cadastrada com sucesso.", "create"), [mutate]);
     const editStore = useCallback((id: string, data: StoreFormData): Promise<boolean> => mutate(async (signal) => {
         const store = await updateStore(id, data, { signal });
         return savePhoto(store, data.photoDataUrl, signal);
-    }, "Loja atualizada com sucesso."), [mutate]);
+    }, "Loja atualizada com sucesso.", "update"), [mutate]);
     const removeStore = useCallback((id: string): Promise<boolean> => mutate(async (signal) => {
         await deleteStore(id, { signal });
         return { removedId: id };
-    }, "Loja excluída com sucesso."), [mutate]);
+    }, "Loja excluída com sucesso.", "delete"), [mutate]);
     const clearFeedback = useCallback((): void => dispatch({ type: "clear" }), []);
     const clearError = useCallback((): void => dispatch({ type: "clear-error" }), []);
 
-    // As páginas consomem a mesma coleção sem repassar dados e operações pelo layout.
     return useMemo(() => ({ ...state, addStore, editStore, removeStore, reload, clearFeedback, clearError }), [state, addStore, editStore, removeStore, reload, clearFeedback, clearError]);
 }
 

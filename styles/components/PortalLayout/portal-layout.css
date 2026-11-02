@@ -1,4 +1,5 @@
 .portal-layout {
+    container: portal / inline-size;
     display: flex;
     flex: 1;
     min-block-size: 100vh;
@@ -15,11 +16,15 @@
 }
 
 .portal-layout__content {
+    container: portal-content / inline-size;
     display: flex;
     flex: 1;
     flex-direction: column;
     min-inline-size: 0;
 }
+
+.portal-layout__skip-link { position: fixed; inset-block-start: 1.2rem; inset-inline-start: 1.2rem; z-index: 1000; max-inline-size: calc(100% - 2.4rem); padding: 1.2rem 1.6rem; transform: translateY(calc(-100% - 2rem)); border: 1px solid var(--primary); border-radius: 0.8rem; background: #fff; color: var(--primary); font: 600 1.4rem/1.5 "Montserrat", sans-serif; }
+.portal-layout__skip-link:focus { transform: translateY(0); }
 
 .portal-layout__profile-status { margin: 1.6rem 4rem 0; padding: 1.2rem 1.6rem; border: 1px solid #bbd9ca; border-radius: 1.2rem; background: #f0fdf4; color: #166534; font: 400 1.3rem/1.5 "Montserrat", sans-serif; }
 

@@ -5,9 +5,9 @@ export const ACCESSIBILITY_STORAGE_KEY = "nexus-accessibility-preferences";
 export const DEFAULT_ACCESSIBILITY_PREFERENCES: Readonly<AccessibilityPreferences> = {
     textSize: 100,
     contrast: "standard",
-    reduceMotion: false,
     highlightFocus: true,
-    underlineLinks: true,
+    dyslexiaFont: false,
+    monochrome: false,
 };
 
 export function loadAccessibilityPreferences(): AccessibilityPreferences {
@@ -20,9 +20,9 @@ export function loadAccessibilityPreferences(): AccessibilityPreferences {
         return {
             textSize: stored.textSize === 125 || stored.textSize === 150 ? stored.textSize : 100,
             contrast: stored.contrast === "high" ? "high" : "standard",
-            reduceMotion: stored.reduceMotion === true,
             highlightFocus: typeof stored.highlightFocus === "boolean" ? stored.highlightFocus : true,
-            underlineLinks: typeof stored.underlineLinks === "boolean" ? stored.underlineLinks : true,
+            dyslexiaFont: stored.dyslexiaFont === true,
+            monochrome: stored.monochrome === true,
         };
     } catch {
         return { ...DEFAULT_ACCESSIBILITY_PREFERENCES };
@@ -51,7 +51,7 @@ export function applyAccessibilityPreferences(preferences: AccessibilityPreferen
     const root = document.documentElement;
     root.dataset.a11yTextSize = String(preferences.textSize);
     root.dataset.a11yContrast = preferences.contrast;
-    root.dataset.a11yReduceMotion = String(preferences.reduceMotion);
     root.dataset.a11yHighlightFocus = String(preferences.highlightFocus);
-    root.dataset.a11yUnderlineLinks = String(preferences.underlineLinks);
+    root.dataset.a11yDyslexiaFont = String(preferences.dyslexiaFont);
+    root.dataset.a11yMonochrome = String(preferences.monochrome);
 }

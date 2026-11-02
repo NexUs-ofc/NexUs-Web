@@ -49,12 +49,16 @@
 .accessibility-example__content > a { color: var(--primary); font-weight: 600; }
 .accessibility-example__content > button { max-inline-size: 100%; min-block-size: 4.4rem; margin-block-start: 0.4rem; padding: 1.1rem 2rem; border: 1px solid var(--primary); border-radius: 0.8rem; background: var(--primary); color: #fff; cursor: pointer; font: 600 1.4rem/1.5 "Montserrat", sans-serif; overflow-wrap: anywhere; }
 .accessibility-example__content > button:hover { background: #60298e; }
-html[data-a11y-highlight-focus="true"] .accessibility-example__content > button { outline: 2px solid var(--primary); outline-offset: 2px; }
+.accessibility-example__content > a { text-decoration: underline; text-underline-offset: 0.18em; }
 .accessibility-example__caption { margin-block-start: 2rem; color: #475569; font-size: 1.2rem; }
 .accessibility-keyboard dl { display: flex; flex-direction: column; gap: 1.4rem; margin-block-start: 1.4rem; }
 .accessibility-keyboard dt { color: var(--primary); font-weight: 600; }
 .accessibility-keyboard dd { margin-block-start: 0.4rem; color: #475569; font-size: 1.3rem; }
 .accessibility-page__storage-error { color: #991b1b; }
+
+html[data-a11y-dyslexia-font="true"] .accessibility-choice__option > span { padding: 1.2rem; }
+html[data-a11y-dyslexia-font="true"] .accessibility-toggle button { min-inline-size: 0; max-inline-size: 100%; }
+html[data-a11y-dyslexia-font="true"] .accessibility-toggle__dot { flex-shrink: 0; }
 
 @media (max-width: 75rem) {
     .accessibility-page__layout { grid-template-columns: minmax(0, 1fr); }
@@ -86,4 +90,14 @@ html[data-a11y-highlight-focus="true"] .accessibility-example__content > button 
     .accessibility-toggle { flex-wrap: wrap; gap: 1.2rem; }
     .accessibility-toggle__copy { flex-basis: calc(100% - 5.2rem); }
     .accessibility-toggle button { flex: 1; min-inline-size: 0; }
+    html[data-a11y-dyslexia-font="true"] .accessibility-toggle { display: grid; grid-template-columns: 4rem minmax(0, 1fr); align-items: start; }
+    html[data-a11y-dyslexia-font="true"] .accessibility-toggle button { grid-column: 2; justify-self: start; }
+}
+
+@container accessibility (max-width: 28rem) {
+    html[data-a11y-dyslexia-font="true"] :where(.accessibility-card, .accessibility-example__content) { padding: 12px; }
+    html[data-a11y-dyslexia-font="true"] .accessibility-toggle { grid-template-columns: minmax(0, 1fr); }
+    html[data-a11y-dyslexia-font="true"] .accessibility-toggle__icon { display: none; }
+    html[data-a11y-dyslexia-font="true"] .accessibility-toggle button { grid-column: 1; inline-size: 100%; padding-inline: 8px; overflow-wrap: anywhere; }
+    html[data-a11y-dyslexia-font="true"] .accessibility-choice__option > span { padding-inline: 8px; }
 }

@@ -7,6 +7,10 @@ export interface ProfileRequestOptions {
     signal?: AbortSignal;
 }
 
+interface GetProfileOptions extends ProfileRequestOptions {
+    authToken?: string;
+}
+
 export async function updateProfile(payload: ProfileUpdatePayload, options: ProfileRequestOptions = {}): Promise<Profile> {
     return parseProfile(await coreRequest<unknown>("/api/profile", {
         method: "PATCH",
@@ -32,10 +36,11 @@ export async function removeProfileImage(options: ProfileRequestOptions = {}): P
     }));
 }
 
-export async function getProfile(options: ProfileRequestOptions = {}): Promise<Profile> {
+export async function getProfile(options: GetProfileOptions = {}): Promise<Profile> {
     try {
         return parseProfile(await coreRequest<unknown>("/api/profile", {
             method: "GET",
+            ...(options.authToken ? { authToken: options.authToken } : {}),
             ...(options.signal ? { signal: options.signal } : {}),
         }));
     } catch (error) {

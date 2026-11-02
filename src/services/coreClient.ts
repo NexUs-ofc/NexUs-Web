@@ -1,31 +1,25 @@
 import { apiRequest } from "./apiClient";
 import type { ApiRequestOptions } from "./apiClient";
+import { withAuthSession } from "./sessionManager";
 
 export const CORE_API_BASE_URL =
     import.meta.env.VITE_CORE_API_BASE_URL ?? "https://ceris-core.discloud.dev";
 
-let coreAuthToken: string | null = null;
-
-export function setCoreAuthToken(token: string | null): void {
-    coreAuthToken = token;
-}
-
-export function getCoreAuthToken(): string | null {
-    return coreAuthToken;
-}
-
-export type CoreRequestOptions = Omit<ApiRequestOptions, "authToken" | "apiKey">;
+export type CoreRequestOptions = Omit<ApiRequestOptions, "apiKey">;
 
 export async function coreRequest<T>(
     endpoint: string,
     options: CoreRequestOptions = {},
 ): Promise<T> {
     try {
-        return await apiRequest<T>(CORE_API_BASE_URL, endpoint, {
+        const request = (token: string | null) => apiRequest<T>(CORE_API_BASE_URL, endpoint, {
             ...options,
-            ...(coreAuthToken !== null ? { authToken: coreAuthToken } : {}),
+            ...(token !== null ? { authToken: token } : {}),
             credentials: "include",
         });
+        return options.authToken !== undefined
+            ? await request(options.authToken)
+            : await withAuthSession(request, options.signal);
     } catch (error) {
         if (error instanceof Error) {
             throw error;

@@ -3,11 +3,47 @@ import { asRecord } from "../utils/responseParsers";
 import type { AuthTokens, LoginPayload, RefreshPayload, VerifyRegistrationPayload } from "../types/auth";
 import type { RegistrationData, RegistrationStartResponse } from "../types/registration";
 import { apiRequest } from "./apiClient";
+import type { ForgotPasswordPayload, ForgotPasswordResponse, ResetPasswordPayload, VerifyPasswordResetPayload, VerifyPasswordResetResponse } from "../types/passwordRecovery";
+import { parseForgotPasswordResponse, parsePasswordResetVerificationResponse, validateForgotPassword, validatePasswordReset, validatePasswordResetVerification } from "../utils/validatePasswordRecovery";
 
 const AUTH_API_BASE_URL =
     import.meta.env.VITE_AUTH_API_BASE_URL ?? "https://ceris-auth.vercel.app";
 
 const AUTH_API_KEY = import.meta.env.VITE_AUTH_API_KEY ?? "default";
+
+export interface PasswordRecoveryRequestOptions {
+    signal?: AbortSignal;
+}
+
+export async function forgotPassword(payload: ForgotPasswordPayload, options: PasswordRecoveryRequestOptions = {}): Promise<ForgotPasswordResponse> {
+    return parseForgotPasswordResponse(await apiRequest<unknown>(AUTH_API_BASE_URL, "/api/auth/password/forgot", {
+        method: "POST",
+        apiKey: AUTH_API_KEY,
+        body: validateForgotPassword(payload),
+        credentials: "omit",
+        signal: options.signal,
+    }));
+}
+
+export async function verifyPasswordReset(payload: VerifyPasswordResetPayload, options: PasswordRecoveryRequestOptions = {}): Promise<VerifyPasswordResetResponse> {
+    return parsePasswordResetVerificationResponse(await apiRequest<unknown>(AUTH_API_BASE_URL, "/api/auth/password/reset/verify", {
+        method: "POST",
+        apiKey: AUTH_API_KEY,
+        body: validatePasswordResetVerification(payload),
+        credentials: "omit",
+        signal: options.signal,
+    }));
+}
+
+export async function resetPassword(payload: ResetPasswordPayload, options: PasswordRecoveryRequestOptions = {}): Promise<void> {
+    await apiRequest<unknown>(AUTH_API_BASE_URL, "/api/auth/password/reset", {
+        method: "POST",
+        apiKey: AUTH_API_KEY,
+        body: validatePasswordReset(payload),
+        credentials: "omit",
+        signal: options.signal,
+    });
+}
 
 export interface LoginRequestOptions {
     signal?: AbortSignal;

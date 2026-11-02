@@ -10,6 +10,7 @@ import "../styles/index.css";
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const VerifyRegistrationPage = lazy(() => import("./pages/VerifyRegistrationPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const PasswordRecoveryPage = lazy(() => import("./pages/PasswordRecoveryPage"));
 const PlansPage = lazy(() => import("./pages/PlansPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
@@ -27,6 +28,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<RootRedirect />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/esqueci-senha" element={<PasswordRecoveryPage />} />
                     <Route path="/cadastro" element={<RegisterPage />} />
                     <Route path="/cadastro/verificacao" element={<VerifyRegistrationPage />} />
                     <Route path="/planos" element={<PlansPage />} />

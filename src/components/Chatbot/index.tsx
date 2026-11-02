@@ -1,9 +1,11 @@
 import { useEffect, useRef, useCallback } from "react";
 import ceritaAvatarUrl from "../../../assets/cerita-avatar.png";
 import { useChatbot } from "../../hooks/useChatbot";
+import { useAccessibility } from "../../hooks/useAccessibility";
 import "../../../styles/components/Chatbot/chatbot.css";
 
 export default function Chatbot() {
+    const { reducedMotion } = useAccessibility();
     const {
         isOpen,
         messages,
@@ -20,19 +22,21 @@ export default function Chatbot() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const toggleBtnRef = useRef<HTMLButtonElement>(null);
+    const wasOpenRef = useRef(false);
 
     // Rola para a última mensagem sempre que a lista muda ou o loading aparece.
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, loading]);
+        messagesEndRef.current?.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
+    }, [messages, loading, reducedMotion]);
 
     // Foca o campo de texto ao abrir; devolve foco ao botão ao fechar.
     useEffect(() => {
         if (isOpen) {
             inputRef.current?.focus();
-        } else {
+        } else if (wasOpenRef.current) {
             toggleBtnRef.current?.focus();
         }
+        wasOpenRef.current = isOpen;
     }, [isOpen]);
 
     const handleKeyDown = useCallback(

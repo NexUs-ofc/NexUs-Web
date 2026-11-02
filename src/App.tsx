@@ -20,6 +20,7 @@ const CreateStorePage = lazy(() => import("./pages/CreateStorePage"));
 const ReportsPage = lazy(() => import("./pages/ReportsPage"));
 const UpdatePlansPage = lazy(() => import("./pages/UpdatePlansPage"));
 const PaymentsPage = lazy(() => import("./pages/PaymentsPage"));
+const AccessibilityPage = lazy(() => import("./pages/AccessibilityPage"));
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                         <Route path="/lojas/editar/:id" element={<EditStorePage />} />
                         <Route path="/relatorios" element={<ReportsPage />} />
                         <Route path="/pagamentos" element={<PaymentsPage />} />
+                        <Route path="/acessibilidade" element={<AccessibilityPage />} />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>

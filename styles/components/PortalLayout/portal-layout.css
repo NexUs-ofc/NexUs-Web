@@ -21,6 +21,8 @@
     min-inline-size: 0;
 }
 
+.portal-layout__profile-status { margin: 1.6rem 4rem 0; padding: 1.2rem 1.6rem; border: 1px solid #bbd9ca; border-radius: 1.2rem; background: #f0fdf4; color: #166534; font: 400 1.3rem/1.5 "Montserrat", sans-serif; }
+
 .portal-page h1 {
     color: #0f172a;
     font-family: "Huninn", sans-serif;
@@ -33,4 +35,5 @@
     .portal-page {
         padding: 2.4rem 1.6rem;
     }
+    .portal-layout__profile-status { margin-inline: 1.6rem; }
 }

@@ -10,6 +10,7 @@ import "../styles/index.css";
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const VerifyRegistrationPage = lazy(() => import("./pages/VerifyRegistrationPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const PasswordRecoveryPage = lazy(() => import("./pages/PasswordRecoveryPage"));
 const PlansPage = lazy(() => import("./pages/PlansPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
@@ -18,6 +19,7 @@ const EditStorePage = lazy(() => import("./pages/EditStorePage"));
 const CreateStorePage = lazy(() => import("./pages/CreateStorePage"));
 const ReportsPage = lazy(() => import("./pages/ReportsPage"));
 const UpdatePlansPage = lazy(() => import("./pages/UpdatePlansPage"));
+const PaymentsPage = lazy(() => import("./pages/PaymentsPage"));
 
 function App() {
     return (
@@ -26,6 +28,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<RootRedirect />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/esqueci-senha" element={<PasswordRecoveryPage />} />
                     <Route path="/cadastro" element={<RegisterPage />} />
                     <Route path="/cadastro/verificacao" element={<VerifyRegistrationPage />} />
                     <Route path="/planos" element={<PlansPage />} />
@@ -37,6 +40,7 @@ function App() {
                         <Route path="/lojas/editar" element={<EditStorePage />} />
                         <Route path="/lojas/editar/:id" element={<EditStorePage />} />
                         <Route path="/relatorios" element={<ReportsPage />} />
+                        <Route path="/pagamentos" element={<PaymentsPage />} />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>

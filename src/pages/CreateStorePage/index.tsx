@@ -1,19 +1,13 @@
 import PageTitle from "../../components/PageTitle";
-import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import StoreForm from "../../components/StoreForm";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import { useStoresContext } from "../../hooks/useStoresContext";
-import { EMPTY_STORE_FORM } from "../../utils/validateStore";
 import "../../../styles/pages/CreateStorePage/create-store-page.css";
+import { Link } from "react-router-dom";
+import { EMPTY_STORE_FORM } from "../../utils/validateStore";
+import { useCreateStorePage } from "../../hooks/useCreateStorePage";
 
 export default function CreateStorePage() {
-    const { addStore, saving, loading, error } = useStoresContext();
-    const navigate = useNavigate();
-    useEffect(() => {
-        document.title = "Adicionar Nova Filial — NexUs";
-    }, []);
-
+    const { addStore, saving, loading, error, back } = useCreateStorePage();
     return (
         <main className="portal-page create-store-page" aria-labelledby="create-store-title">
             <header className="create-store-page__header">
@@ -25,7 +19,7 @@ export default function CreateStorePage() {
                 <PageTitle id="create-store-title">Adicionar Nova Filial</PageTitle>
                 <p>Preencha os campos abaixo para cadastrar um novo ponto comercial no aplicativo.</p>
             </header>
-            {loading ? <LoadingSpinner message="Carregando filiais..." /> : <StoreForm mode="create" initialData={EMPTY_STORE_FORM} saving={saving} error={error} onSave={addStore} onSaved={() => navigate("/lojas")} onCancel={() => navigate("/lojas")} />}
+            {loading ? <LoadingSpinner message="Carregando filiais..." /> : <StoreForm mode="create" initialData={EMPTY_STORE_FORM} saving={saving} error={error} onSave={addStore} onSaved={back} onCancel={back} />}
         </main>
     );
 }

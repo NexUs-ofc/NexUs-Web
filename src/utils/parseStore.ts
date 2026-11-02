@@ -37,7 +37,6 @@ export function parseStore(value: unknown): Store {
     };
     if (!store.name || !/^\d{14}$/u.test(store.cnpj.replace(/\D/gu, "")) || !BRAZILIAN_STATES.includes(store.state)) throw new Error("O core retornou dados de identificação de filial inválidos.");
     if ([store.openingTime, store.closingTime].some((time) => time && !isStoreTime(time))) throw new Error("O core retornou um horário de filial inválido.");
-    // O contrato de leitura não garante CEP/telefones. Aproveita-os somente se presentes.
     if (data.cep != null) {
         store.cep = text(data.cep, STORE_MAX_LENGTH.cep);
         if (!/^\d{8}$/u.test(store.cep.replace(/\D/gu, ""))) throw new Error("O core retornou um CEP inválido.");
@@ -45,9 +44,11 @@ export function parseStore(value: unknown): Store {
     if (data.phones != null) {
         if (!Array.isArray(data.phones) || data.phones.length > 10) throw new Error("O core retornou telefones inválidos.");
         store.phones = data.phones.map((phone) => {
-            const result = text(phone, 20).replace(/\D/gu, "");
-            if (!/^[1-9]\d{9,10}$/u.test(result)) throw new Error("O core retornou um telefone inválido.");
-            return result;
+            const result = text(phone, 20);
+            if (result.startsWith("+") && !/^\+55[1-9]\d{9,10}$/u.test(result)) throw new Error("O core retornou um telefone inválido.");
+            const national = result.replace(/^\+55/u, "").replace(/\D/gu, "");
+            if (!/^[1-9]\d{9,10}$/u.test(national)) throw new Error("O core retornou um telefone inválido.");
+            return national;
         });
     }
     return store;

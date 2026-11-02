@@ -77,7 +77,7 @@
         );
     }
 
-    header {
+    .brand-logo {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -145,11 +145,11 @@
 }
 
 @media (max-width: 900px) {
-    .brand-panel header {
+    .brand-panel .brand-logo {
         height: 8rem;
     }
 
-    .brand-panel header img {
+    .brand-panel .brand-logo img {
         height: 5rem;
     }
 
@@ -180,11 +180,11 @@
         border-bottom-left-radius: 2rem;
     }
 
-    .brand-panel header {
+    .brand-panel .brand-logo {
         height: 8rem;
     }
 
-    .brand-panel header img {
+    .brand-panel .brand-logo img {
         height: 5rem;
     }
 
@@ -226,11 +226,11 @@
         border-bottom-left-radius: 1.6rem;
     }
 
-    .brand-panel header {
+    .brand-panel .brand-logo {
         height: 7rem;
     }
 
-    .brand-panel header img {
+    .brand-panel .brand-logo img {
         height: 4.2rem;
     }
 
@@ -271,3 +271,6 @@
         padding: 2rem 1.4rem;
     }
 }
+
+.form-section { flex-direction: column; gap: 1.6rem; overflow-y: auto; padding-block: 2.4rem; justify-content: safe center; }
+.auth-form-container { flex-shrink: 0; display: flex; justify-content: center; width: 100%; }

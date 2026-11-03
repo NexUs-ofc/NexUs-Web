@@ -4,25 +4,25 @@ import { useProductRanking } from "../../hooks/useProductRanking";
 
 /** Os dois rankings de produtos do dashboard, cada um com seu próprio filtro de UF. */
 export default function ProductRankingsGrid() {
-    const consumed = useProductRanking("registered");
+    const registered = useProductRanking("registered");
     const expired = useProductRanking("expired");
 
     return (
         <div className="dashboard-product-rankings">
             <ProductRankingCard
-                title="Top 5 Alimentos Mais Consumidos"
-                subtitle="Produtos com maior registro de consumo no período."
+                title="Top 5 Alimentos Mais Registrados"
+                subtitle="Produtos com mais cadastros no estoque."
                 icon={<MdOutlineRestaurant />}
-                state={consumed.state}
-                items={consumed.items}
-                loading={consumed.loading}
-                error={consumed.error}
-                emptyMessage="Nenhum registro de consumo para este filtro."
-                onStateChange={consumed.setState}
+                state={registered.state}
+                items={registered.items}
+                loading={registered.loading}
+                error={registered.error}
+                emptyMessage="Nenhum produto registrado para este filtro."
+                onStateChange={registered.setState}
             />
             <ProductRankingCard
                 title="Top 5 Alimentos Mais Vencidos"
-                subtitle="Produtos que mais venceram no período."
+                subtitle="Produtos com mais ocorrências de vencimento."
                 icon={<MdOutlineWarningAmber />}
                 state={expired.state}
                 items={expired.items}

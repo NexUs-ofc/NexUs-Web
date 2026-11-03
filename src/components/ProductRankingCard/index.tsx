@@ -46,22 +46,18 @@ export default function ProductRankingCard({
             <div className="product-ranking-card__body">
                 {loading ? <LoadingSpinner message={`Carregando ${title.toLowerCase()}...`} /> : null}
                 {!loading && error ? <ErrorAlert message={error} /> : null}
-                {(() => {
-                    const validItems = items.filter((item) => !/^\d+$/u.test(item.productId));
-                    if (loading || error) return null;
-                    if (validItems.length === 0) return <p className="product-ranking-card__empty">{emptyMessage}</p>;
-                    return (
-                        <ol className="product-ranking-card__list">
-                            {validItems.map((item, index) => (
-                                <li key={`${item.productId}-${index}`} className="product-ranking-card__item">
-                                    <span className="product-ranking-card__rank">{index + 1}</span>
-                                    <span className="product-ranking-card__name">{item.productId}</span>
-                                    <span className="product-ranking-card__score">{formatDashboardNumber(item.score)}</span>
-                                </li>
-                            ))}
-                        </ol>
-                    );
-                })()}
+                {!loading && !error && items.length === 0 ? <p className="product-ranking-card__empty">{emptyMessage}</p> : null}
+                {!loading && !error && items.length > 0 ? (
+                    <ol className="product-ranking-card__list">
+                        {items.map((item, index) => (
+                            <li key={item.productId} className="product-ranking-card__item">
+                                <span className="product-ranking-card__rank">{index + 1}</span>
+                                <span className="product-ranking-card__name">{item.productName}</span>
+                                <span className="product-ranking-card__score">{formatDashboardNumber(item.score)}</span>
+                            </li>
+                        ))}
+                    </ol>
+                ) : null}
             </div>
         </article>
     );

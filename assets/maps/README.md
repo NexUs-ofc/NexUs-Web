@@ -4,4 +4,4 @@
 
 Origem: `https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo%2Bjson&qualidade=minima&intrarregiao=UF`.
 
-Foi acrescentada a propriedade `name` com a sigla correspondente ao `codarea` de cada UF, para associar a geometria aos dados do dashboard. As coordenadas não foram alteradas. A malha é distribuída com a aplicação; sua exibição não exige acesso à API do IBGE. As classes de desperdício são mocks independentes da fonte geográfica.
+Foi acrescentada a propriedade `name` com a sigla correspondente ao `codarea` de cada UF, para associar a geometria aos dados do dashboard. As coordenadas não foram alteradas. A malha é distribuída com a aplicação; sua exibição não exige acesso à API do IBGE. As classes de desperdício vêm da resposta de `GET /dashboard` da API NexUs-BI-AI e são independentes da fonte geográfica.

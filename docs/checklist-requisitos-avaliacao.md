@@ -12,6 +12,20 @@ Atualizado em 31/10/2026: filiais integradas ao core autenticado, com CRUD remot
 
 Atualização final em 01/11/2026: edição por `/lojas/editar/:id` cobre os três requisitos de useParams, presença do ID e tratamento de undefined. O header compartilhado permanece no topo em todas as páginas do portal por `position:sticky`, `inset-block-start:0` e camada própria, sem sobrepor o fluxo do formulário. Verificado em navegador com página longa e componentes reais: após rolar 1.088px, headerTop permaneceu em 0 e altura em 80px. Dashboard e planos mantêm suas áreas internas de rolagem. Essa correção visual não altera a contagem dos requisitos nem comprova acessibilidade integral. A evidência atual substitui referências históricas ao modal de edição, às dez páginas e aos três requisitos de rota ainda ausentes: agora são doze páginas lazy; a exclusão de filial permanece em diálogo; o perfil da empresa também utiliza diálogo na PR #24.
 
+## Limpeza de arquivos e chaves públicas — 02/11/2026
+
+Confirmado por rastreamento dos imports a partir de `src/main.tsx`: `src/mocks/dashboard.ts` não tinha consumidores e foi removido. O dashboard consulta `GET /dashboard` via `dashboard.service.ts`/`reportsClient.ts`, valida a resposta e trata erros sem fallback local. Também foram removidos os cinco SVGs antigos de `assets/sidebar/` e o sprite `public/icons.svg`, sem referências no código, estilos ou configurações. Os demais módulos TypeScript continuam ligados à aplicação. README e documentação da malha foram alinhados à integração atual. As referências a mocks e testes nas revisões anteriores são históricas. A limpeza não altera a contagem dos 108 requisitos.
+
+Validação da limpeza: ESLint, TypeScript, build de produção e `git diff --check` aprovados. O Vite exigiu execução fora do sandbox após `spawn EPERM`; permanece o aviso existente do chunk de gráficos de aproximadamente 660 kB. Nenhum arquivo de teste foi criado.
+
+### Justificativa para chaves de API visíveis no frontend
+
+`VITE_AUTH_API_KEY` e `VITE_CHATBOT_API_KEY` são configurações de cliente destinadas ao navegador. O Vite incorpora as variáveis `VITE_*` usadas ao bundle, e seus valores também podem ser vistos nas requisições. Essa exposição é esperada para chaves públicas de cliente; elas não devem conceder privilégios administrativos nem substituir a sessão do usuário. Senhas, tokens de sessão, chaves privadas e de service role não pertencem a essa categoria.
+
+Conforme informado pelos responsáveis pelo projeto, os backends têm CORS e rate limit. CORS restringe a leitura de respostas por origens no navegador, mas não bloqueia chamadas diretas de ferramentas ou servidores. Rate limit limita o volume de requisições e não substitui autorização. A proteção dos dados depende das verificações de autenticação e permissões no servidor; os clientes protegidos deste frontend enviam o Bearer da sessão. Uma chave pública isolada não deve permitir consultar dados de outras empresas.
+
+Esta revisão cobre o frontend: as regras de CORS, os limites e as permissões dos backends externos foram informados, não auditados nesta limpeza. Fontes técnicas: [Vite — Env Variables and Modes](https://vite.dev/guide/env-and-mode) e [MDN — CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS).
+
 ## Entrega sem arquivos de teste — 02/11/2026
 
 Por solicitação explícita do usuário, removidos todos os seis arquivos de teste do projeto, incluindo os recebidos da main. Removidos também o script test de package.json e a etapa npm test da CI. A pasta tests não faz parte da entrega. Dependências de execução e ferramentas de lint/build preservadas.

@@ -9,3 +9,7 @@ O Vite usa a porta 8080, ou a próxima livre. Para a integração de autenticaç
 Acesse o [NexUs Web](https://nex-us-web.vercel.app).
 
 A documentação de acompanhamento está no [checklist do projeto](docs/checklist-requisitos-avaliacao.md).
+
+## Containers e Kubernetes
+
+Consulte o [guia de containers e Kubernetes](docs/containers.md) para build, configuração e execução em qualquer cluster.

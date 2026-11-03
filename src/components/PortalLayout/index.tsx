@@ -41,7 +41,7 @@ export default function PortalLayout() {
                         <Outlet />
                     </StoresProvider>
                 ) : null}
-                {!isAccessibilityPage ? <PageFooter /> : null}
+                <PageFooter />
             </div>
             <Chatbot />
             {profileOpen && state.profile ? <ProfileModal key={state.profile.id} profile={state.profile} onClose={() => setProfileDialog((previous) => ({ ...previous, open: false }))} onSaved={() => { setProfileDialog({ open: false, success: "Perfil atualizado com sucesso." }); }} /> : null}

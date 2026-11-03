@@ -8,6 +8,7 @@ export interface ApiRequestOptions {
     authToken?: string;
     body?: unknown;
     signal?: AbortSignal;
+    timeoutMs?: number;
     credentials?: RequestCredentials;
 }
 
@@ -40,12 +41,14 @@ export async function apiRequestBlob(
     options: ApiRequestOptions = {},
 ): Promise<Blob> {
     const normalizedBase = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+    const timeout = AbortSignal.timeout(options.timeoutMs ?? 30_000);
+    const signal = options.signal ? AbortSignal.any([options.signal, timeout]) : timeout;
     try {
         const response = await fetch(`${normalizedBase}${endpoint}`, {
             method: options.method ?? "GET",
             credentials: options.credentials ?? "include",
             headers: buildHeaders(options, "application/pdf, application/json"),
-            ...(options.signal ? { signal: options.signal } : {}),
+            signal,
         });
         if (!response.ok) {
             let data: unknown = null;
@@ -54,10 +57,15 @@ export async function apiRequestBlob(
             } catch {
                 data = null;
             }
+            signal.throwIfAborted();
             throw new ApiError(resolveErrorMessage(data, "Erro ao comunicar com o servidor."), response.status);
         }
-        return await response.blob();
+        const blob = await response.blob();
+        signal.throwIfAborted();
+        return blob;
     } catch (error) {
+        if (options.signal?.aborted) throw new ApiError("Operação cancelada.", 0);
+        if (timeout.aborted) throw new ApiError("O servidor demorou para responder. Confira se a operação foi concluída antes de tentar novamente.", 0);
         if (error instanceof ApiError) {
             throw error;
         }
@@ -76,6 +84,8 @@ export async function apiRequest<T>(
     const normalizedBase = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
     const url = `${normalizedBase}${endpoint}`;
     const multipart = options.body instanceof FormData;
+    const timeout = AbortSignal.timeout(options.timeoutMs ?? 30_000);
+    const signal = options.signal ? AbortSignal.any([options.signal, timeout]) : timeout;
     try {
         const response = await fetch(url, {
             method: options.method ?? "GET",
@@ -86,7 +96,7 @@ export async function apiRequest<T>(
                 ...(options.authToken ? { Authorization: `Bearer ${options.authToken}` } : {}),
             },
             ...(options.body !== undefined ? { body: multipart ? options.body as FormData : JSON.stringify(options.body) } : {}),
-            ...(options.signal ? { signal: options.signal } : {}),
+            signal,
         });
         let data: unknown = null;
         try {
@@ -94,11 +104,14 @@ export async function apiRequest<T>(
         } catch {
             data = null;
         }
+        signal.throwIfAborted();
         if (!response.ok) {
             throw new ApiError(resolveErrorMessage(data, "Erro ao comunicar com o servidor."), response.status);
         }
         return data as T;
     } catch (error) {
+        if (options.signal?.aborted) throw new ApiError("Operação cancelada.", 0);
+        if (timeout.aborted) throw new ApiError("O servidor demorou para responder. Confira se a operação foi concluída antes de tentar novamente.", 0);
         if (error instanceof ApiError) {
             throw error;
         }

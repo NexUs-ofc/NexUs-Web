@@ -22,11 +22,11 @@ export function usePlansPage() {
                 planId,
             };
             const result = await execute(updated);
-            if (result.success) {
+            if (result.status === "success") {
                 navigate("/cadastro/verificacao");
-            } else {
+            } else if (result.status === "error") {
                 navigate("/cadastro", {
-                    state: { registrationError: result.error ?? "Erro ao iniciar o cadastro. Tente novamente." },
+                    state: { registrationError: result.error },
                 });
             }
         },

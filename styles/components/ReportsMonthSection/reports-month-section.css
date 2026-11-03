@@ -1,12 +1,14 @@
-.reports-month { display: flex; flex-direction: column; gap: 1.6rem; }
+.reports-month { display: flex; flex-direction: column; gap: 1.6rem; min-inline-size: 0; }
 
-.reports-month__header { display: flex; align-items: baseline; justify-content: space-between; gap: 1.6rem; }
-.reports-month__header h2 { color: #0f172a; font-family: "Huninn", sans-serif; font-size: 2.2rem; font-weight: 400; line-height: 3rem; }
+.reports-month__header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.8rem 1.6rem; }
+.reports-month__header h2 { min-inline-size: 0; overflow-wrap: anywhere; color: #0f172a; font-family: "Huninn", sans-serif; font-size: 2.2rem; font-weight: 400; line-height: 3rem; }
 .reports-month__header p { color: #475569; font-size: 1.3rem; line-height: 2rem; white-space: nowrap; }
 
 .reports-table {
+    min-inline-size: 0;
     overflow: auto;
-    overscroll-behavior: contain;
+    /* A tabela contém a rolagem horizontal; a vertical continua na página. */
+    overscroll-behavior-inline: contain;
     border: 1px solid #e5e7eb;
     border-radius: 1.6rem;
     background: #ffffff;
@@ -46,7 +48,7 @@
 .reports-table tr > :last-child { inline-size: 21rem; padding-inline-end: 1.8rem; text-align: end; }
 
 .reports-table tbody th,
-.reports-table tbody td { block-size: 6.4rem; border-block-end: 1px solid #e5e7eb; }
+.reports-table tbody td { block-size: 6.4rem; padding-block: 1.2rem; overflow-wrap: anywhere; border-block-end: 1px solid #e5e7eb; }
 .reports-table tbody tr:last-child th,
 .reports-table tbody tr:last-child td { border-block-end: 0; }
 

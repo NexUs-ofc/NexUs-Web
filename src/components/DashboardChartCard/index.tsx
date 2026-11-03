@@ -31,7 +31,7 @@ function DashboardChartCard({ model, mapSource }: DashboardChartCardProps) {
                     </Suspense>
                 )}
             </div>
-            <div id={`${id}-panel-1`} hidden={!showData} role="tabpanel" aria-labelledby={`${id}-tab-1`} tabIndex={0}>
+            <div id={`${id}-panel-1`} className="dashboard-data-table" hidden={!showData} role="tabpanel" aria-labelledby={`${id}-tab-1`} tabIndex={0}>
                 {showData ? <DashboardDataTable title={model.title} table={model.table} /> : null}
             </div>
             <footer className="dashboard-card__footer">

@@ -10,7 +10,9 @@ function asStatus(value: unknown): ReportStatus {
 
 function asIsoDate(value: unknown): string {
     const date = asText(value, 10);
-    if (!ISO_DATE.test(date) || Number.isNaN(Date.parse(date))) throw new Error("Data do relatório inválida.");
+    if (!ISO_DATE.test(date)) throw new Error("Data do relatório inválida.");
+    const parsed = new Date(date + "T12:00:00Z");
+    if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date) throw new Error("Data do relatório inválida.");
     return date;
 }
 

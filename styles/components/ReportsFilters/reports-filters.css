@@ -45,7 +45,7 @@
 .reports-filters input:focus-visible,
 .reports-filters select:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 
-@media (max-width: 64rem) {
+@container portal-content (max-width: 64rem) {
     .reports-filters { flex-wrap: wrap; }
     .reports-filters__search { flex-basis: 100%; }
     .reports-filters__select { flex: 1 1 18rem; }

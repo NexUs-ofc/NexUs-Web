@@ -35,7 +35,7 @@ export default function ReportPdfDialog({ report, url, onClose, className = "", 
                 </div>
                 <button type="button" className="report-dialog__close" data-initial-focus onClick={onClose}>Fechar</button>
             </header>
-            <iframe className="report-dialog__viewer" title={`Relatório: ${description}`} src={url} referrerPolicy="no-referrer" />
+            <iframe className="report-dialog__viewer" title={`Relatório: ${description}`} src={url} tabIndex={0} referrerPolicy="no-referrer" />
         </dialog>
     );
 }
